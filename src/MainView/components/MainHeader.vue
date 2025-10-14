@@ -1,5 +1,12 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+
+const auth = ref('not')
+
+const authenticarPrueba = () => {
+  auth.value = 'logeado'
+}
 </script>
 
 <template>
@@ -10,11 +17,15 @@ import { RouterLink } from 'vue-router'
           Ray<span>Mei</span>Spa
           <img src="../assets/RayMei Logo.webp" alt="logo" class="iconLogo" />
         </div>
-        <nav>
+        <nav v-if="auth === 'logeado'">
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/productos">Tratamientos</RouterLink>
           <RouterLink to="/paquetes">Paquetes</RouterLink>
-          <RouterLink to="/paquetes">Login</RouterLink>
+          <RouterLink to="/user">Usuario</RouterLink>
+        </nav>
+        <nav v-else>
+          <RouterLink to="/register" class="ButtonSigLog">Registrar</RouterLink>
+          <RouterLink to="/login" class="ButtonSigLog" @click="authenticarPrueba">Login</RouterLink>
         </nav>
       </div>
     </div>
