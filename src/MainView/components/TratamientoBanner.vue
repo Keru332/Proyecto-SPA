@@ -1,13 +1,20 @@
 <template>
   <div class="trat-container">
+    <div class="trat-badge">
+      <span>{{ tratamiento.categoria }}</span>
+    </div>
     <div class="trat-header">
-      <h2>{{ tratamiento.nombreTratamiento }}</h2>
-      <h3>{{ tratamiento.categoria }}</h3>
+      <h1>{{ tratamiento.nombreTratamiento }}</h1>
     </div>
     <p>{{ tratamiento.descripcion }}</p>
     <div class="trat-informacion">
-      <h4>Precio: {{ tratamiento.precioTrat }}</h4>
-      <h4>Duracion: {{ tratamiento.duracion }}</h4>
+      <div class="price-tag">
+        <h4>${{ tratamiento.precioTrat }}</h4>
+        <span>{{ tratamiento.duracion }} minutos</span>
+      </div>
+    </div>
+    <div class="trat-footer">
+      <button class="btn-reservar">Reservar ahora</button>
     </div>
   </div>
 </template>
@@ -29,4 +36,4 @@ defineProps({
 })
 </script>
 
-<style scoped></style>
+<style scoped src="./TratamientoBanner.css"></style>

@@ -1,7 +1,15 @@
 <template>
   <div class="home">
     <SpaBanner></SpaBanner>
-    <ListaTratamientos></ListaTratamientos>
+    <div class="treatments-section">
+      <div class="section-header">
+        <h2>Algunos de nuestros tratamientos</h2>
+        <p class="section-subtitle">
+          Descubre nuestra selección de experiencias únicas para tu bienestar
+        </p>
+      </div>
+      <ListaTratamientos></ListaTratamientos>
+    </div>
   </div>
 </template>
 

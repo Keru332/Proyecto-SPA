@@ -33,4 +33,8 @@ const tratamientos = ref([
 ])
 </script>
 
-<style scoped></style>
+<style scoped>
+.ListaTrat-Container {
+  display: flex;
+}
+</style>

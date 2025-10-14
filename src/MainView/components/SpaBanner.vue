@@ -12,22 +12,24 @@ const tratamientoMasPopular = {
 
 <template>
   <div class="banner-container">
-    <div class="text-contaner">
-      <h1>Bienvenido a nuestro Spa</h1>
-      <h2>Donde tu felicidad va a ser Eterna</h2>
-      <p>
-        Disfruta de nuestros servicios de calidad y recibe la bendicion de nuestra poderosa Raiden
-        Shogun
-      </p>
+    <div class="text-container">
+      <div class="welcome-content">
+        <h1>Bienvenido a nuestro Spa</h1>
+        <h2>Donde tu felicidad va a ser Eterna</h2>
+        <p>
+          Disfruta de nuestros servicios de calidad y recibe la bendicion de nuestra poderosa Raiden
+          Shogun
+        </p>
+        <button class="cta-button">Descubrir Tratamientos</button>
+      </div>
     </div>
-    <TratamientoBanner :tratamiento="tratamientoMasPopular"></TratamientoBanner>
+    <div class="popular-container">
+      <div class="popular-header">
+        <h2>Nuestro Tratamiento más popular</h2>
+      </div>
+      <TratamientoBanner :tratamiento="tratamientoMasPopular"></TratamientoBanner>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.banner-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-</style>
+<style scoped src="./SpaBanner.css"></style>
