@@ -32,4 +32,4 @@ const authenticarPrueba = () => {
   </header>
 </template>
 
-<style scoped src="./MainHeader.css"></style>
+<style scoped src="./CSS/MainHeader.css"></style>

@@ -36,4 +36,4 @@ defineProps({
 })
 </script>
 
-<style scoped src="./TratamientoBanner.css"></style>
+<style scoped src="./CSS/TratamientoBanner.css"></style>

@@ -18,4 +18,4 @@ import ListaTratamientos from './ListaTratamientos.vue'
 import SpaBanner from './SpaBanner.vue'
 </script>
 
-<style scoped src="./MainPresentation.css"></style>
+<style scoped src="./CSS/MainPresentation.css"></style>

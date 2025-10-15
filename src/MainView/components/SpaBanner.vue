@@ -32,4 +32,4 @@ const tratamientoMasPopular = {
   </div>
 </template>
 
-<style scoped src="./SpaBanner.css"></style>
+<style scoped src="./CSS/SpaBanner.css"></style>
