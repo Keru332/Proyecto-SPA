@@ -1,12 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { authService } from '@/Authentication/services/auth'
 
 const router = useRouter()
 const usuario = ref('')
 const pass = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
+
+const token = authService.getAuthHeaders()
 
 // Función para hacer login
 const loginUser = async (event) => {
@@ -25,6 +28,7 @@ const loginUser = async (event) => {
     const response = await fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
+        token,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
