@@ -2,8 +2,9 @@
   <div class="ListaTrat-Container">
     <TratamientoBanner
       v-for="tratamiento in tratamientos"
-      :key="tratamiento.id"
+      :key="tratamiento.codtratamiento"
       :tratamiento="tratamiento"
+      class="tratamiento"
     />
     <p v-if="tratamientos.length === 0">No hay Tratamientos</p>
   </div>
@@ -11,30 +12,29 @@
 
 <script setup>
 import TratamientoBanner from './TratamientoBanner.vue'
-import { ref } from 'vue'
 
-const tratamientos = ref([
-  {
-    id: 1,
-    nombreTratamiento: 'Aguas',
-    categoria: 'ehe',
-    precioTrat: 7,
-    duracion: 9,
-    descripcion: 'La vida es eterna como la todopoderosa Raiden Shogun',
+defineProps({
+  tratamientos: {
+    type: Array,
+    required: true,
+    default: () => [],
   },
-  {
-    id: 2,
-    nombreTratamiento: 'Tierras',
-    categoria: 'ehe',
-    precioTrat: 10,
-    duracion: 20,
-    descripcion: 'La vida es eterna como la todopoderosa Raiden Shogun',
-  },
-])
+})
 </script>
 
 <style scoped>
 .ListaTrat-Container {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.tratamiento {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .ListaTrat-Container {
+    flex-direction: column;
+  }
 }
 </style>

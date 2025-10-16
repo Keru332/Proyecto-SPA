@@ -38,7 +38,6 @@ header:hover {
   color: #2c3e50;
   letter-spacing: -0.5px;
   position: relative;
-  cursor: pointer;
   transition: all 0.3s ease;
 }
 
@@ -170,4 +169,26 @@ nav a.router-link-active::before {
 
 .ButtonSigLog:hover::before {
   width: 0 !important;
+}
+
+.logout {
+  background-image: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: aliceblue;
+  border-radius: 20px;
+  padding: 20px;
+  width: 100px;
+  font-size: large;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  color: aliceblue;
 }

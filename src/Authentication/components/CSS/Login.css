@@ -121,3 +121,19 @@ h1 {
 .footer a:hover {
   text-decoration: underline;
 }
+
+/* Agrega estos estilos para el mensaje de error */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 15px 0;
+  text-align: center;
+  border: 1px solid #f5c6cb;
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

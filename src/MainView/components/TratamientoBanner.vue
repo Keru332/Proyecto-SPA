@@ -1,15 +1,15 @@
 <template>
   <div class="trat-container">
     <div class="trat-badge">
-      <span>{{ tratamiento.categoria }}</span>
+      <span>{{ tratamiento.nombrecategoria }}</span>
     </div>
     <div class="trat-header">
-      <h1>{{ tratamiento.nombreTratamiento }}</h1>
+      <h1>{{ tratamiento.nombretratamiento }}</h1>
     </div>
     <p>{{ tratamiento.descripcion }}</p>
     <div class="trat-informacion">
       <div class="price-tag">
-        <h4>${{ tratamiento.precioTrat }}</h4>
+        <h4>${{ tratamiento.precio }}</h4>
         <span>{{ tratamiento.duracion }} minutos</span>
       </div>
     </div>
@@ -25,8 +25,8 @@ defineProps({
     type: Object,
     required: true,
     default: () => ({
-      id: Object,
-      nombreTratamiento: '',
+      codtratamiento: Object,
+      nombretratamiento: '',
       categoria: '',
       precioTrat: 0,
       duracion: 0,

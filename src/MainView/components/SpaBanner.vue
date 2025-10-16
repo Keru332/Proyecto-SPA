@@ -1,13 +1,40 @@
 <script setup lang="ts">
 import TratamientoBanner from './TratamientoBanner.vue'
+import { ref, onMounted } from 'vue'
 
-const tratamientoMasPopular = {
-  nombreTratamiento: 'Tierras',
-  categoria: 'ehe',
-  precioTrat: 10,
-  duracion: 20,
-  descripcion: 'La vida es eterna como la todopoderosa Raiden Shogun',
+// Datos del tratamiento más popular
+
+const tratamientoMasPopular = ref({
+  nombretratamiento: 'Cargando...',
+  nombrecategoria: 'Cargando...',
+  precio: 0,
+  duracion: 0,
+  descripcion: 'Cargando descripción...',
+  frecuenciadesolicitudmensual: 0,
+  categoria_codcategoria: 0,
+})
+
+const loading = ref(true)
+const error = ref('')
+
+const fetchTratamientoPopular = async () => {
+  try {
+    const responseTratamiento = await fetch(`http://localhost:3000/api/tratamiento/mas-popular`)
+    if (!responseTratamiento.ok) throw new Error('Tratamiento no encontrado')
+
+    tratamientoMasPopular.value = await responseTratamiento.json()
+  } catch (err) {
+    error.value = 'No se pudo cargar el tratamiento más popular'
+    console.error('Error:', err)
+  } finally {
+    loading.value = false
+  }
 }
+
+// Cargar el tratamiento al montar el componente
+onMounted(() => {
+  fetchTratamientoPopular()
+})
 </script>
 
 <template>
@@ -26,6 +53,13 @@ const tratamientoMasPopular = {
     <div class="popular-container">
       <div class="popular-header">
         <h2>Nuestro Tratamiento más popular</h2>
+      </div>
+      <!-- Estado de carga -->
+      <div v-if="loading" class="loading">Cargando tratamiento más popular...</div>
+
+      <!-- Estado de error -->
+      <div v-else-if="error" class="error">
+        {{ error }}
       </div>
       <TratamientoBanner :tratamiento="tratamientoMasPopular"></TratamientoBanner>
     </div>
