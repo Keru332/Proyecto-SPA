@@ -9,8 +9,6 @@ const pass = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
 
-const token = authService.getAuthHeaders()
-
 // Función para hacer login
 const loginUser = async (event) => {
   event.preventDefault()
@@ -28,7 +26,6 @@ const loginUser = async (event) => {
     const response = await fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
-        token,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

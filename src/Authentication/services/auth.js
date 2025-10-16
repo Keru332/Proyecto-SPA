@@ -22,9 +22,13 @@ export const authService = {
     localStorage.removeItem('user')
   },
 
-  // Headers para requests autenticados
   getAuthHeaders() {
     const token = this.getToken()
-    return token ? { Authorization: `Bearer ${token}` } : {}
+    return token
+      ? {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      : {}
   },
 }
