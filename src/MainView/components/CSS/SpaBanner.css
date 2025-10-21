@@ -103,7 +103,7 @@
 
 .popular-container {
   flex: 1;
-  padding: 30px;
+  padding: 10px;
   margin: 10px;
   display: flex;
   flex-direction: column;

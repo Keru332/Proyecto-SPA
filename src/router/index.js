@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainPresentation from '@/MainView/components/MainPresentation.vue'
 import LogIn from '@/Authentication/components/LogIn.vue'
 import SignIn from '@/Authentication/components/SignIn.vue'
+import TratamientosSeleccion from '@/TratamientoSection/components/TratamientosSeleccion.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,12 @@ const router = createRouter({
       name: 'sigin',
       component: SignIn,
       meta: { requiresHeader: false },
+    },
+    {
+      path: '/productos',
+      name: 'tratamientos',
+      component: TratamientosSeleccion,
+      meta: { requiresHeader: true },
     },
   ],
 })

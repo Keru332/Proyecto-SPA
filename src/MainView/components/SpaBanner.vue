@@ -1,7 +1,10 @@
-<script setup lang="ts">
-import TratamientoBanner from './TratamientoBanner.vue'
+<script setup>
+import TratamientoBanner from '../../TratamientoSection/components/TratamientoBanner.vue'
 import { ref, onMounted } from 'vue'
 
+const goTrat = () => {
+  window.location.href = '/productos'
+}
 // Datos del tratamiento más popular
 
 const tratamientoMasPopular = ref({
@@ -47,7 +50,7 @@ onMounted(() => {
           Disfruta de nuestros servicios de calidad y recibe la bendicion de nuestra poderosa Raiden
           Shogun
         </p>
-        <button class="cta-button">Descubrir Tratamientos</button>
+        <button class="cta-button" @click="goTrat()">Descubrir Tratamientos</button>
       </div>
     </div>
     <div class="popular-container">

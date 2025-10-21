@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import TratamientoBanner from './TratamientoBanner.vue'
+import TratamientoBanner from '../../TratamientoSection/components/TratamientoBanner.vue'
 
 defineProps({
   tratamientos: {

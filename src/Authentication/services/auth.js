@@ -16,6 +16,16 @@ export const authService = {
     return user ? JSON.parse(user) : null
   },
 
+  isAdmin() {
+    const user = this.getUser()
+    return user.role == 'admin'
+  },
+
+  isUser() {
+    const user = this.getUser()
+    return user.role === 'user'
+  },
+
   // Cerrar sesión
   logout() {
     localStorage.removeItem('authToken')
