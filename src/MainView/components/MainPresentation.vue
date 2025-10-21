@@ -32,7 +32,7 @@ const tratamientos = ref([])
 const loading = ref(true)
 const error = ref('')
 
-// Obtener headers completos
+
 const headers = authService.getAuthHeaders()
 
 const fetchTratamientos = async () => {

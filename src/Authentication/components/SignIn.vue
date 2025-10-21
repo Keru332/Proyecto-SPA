@@ -91,6 +91,7 @@ const registerUser = async (event) => {
           class="user"
           placeholder="Escriba su nombre de usuario"
           v-model="usuario"
+          required
         />
       </div>
 
@@ -101,6 +102,7 @@ const registerUser = async (event) => {
           class="Fullname"
           placeholder="Escriba su nombre completo"
           v-model="nombre"
+          required
         />
       </div>
 
@@ -111,6 +113,7 @@ const registerUser = async (event) => {
           class="correo"
           placeholder="Escriba su correo electrónico"
           v-model="correo"
+          required
         />
       </div>
 
@@ -121,12 +124,13 @@ const registerUser = async (event) => {
           id="password"
           placeholder="Cree una contraseña segura"
           v-model="pass"
+          required
         />
       </div>
 
       <div class="password-container">
         <label for="confirm-password">Confirmar Contraseña</label>
-        <input type="password" id="confirm-password" placeholder="Repita su contraseña" />
+        <input type="password" id="confirm-password" placeholder="Repita su contraseña" required />
       </div>
 
       <input

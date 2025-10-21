@@ -71,11 +71,17 @@ const loginUser = async (event) => {
     <form @submit="loginUser" class="login-form">
       <div class="user-container">
         <label for="user">Usuario</label>
-        <input type="text" class="user" placeholder="Escriba su Nombre" v-model="usuario" />
+        <input
+          type="text"
+          class="user"
+          placeholder="Escriba su Nombre"
+          v-model="usuario"
+          required
+        />
       </div>
       <div class="password-container">
         <label for="password">Contraseña</label>
-        <input type="password" placeholder="Escriba su Contraseña" v-model="pass" />
+        <input type="password" placeholder="Escriba su Contraseña" v-model="pass" required />
       </div>
       <input
         type="submit"
