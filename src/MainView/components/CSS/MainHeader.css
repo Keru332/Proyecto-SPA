@@ -138,17 +138,13 @@ nav a.router-link-active::before {
 }
 
 .ButtonSigLog {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-
+  all: unset;
   background-image: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: aliceblue;
   border-radius: 20px;
-  padding: 10px 20px;
-  min-width: 100px;
+  padding: 20px;
+  width: 100px;
   font-size: large;
   border: none;
   cursor: pointer;

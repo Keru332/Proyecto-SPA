@@ -34,7 +34,6 @@ const logout = () => {
           <RouterLink to="/productos">Tratamientos</RouterLink>
           <RouterLink to="/paquetes">Paquetes</RouterLink>
           <RouterLink to="/user">Usuario</RouterLink>
-          <RouterLink to="/crear-tratamiento" class="ButtonSigLog">Crear Tratamiento</RouterLink>
           <button @click="logout" class="logout">Logout</button>
         </nav>
         <nav v-else>

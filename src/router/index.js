@@ -3,7 +3,6 @@ import MainPresentation from '@/MainView/components/MainPresentation.vue'
 import LogIn from '@/Authentication/components/LogIn.vue'
 import SignIn from '@/Authentication/components/SignIn.vue'
 import TratamientosSeleccion from '@/TratamientoSection/components/TratamientosSeleccion.vue'
-import CrearTratamiento from '@/TratamientoSection/CrearTratamiento.vue'
 import { authService } from '@/Authentication/services/auth'
 
 const router = createRouter({
@@ -31,11 +30,6 @@ const router = createRouter({
       path: '/productos',
       name: 'tratamientos',
       component: TratamientosSeleccion,
-      meta: { requiresHeader: true, requiresAuth: true },
-    },
-    { path: '/crear-tratamiento',
-      name: 'crear-tratamiento',
-      component: CrearTratamiento,
       meta: { requiresHeader: true, requiresAuth: true },
     },
   ],
