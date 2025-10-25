@@ -60,4 +60,4 @@ const submitForm = () => {
 }
 </script>
 
-<style scoped src="../Authentication/components/CSS/Login.css"></style>
+<style scoped src="./components/CSS/CrearTratamiento.css"></style>

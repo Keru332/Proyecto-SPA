@@ -1,0 +1,24 @@
+.paquetes-section {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fafafa;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+.loading,
+.error {
+  color: #555;
+  font-size: 1.1rem;
+  margin-top: 20px;
+}
