@@ -1,6 +1,7 @@
 .home {
   display: grid;
   align-items: center;
+  background-color: white;
 }
 .section-header {
   text-align: center;

@@ -2,30 +2,61 @@
   <div class="login-container">
     <h1>Crear Tratamiento</h1>
     <form class="login-form" @submit.prevent="submitForm">
-
       <div class="user-container">
         <label for="nombre">Nombre del Tratamiento</label>
-        <input type="text" id="nombre" v-model="tratamiento.nombre" placeholder="Ejemplo: Masaje relajante" required />
+        <input
+          type="text"
+          id="nombre"
+          v-model="tratamiento.nombre"
+          placeholder="Ejemplo: Masaje relajante"
+          required
+        />
       </div>
 
       <div class="user-container">
         <label for="descripcion">Descripción</label>
-        <input type="text" id="descripcion" v-model="tratamiento.descripcion" placeholder="Describe el tratamiento" required />
+        <input
+          type="text"
+          id="descripcion"
+          v-model="tratamiento.descripcion"
+          placeholder="Describe el tratamiento"
+          required
+        />
       </div>
 
       <div class="user-container">
         <label for="duracion">Duración (minutos)</label>
-        <input type="number" id="duracion" min="5" v-model="tratamiento.duracion" placeholder="0" required />
+        <input
+          type="number"
+          id="duracion"
+          min="5"
+          v-model="tratamiento.duracion"
+          placeholder="0"
+          required
+        />
       </div>
 
       <div class="user-container">
         <label for="precio">Precio ($)</label>
-        <input type="number" id="precio" min="1" v-model="tratamiento.precio" placeholder="0" required />
+        <input
+          type="number"
+          id="precio"
+          min="1"
+          v-model="tratamiento.precio"
+          placeholder="0"
+          required
+        />
       </div>
 
       <div class="user-container">
         <label for="categoria">Categoría</label>
-        <input type="text" id="categoria" v-model="tratamiento.categoria" placeholder="Relajación, Terapia, etc." required />
+        <input
+          type="text"
+          id="categoria"
+          v-model="tratamiento.categoria"
+          placeholder="Relajación, Terapia, etc."
+          required
+        />
       </div>
 
       <button type="submit" class="submit">Crear Tratamiento</button>
@@ -43,7 +74,7 @@ const tratamiento = reactive({
   descripcion: '',
   duracion: '',
   precio: '',
-  categoria: ''
+  categoria: '',
 })
 
 const mensaje = ref('')

@@ -1,13 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import MainPresentation from '@/MainView/components/MainPresentation.vue'
 import LogIn from '@/Authentication/components/LogIn.vue'
 import SignIn from '@/Authentication/components/SignIn.vue'
 import TratamientosSeleccion from '@/TratamientoSection/components/TratamientosSeleccion.vue'
-import CrearTratamiento from '@/TratamientoSection/CrearTratamiento.vue'
 import { authService } from '@/Authentication/services/auth'
+import AgendarCita from '@/VentaSection/components/AgendarCita.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -33,9 +33,11 @@ const router = createRouter({
       component: TratamientosSeleccion,
       meta: { requiresHeader: true, requiresAuth: true },
     },
-    { path: '/crear-tratamiento',
-      name: 'crear-tratamiento',
-      component: CrearTratamiento,
+    {
+      path: '/agendarCita/:id',
+      name: 'agendarCita',
+      component: AgendarCita,
+      props: true,
       meta: { requiresHeader: true, requiresAuth: true },
     },
   ],
