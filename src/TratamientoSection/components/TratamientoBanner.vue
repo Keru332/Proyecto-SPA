@@ -13,13 +13,30 @@
         <span>{{ tratamiento.duracion }} minutos</span>
       </div>
     </div>
-    <div class="trat-footer">
-      <button class="btn-reservar">Reservar ahora</button>
+    <div class="trat-footer" v-if="!$route.path.includes('/agendarCita/')">
+      <button
+        class="btn-reservar"
+        @click="
+          () => {
+            if (tratamiento.nombretratamiento != '') {
+              storeTrat.setTratamiento(tratamiento)
+              router.push(`/agendarCita/${tratamiento.codtratamiento}`)
+            }
+          }
+        "
+      >
+        Reservar ahora
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import { tratamientoStore } from '../stores/TratamientoReservar'
+
+const router = useRouter()
+const storeTrat = tratamientoStore()
 defineProps({
   tratamiento: {
     type: Object,
