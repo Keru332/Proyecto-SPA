@@ -30,12 +30,12 @@
       </button>
 
       <button
-        class="btn-reservar"
+        class="btn-editar"
         @click="
           () => {
             if (tratamiento.nombretratamiento != '') {
               storeTrat.setTratamiento(tratamiento)
-              router.push(`/agendarCita/${tratamiento.codtratamiento}`)
+              router.push(`/EditarTratamiento/${tratamiento.codtratamiento}`)
             }
           }
         "
