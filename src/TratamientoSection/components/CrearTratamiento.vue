@@ -91,4 +91,4 @@ const submitForm = () => {
 }
 </script>
 
-<style scoped src="./components/CSS/CrearTratamiento.css"></style>
+<style scoped src="./CSS/CrearTratamiento.css"></style>
