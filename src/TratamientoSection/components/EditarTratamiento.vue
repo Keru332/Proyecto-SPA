@@ -150,6 +150,7 @@ const submitForm = async () => {
     tratamientoF.precio = ''
     tratamientoF.codcategoria = ''
 
+    alert('Tratamiento editado correctamente')
     router.push('/')
   } catch (error) {
     console.error('Error:', error)
