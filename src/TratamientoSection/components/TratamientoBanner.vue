@@ -100,6 +100,18 @@ const eliminarTratamiento = async () => {
 
     if (!response.ok) {
       const errorText = await response.text()
+      // Detectar violación de FK por el mensaje de error
+      if (
+        errorText.includes('foreign key') ||
+        errorText.includes('FK_') ||
+        errorText.includes('violates foreign key') ||
+        errorText.includes('restrict') ||
+        errorText.includes('REFERENCE')
+      ) {
+        throw new Error(
+          'No se puede eliminar este tratamiento porque está siendo utilizado en citas. Primero elimine las citas asociadas.',
+        )
+      }
       throw new Error(`Error ${response.status}: ${errorText}`)
     }
 
