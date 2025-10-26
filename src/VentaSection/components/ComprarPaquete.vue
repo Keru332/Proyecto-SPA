@@ -2,7 +2,7 @@
   <div class="Agendar-Panel">
     <h1>Comprar Paquete</h1>
     <div class="container">
-      <PaqueteBanner :paquete="paqData"></PaqueteBanner>
+      <PaqueteBanner :paquete="paqData" v-if="paqData && paqData.codpaquete"></PaqueteBanner>
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
