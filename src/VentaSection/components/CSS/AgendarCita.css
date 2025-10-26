@@ -3,6 +3,9 @@
   margin: 0 auto;
   padding: 30px 20px;
 }
+PaqueteBanner {
+  margin: auto;
+}
 
 .Agendar-Panel h1 {
   font-size: 3rem;
@@ -24,6 +27,8 @@
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.35);
   border-radius: 50px;
   background-color: aliceblue;
+  justify-content: center;
+  align-items: center;
 }
 
 form {

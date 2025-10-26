@@ -2,6 +2,7 @@
   <div class="Agendar-Panel">
     <h1>Comprar Paquete</h1>
     <div class="container">
+      <PaqueteBanner :paquete="paqData"></PaqueteBanner>
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
@@ -11,8 +12,8 @@
           <input type="date" v-model="fechaI" name="fecha" required />
         </div>
         <div class="form-input">
-          <label for="hora">Fecha de Fin</label>
-          <input type="date" v-model="fechaF" name="hora" required />
+          <label for="fechaF">Fecha de Fin</label>
+          <input type="date" v-model="fechaF" name="fechaF" required />
         </div>
         <input type="submit" value="Comprar Paquete" />
       </form>
@@ -28,7 +29,7 @@ import { authService } from '@/Authentication/services/auth'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
-//import PaqueteBanner from '@/PaquetesSection/components/PaqueteBanner.vue'
+import PaqueteBanner from '@/PaquetesSection/components/PaqueteBanner.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -116,3 +117,9 @@ const validateForm = () => {
   return null
 }
 </script>
+
+<style scoped>
+.container >>> .paquete-container {
+  margin: auto;
+}
+</style>
