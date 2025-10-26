@@ -24,8 +24,24 @@
             }
           }
         "
+        v-if="authService.isUser()"
       >
         Reservar ahora
+      </button>
+
+      <button
+        class="btn-reservar"
+        @click="
+          () => {
+            if (tratamiento.nombretratamiento != '') {
+              storeTrat.setTratamiento(tratamiento)
+              router.push(`/agendarCita/${tratamiento.codtratamiento}`)
+            }
+          }
+        "
+        v-if="authService.isAdmin()"
+      >
+        Editar
       </button>
     </div>
   </div>
@@ -34,6 +50,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { tratamientoStore } from '../stores/TratamientoReservar'
+import { authService } from '@/Authentication/services/auth'
 
 const router = useRouter()
 const storeTrat = tratamientoStore()
