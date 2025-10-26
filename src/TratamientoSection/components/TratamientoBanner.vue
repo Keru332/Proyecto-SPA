@@ -43,6 +43,10 @@
       >
         Editar
       </button>
+
+      <button class="btn-eliminar" @click="confirmarEliminacion" v-if="authService.isAdmin()">
+        Eliminar
+      </button>
     </div>
   </div>
 </template>
@@ -54,7 +58,7 @@ import { authService } from '@/Authentication/services/auth'
 
 const router = useRouter()
 const storeTrat = tratamientoStore()
-defineProps({
+const props = defineProps({
   tratamiento: {
     type: Object,
     required: true,
@@ -68,6 +72,44 @@ defineProps({
     }),
   },
 })
+
+const confirmarEliminacion = () => {
+  if (
+    confirm(
+      '¿Estás seguro de que deseas eliminar este tratamiento? Esta acción no se puede deshacer.',
+    )
+  ) {
+    eliminarTratamiento()
+  }
+}
+
+const eliminarTratamiento = async () => {
+  try {
+    // Obtener el token
+    const token = authService.getToken()
+
+    const response = await fetch(
+      `http://localhost:3000/api/tratamiento/${props.tratamiento.codtratamiento}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`Error ${response.status}: ${errorText}`)
+    }
+
+    alert('Tratamiento eliminado correctamente')
+    window.location.reload()
+  } catch (error) {
+    console.error('Error eliminando tratamiento:', error)
+    alert(`Error al eliminar: ${error.message}`)
+  }
+}
 </script>
 
 <style scoped src="./CSS/TratamientoBanner.css"></style>
