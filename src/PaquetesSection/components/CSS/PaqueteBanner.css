@@ -6,7 +6,9 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 300px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .paquete-container:hover {
@@ -82,5 +84,35 @@
 }
 
 .btn-reservar:hover {
+  transform: scale(1.05);
+}
+
+.btn-editar {
+  all: unset;
+  background: linear-gradient(135deg, #62a35c 0%, #72a24b 100%);
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-editar:hover {
+  transform: scale(1.05);
+}
+
+.btn-eliminar {
+  all: unset;
+  background: linear-gradient(135deg, #ff5e00 0%, #d1271b 100%);
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-eliminar:hover {
   transform: scale(1.05);
 }

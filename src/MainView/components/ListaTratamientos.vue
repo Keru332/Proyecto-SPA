@@ -26,6 +26,10 @@ defineProps({
 .ListaTrat-Container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  padding: 30px;
+  background-color: #f8f8f8;
 }
 
 .tratamiento {
