@@ -29,9 +29,10 @@ import { onMounted, ref, watch } from 'vue'
 import { authService } from '@/Authentication/services/auth'
 import { tratamientoStore } from '@/TratamientoSection/stores/TratamientoReservar'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const tratStore = tratamientoStore()
 const { tratamiento } = storeToRefs(tratStore)
 const tratData = tratamiento
@@ -87,6 +88,8 @@ const agendar = async (event) => {
     if (!response.ok) {
       throw new Error(data.error || 'Error al registrar usuario')
     }
+    alert('Cita agendada correctamente')
+    router.push('/')
   } catch (error) {
     errorMessage.value = `❌ Error: ${error.message}`
   } finally {

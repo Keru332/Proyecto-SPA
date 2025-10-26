@@ -26,8 +26,20 @@
       </ul>
     </div>
 
-    <div class="paquete-footer">
-      <button class="btn-reservar" v-if="authService.isUser()">Reservar paquete</button>
+    <div class="paquete-footer" v-if="!$route.path.includes('/comprarPaquete/')">
+      <button
+        class="btn-reservar"
+        v-if="authService.isUser()"
+        @click="
+          () => {
+            if (paquete.nombrepaquete != '') {
+              router.push(`/comprarPaquete/${paquete.codpaquete}`)
+            }
+          }
+        "
+      >
+        Reservar paquete
+      </button>
       <button class="btn-editar" v-if="authService.isAdmin()">Editar</button>
       <button class="btn-eliminar" v-if="authService.isAdmin()" @click="confirmarEliminacion">
         Eliminar
@@ -38,6 +50,8 @@
 
 <script setup>
 import { authService } from '@/Authentication/services/auth'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const props = defineProps({
   paquete: {
     type: Object,

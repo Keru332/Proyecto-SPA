@@ -7,6 +7,7 @@ import { authService } from '@/Authentication/services/auth'
 import AgendarCita from '@/VentaSection/components/AgendarCita.vue'
 import PaquetesSelection from '@/PaquetesSection/components/PaquetesSelection.vue'
 import EditarTratamiento from '@/TratamientoSection/components/EditarTratamiento.vue'
+import ComprarPaquete from '@/VentaSection/components/ComprarPaquete.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,13 @@ const router = createRouter({
       path: '/agendarCita/:id',
       name: 'agendarCita',
       component: AgendarCita,
+      props: true,
+      meta: { requiresHeader: true, requiresAuth: true },
+    },
+    {
+      path: '/comprarPaquete/:id',
+      name: 'comprarPaquete',
+      component: ComprarPaquete,
       props: true,
       meta: { requiresHeader: true, requiresAuth: true },
     },

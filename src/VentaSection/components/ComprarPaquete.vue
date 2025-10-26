@@ -2,7 +2,6 @@
   <div class="Agendar-Panel">
     <h1>Comprar Paquete</h1>
     <div class="container">
-      <PaqueteBanner :paquete="paqData"></PaqueteBanner>
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
@@ -15,7 +14,7 @@
           <label for="hora">Fecha de Fin</label>
           <input type="date" v-model="fechaF" name="hora" required />
         </div>
-        <input type="submit" value="Agendar Cita" />
+        <input type="submit" value="Comprar Paquete" />
       </form>
     </div>
   </div>
@@ -27,11 +26,12 @@
 import { onMounted, ref, watch } from 'vue'
 import { authService } from '@/Authentication/services/auth'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
-import PaqueteBanner from '@/PaquetesSection/components/PaqueteBanner.vue'
+//import PaqueteBanner from '@/PaquetesSection/components/PaqueteBanner.vue'
 
 const route = useRoute()
+const router = useRouter()
 const paqStore = paqueteStore()
 const { paquete } = storeToRefs(paqStore)
 const paqData = paquete
@@ -83,6 +83,9 @@ const agendar = async (event) => {
     if (!response.ok) {
       throw new Error(data.error || 'Error al registrar usuario')
     }
+
+    alert('Paquete Comprado correctamente')
+    router.push('/')
   } catch (error) {
     errorMessage.value = `❌ Error: ${error.message}`
   } finally {
@@ -98,6 +101,7 @@ const validateForm = () => {
 
   // Validar que la fecha no sea en el pasado
   const selectedDate = new Date(fechaI.value)
+  const fechaFinDate = new Date(fechaF.value)
   const today = new Date()
   today.setHours(0, 0, 0, 0) // Reset hours to compare only dates
 
@@ -105,9 +109,8 @@ const validateForm = () => {
     return 'No puedes agendar citas en fechas pasadas'
   }
 
-  // Validar que no sea domingo
-  if (selectedDate.getDay() === 0) {
-    return 'No se pueden agendar citas los domingos'
+  if (selectedDate > fechaFinDate) {
+    return 'Fecha inicio no puede ser mayor que fecha fin'
   }
 
   return null
