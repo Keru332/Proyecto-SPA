@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import ListaPaquetes from '@/MainView/components/ListaPaquetes.vue'
+import ListaPaquetes from './ListaPaquetes.vue'
 
 const paquetes = ref([])
 const loading = ref(true)
@@ -25,6 +25,7 @@ const fetchPaquetes = async () => {
     const response = await fetch('http://localhost:3000/api/paquete/')
     if (!response.ok) throw new Error(`Error ${response.status}`)
     paquetes.value = await response.json()
+    fetchPaquetesTratamiento()
   } catch (err) {
     console.error('Error cargando paquetes:', err)
     error.value = 'No se pudieron cargar los paquetes.'
@@ -32,10 +33,20 @@ const fetchPaquetes = async () => {
     loading.value = false
   }
 }
+const fetchPaquetesTratamiento = async () => {
+  paquetes.value.forEach(async (e, index) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/paq_trat/${e.codpaquete}`)
+      if (!response.ok) throw new Error(`Error ${response.status}`)
+      paquetes.value[index].tratamientos = []
+      paquetes.value[index].tratamientos = await response.json()
+    } catch (err) {
+      console.error('Error cargando paquetes:', err)
+    }
+  })
+}
 
 onMounted(fetchPaquetes)
 </script>
 
 <style scoped src="./CSS/PaquetesSelection.css"></style>
-
-

@@ -5,15 +5,15 @@
     </div>
 
     <div class="paquete-header">
-      <h1>{{ paquete.nombre }}</h1>
+      <h1>{{ paquete.nombrepaquete }}</h1>
     </div>
 
     <p>{{ paquete.descripcion }}</p>
 
     <div class="paquete-informacion">
       <div class="price-tag">
-        <h4>${{ paquete.precio }}</h4>
-        <span>{{ paquete.duracion }} minutos</span>
+        <h4>${{ paquete.preciopaquete }}</h4>
+        <span>{{ paquete.duraciontotal }} minutos</span>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       <h3>Tratamientos incluidos:</h3>
       <ul>
         <li v-for="(t, i) in paquete.tratamientos" :key="i">
-          {{ t.nombre }}
+          {{ t.nombretratamiento }}
         </li>
       </ul>
     </div>
@@ -38,13 +38,13 @@ defineProps({
     type: Object,
     required: true,
     default: () => ({
-      nombre: '',
-      descripcion: '',
-      duracion: 0,
-      precio: 0,
-      tratamientos: []
-    })
-  }
+      codpaquete: Object,
+      nombrepaquete: '',
+      duraciontotal: 0,
+      preciopaquete: 0,
+      tratamientos: [],
+    }),
+  },
 })
 </script>
 
