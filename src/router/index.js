@@ -8,7 +8,7 @@ import AgendarCita from '@/VentaSection/components/AgendarCita.vue'
 import PaquetesSelection from '@/PaquetesSection/components/PaquetesSelection.vue'
 import EditarTratamiento from '@/TratamientoSection/components/EditarTratamiento.vue'
 import ComprarPaquete from '@/VentaSection/components/ComprarPaquete.vue'
-import admin from '@/admin/admin.vue'
+import adminPanel from '@/admin/adminPanel.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,8 +67,8 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      component: admin,
-      meta: { requiresHeader: true, requiresAuth: true},
+      component: adminPanel,
+      meta: { requiresHeader: true, requiresAuth: true },
     },
   ],
 })
