@@ -40,7 +40,19 @@
       >
         Reservar paquete
       </button>
-      <button class="btn-editar" v-if="authService.isAdmin()">Editar</button>
+      <button
+        class="btn-editar"
+        v-if="authService.isAdmin()"
+        @click="
+          () => {
+            if (paquete.nombrepaquete != '') {
+              router.push(`/EditarPaquete/${paquete.codpaquete}`)
+            }
+          }
+        "
+      >
+        Editar
+      </button>
       <button class="btn-eliminar" v-if="authService.isAdmin()" @click="confirmarEliminacion">
         Eliminar
       </button>
