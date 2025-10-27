@@ -36,12 +36,15 @@ function Cat() {
 
     <div class="main-content">
       <div class="form">
-        <form action="" class="Paquetes" v-if="op == 1">
+        <div v-if="op == 0">
+          <h1>Bienvenido al Panel Administrativo</h1>
+        </div>
+        <div class="Paquetes" v-if="op == 1">
           <formpaq></formpaq>
-        </form>
-        <form action="" class="Tratamientos" v-else-if="op == 2">
+        </div>
+        <div class="Tratamientos" v-else-if="op == 2">
           <formtrat></formtrat>
-        </form>
+        </div>
       </div>
     </div>
   </div>
