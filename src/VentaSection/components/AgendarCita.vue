@@ -66,6 +66,7 @@ const agendar = async (event) => {
   errorMessage.value = ''
   try {
     const validationError = validateForm()
+    const token = authService.getToken()
     if (validationError) {
       throw new Error(validationError)
     }
@@ -74,6 +75,7 @@ const agendar = async (event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         codsolicitud: 'z7ccd3cf-dd97-4e81-83af-fae01e33f261',
@@ -133,7 +135,7 @@ const validateForm = () => {
   }
 
   // Validar que no sea domingo
-  if (selectedDate.getDay() === 0) {
+  if (selectedDate.getDay() === 6) {
     return 'No se pueden agendar citas los domingos'
   }
 

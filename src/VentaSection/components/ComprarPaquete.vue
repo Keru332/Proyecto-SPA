@@ -61,6 +61,7 @@ const agendar = async (event) => {
   errorMessage.value = ''
   try {
     const validationError = validateForm()
+    const token = authService.getToken()
     if (validationError) {
       throw new Error(validationError)
     }
@@ -69,6 +70,7 @@ const agendar = async (event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         cliente__idcliente: cliente,
