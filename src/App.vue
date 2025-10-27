@@ -32,7 +32,6 @@ export default {
   display: grid;
   grid-template-rows: auto 1fr;
   min-height: 100vh;
-  background-color: white;
 }
 .main-content {
   grid-row: 2;
