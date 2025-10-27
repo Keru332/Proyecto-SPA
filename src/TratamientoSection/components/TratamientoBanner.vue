@@ -13,7 +13,12 @@
         <span>{{ tratamiento.duracion }} minutos</span>
       </div>
     </div>
-    <div class="trat-footer" v-if="!$route.path.includes('/agendarCita/')">
+    <div
+      class="trat-footer"
+      v-if="
+        !$route.path.includes('/agendarCita/') && tratamiento.nombretratamiento != 'Cargando...'
+      "
+    >
       <button
         class="btn-reservar"
         @click="
@@ -24,7 +29,7 @@
             }
           }
         "
-        v-if="authService.isUser()"
+        v-if="authService.isAuthenticated() && authService.isUser()"
       >
         Reservar ahora
       </button>
@@ -39,12 +44,16 @@
             }
           }
         "
-        v-if="authService.isAdmin()"
+        v-if="authService.isAuthenticated() && authService.isAdmin()"
       >
         Editar
       </button>
 
-      <button class="btn-eliminar" @click="confirmarEliminacion" v-if="authService.isAdmin()">
+      <button
+        class="btn-eliminar"
+        @click="confirmarEliminacion"
+        v-if="authService.isAuthenticated() && authService.isAdmin()"
+      >
         Eliminar
       </button>
     </div>
@@ -63,10 +72,10 @@ const props = defineProps({
     type: Object,
     required: true,
     default: () => ({
-      codtratamiento: Object,
+      codtratamiento: '',
       nombretratamiento: '',
-      categoria: '',
-      precioTrat: 0,
+      nombrecategoria: '',
+      precio: '0.00',
       duracion: 0,
       descripcion: '',
     }),

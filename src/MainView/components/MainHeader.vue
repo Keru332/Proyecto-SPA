@@ -47,7 +47,7 @@ const logout = () => {
         </nav>
         <nav v-else>
           <RouterLink to="/register" class="ButtonSigLog">Registrar</RouterLink>
-          <RouterLink to="/login" class="ButtonSigLog" @click="authenticarPrueba">Login</RouterLink>
+          <RouterLink to="/login" class="ButtonSigLog">Login</RouterLink>
         </nav>
       </div>
     </div>

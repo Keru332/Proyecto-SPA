@@ -25,21 +25,15 @@ import ListaTratamientos from './ListaTratamientos.vue'
 import SpaBanner from './SpaBanner.vue'
 
 import { ref, onMounted } from 'vue'
-import { authService } from '@/Authentication/services/auth'
-
 const tratamientos = ref([])
 
 const loading = ref(true)
 const error = ref('')
 
-
-const headers = authService.getAuthHeaders()
-
 const fetchTratamientos = async () => {
   try {
     const responseTratamiento = await fetch(`http://localhost:3000/api/tratamiento/`, {
       method: 'GET',
-      headers: headers,
     })
     if (!responseTratamiento.ok) {
       if (responseTratamiento.status === 401) {

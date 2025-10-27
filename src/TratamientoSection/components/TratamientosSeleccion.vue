@@ -4,7 +4,6 @@
       <h2>Todos Nuestros Tratamientos</h2>
       <p class="section-subtitle">Agende su cita ya para ser atendido en nuestro glorioso Spa</p>
     </div>
-    <!-- Estados de carga y error -->
     <div v-if="loading" class="loading">Cargando tratamientos...</div>
 
     <div v-else-if="error" class="error">
