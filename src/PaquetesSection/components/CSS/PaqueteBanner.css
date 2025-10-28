@@ -61,6 +61,8 @@
 
 .paquete-tratamientos ul {
   padding-left: 20px;
+  height: 80px;
+  overflow: auto;
 }
 
 .paquete-tratamientos li {
