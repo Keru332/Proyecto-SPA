@@ -11,6 +11,7 @@ import ComprarPaquete from '@/VentaSection/components/ComprarPaquete.vue'
 import adminPanel from '@/admin/adminPanel.vue'
 import EditarPaquete from '@/PaquetesSection/components/EditarPaquete.vue'
 import CitasSeleccion from '@/CitasSection/CitasSeleccion.vue'
+import NotFound from '@/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,6 +85,12 @@ const router = createRouter({
       name: 'admin',
       component: adminPanel,
       meta: { requiresHeader: true, requiresAuth: true },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound,
+      meta: { requiresHeader: false, requiresAuth: false },
     },
   ],
 })
