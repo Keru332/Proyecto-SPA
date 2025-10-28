@@ -24,9 +24,11 @@ export default {
 
 <style scoped>
 * {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 .app-layout {
   display: grid;
@@ -37,7 +39,7 @@ export default {
   grid-row: 2;
   padding: 20px;
   width: 100%;
-  padding-top: calc(80px + 20px);
+  padding-top: calc(80px + 20px) !important;
 }
 .noPadding {
   padding-top: 20px;

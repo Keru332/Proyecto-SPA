@@ -173,7 +173,7 @@
 @media (max-width: 480px) {
   .banner-container {
     padding: 25px 20px;
-    margin: 15px;
+    margin: 0;
   }
 
   .text-container h1 {
