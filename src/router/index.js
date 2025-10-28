@@ -10,6 +10,7 @@ import EditarTratamiento from '@/TratamientoSection/components/EditarTratamiento
 import ComprarPaquete from '@/VentaSection/components/ComprarPaquete.vue'
 import adminPanel from '@/admin/adminPanel.vue'
 import EditarPaquete from '@/PaquetesSection/components/EditarPaquete.vue'
+import CitasSection from '@/CitasSection/TratamientosSeleccion.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +43,12 @@ const router = createRouter({
       path: '/paquetes',
       name: 'paquetes',
       component: PaquetesSelection,
+      meta: { requiresHeader: true, requiresAuth: true },
+    },
+    {
+      path: '/cita',
+      name: 'cita',
+      component: CitasSection,
       meta: { requiresHeader: true, requiresAuth: true },
     },
     {
