@@ -19,6 +19,7 @@
           type="number"
           id="duracion"
           min="5"
+          max="1000"
           v-model="paqueteF.duraciontotal"
           placeholder="0"
           required
@@ -31,6 +32,7 @@
           type="number"
           id="precio"
           min="1"
+          max="9999"
           v-model="paqueteF.preciopaquete"
           placeholder="0"
           required

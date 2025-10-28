@@ -9,8 +9,8 @@
 
     <div class="cita-informacion">
       <div class="price-tag">
-        <h4>Fecha:{{ fechaFormateada }}</h4>
-        <h4>Hora:{{ horaFormateada }}</h4>
+        <h4>Fecha:{{ cita.fecha_formateada }}</h4>
+        <h4>Hora:{{ cita.hora_formateada }}</h4>
       </div>
     </div>
 
@@ -50,29 +50,6 @@ const esFechaFutura = computed(() => {
 
   const fechaCita = new Date(props.cita.fecha)
   return fechaCita > actual
-})
-
-const fechaFormateada = computed(() => {
-  if (!props.cita.fecha) return ''
-
-  const fecha = new Date(props.cita.fecha)
-  return fecha.toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-})
-
-// Computed para formatear hora (hora:minuto)
-const horaFormateada = computed(() => {
-  if (!props.cita.horacita) return ''
-
-  const hora = new Date(`2000-01-01T${props.cita.horacita}`)
-  return hora.toLocaleTimeString('es-ES', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  })
 })
 
 const confirmarEliminacion = () => {

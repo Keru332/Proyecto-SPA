@@ -30,6 +30,7 @@
           type="number"
           id="duracion"
           min="5"
+          max="300"
           v-model="tratamiento.duracion"
           placeholder="0"
           required
@@ -42,6 +43,7 @@
           type="number"
           id="precio"
           min="1"
+          max="9999"
           v-model="tratamiento.precio"
           placeholder="0"
           required
