@@ -12,6 +12,7 @@ import adminPanel from '@/admin/adminPanel.vue'
 import EditarPaquete from '@/PaquetesSection/components/EditarPaquete.vue'
 import CitasSeleccion from '@/CitasSection/CitasSeleccion.vue'
 import NotFound from '@/NotFound.vue'
+import PaquetesVSelection from '@/PaquetesSection/PaquetesVendidosSection/PaquetesVSelection.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,12 @@ const router = createRouter({
       path: '/paquetes',
       name: 'paquetes',
       component: PaquetesSelection,
+      meta: { requiresHeader: true, requiresAuth: true },
+    },
+    {
+      path: '/paquetesv',
+      name: 'paquetesv',
+      component: PaquetesVSelection,
       meta: { requiresHeader: true, requiresAuth: true },
     },
     {
