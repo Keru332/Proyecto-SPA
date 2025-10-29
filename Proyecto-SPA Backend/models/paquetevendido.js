@@ -2,7 +2,12 @@ const db = require('../config/database');
 
 const PaqueteVendido = {
   getAll: async () => {
-    const result = await db.query('SELECT * FROM paquetevendido ORDER BY 1');
+    const result = await db.query(`SELECT 
+paquetevendido.*,
+ TO_CHAR(paquetevendido.fechacompra, 'DD/MM/YYYY') as fechacompra,
+ TO_CHAR(paquetevendido.fechainicio, 'DD/MM/YYYY') as fechainicio,
+ TO_CHAR(paquetevendido.fechafin, 'DD/MM/YYYY') as fechafin
+ FROM paquetevendido JOIN cliente ON cliente__idcliente = idcliente JOIN paquete ON paquete__codpaquete = codpaquete ORDER BY 1`);
     return result.rows;
   },
 

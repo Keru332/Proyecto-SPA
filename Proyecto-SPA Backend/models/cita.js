@@ -2,10 +2,20 @@ const db = require('../config/database');
 
 const Cita = {
   getAll: async () => {
-    const result = await db.query('SELECT * FROM cita ORDER BY fecha');
+    const result = await db.query(`
+        SELECT 
+            cita.*,
+            tratamiento.nombretratamiento,
+            cliente.nombrecliente,
+            TO_CHAR(cita.fecha, 'DD/MM/YYYY') as fecha_formateada,
+            TO_CHAR(cita.horacita::time, 'HH24:MI') as hora_formateada
+        FROM cita 
+        JOIN tratamiento ON tratamiento__codtratamiento = codtratamiento 
+        JOIN cliente ON cliente__idcliente = idcliente 
+        ORDER BY fecha
+    `);
     return result.rows;
-  },
-
+},
   getById: async (id) => {
     const result = await db.query('SELECT * FROM cita WHERE codsolicitud = $1', [id]);
     return result.rows[0];
