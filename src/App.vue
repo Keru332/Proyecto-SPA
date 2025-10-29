@@ -24,7 +24,7 @@ export default {
 
 <style scoped>
 * {
-  margin: 0 !important;
+  margin: 0;
   padding: 0 !important;
   box-sizing: border-box;
   max-width: 100%;
