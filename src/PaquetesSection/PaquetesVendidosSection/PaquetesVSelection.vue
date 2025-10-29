@@ -57,7 +57,7 @@
       <p>Mostrando {{ paquetesvFiltrados.length }} de {{ paquetesv.length }} paquetes vendidos</p>
     </div>
 
-    <ListaPaquetesV :citas="paquetesvFiltrados" v-if="!loading && !error"></ListaPaquetesV>
+    <ListaPaquetesV :paquetesv="paquetesvFiltrados" v-if="!loading && !error"></ListaPaquetesV>
 
     <!-- Mensaje cuando no hay citas con el filtro aplicado -->
     <div v-if="!loading && !error && paquetesvFiltrados.length === 0" class="no-paquetesv-filtro">
@@ -131,7 +131,7 @@ const paquetesvFiltrados = computed(() => {
 
   return paquetesv.value.filter((paquetev) => {
     try {
-      const fechaPaquetev = new Date(paquetev.fechacompra)
+      const fechaPaquetev = new Date(paquetev.fechafin)
       return fechaPaquetev >= fechaInicio && fechaPaquetev < fechaFin
     } catch (error) {
       console.error('Error al filtrar paquete vendido:', error)

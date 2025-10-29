@@ -3,15 +3,15 @@
     <div class="paquetev-header">
       <h1>Paquete Vendido</h1>
     </div>
-    <h3>Cliente: {{ paquetev.nombrecliente}}</h3>
+    <h3>Cliente: {{ paquetev.nombrecliente }}</h3>
 
     <h3>Paquete: {{ paquetev.nombrepaquete }}</h3>
 
     <div class="paquetev-informacion">
       <div class="price-tag">
-        <h4>Fecha Compra:{{ paquetev.fechacompra}}</h4>
-        <h4>Fecha Inicio:{{ paquetev.fechainicio}}</h4>
-        <h4>Fecha Fin:{{ paquetev.fechafin}}</h4>
+        <h4>Fecha Compra:{{ paquetev.fechacompra }}</h4>
+        <h4>Fecha Inicio:{{ paquetev.fechainicio }}</h4>
+        <h4>Fecha Fin:{{ paquetev.fechafin }}</h4>
       </div>
     </div>
 
@@ -48,15 +48,17 @@ const props = defineProps({
 
 const actual = new Date()
 const esFechaFutura = computed(() => {
-  if (!props.cita.fecha) return false
+  if (!props.paquetev.fechafin) return false
 
-  const fechaCita = new Date(props.cita.fecha)
+  const fechaCita = new Date(props.paquetev.fechafin)
   return fechaCita > actual
 })
 
 const confirmarEliminacion = () => {
   if (
-    confirm('¿Estás seguro de que deseas cancelar este paquete vendido? Esta acción no se puede deshacer.')
+    confirm(
+      '¿Estás seguro de que deseas cancelar este paquete vendido? Esta acción no se puede deshacer.',
+    )
   ) {
     eliminarPaquetev()
   }
@@ -67,12 +69,15 @@ const eliminarPaquetev = async () => {
     // Obtener el token
     const token = authService.getToken()
 
-    const response = await fetch(`http://localhost:3000/api/paquetev/${props.paquetev.codsolicitud}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await fetch(
+      `http://localhost:3000/api/paquetevendido/${props.paquetev.codsolicitud}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
 
     if (!response.ok) {
       const errorText = await response.text()

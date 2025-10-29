@@ -1,5 +1,5 @@
 <template>
-  <div class="lista-paquetev">
+  <div class="lista-paquetesv">
     <PaquetesVBanner v-for="(paquetev, index) in paquetesv" :key="index" :paquetev="paquetev" />
   </div>
 </template>
