@@ -25,10 +25,9 @@ export default {
 <style scoped>
 * {
   margin: 0;
-  padding: 0 !important;
+  padding: 0;
   box-sizing: border-box;
   max-width: 100%;
-  overflow-x: hidden;
 }
 .app-layout {
   display: grid;
@@ -40,8 +39,20 @@ export default {
   padding: 20px;
   width: 100%;
   padding-top: calc(80px + 20px) !important;
+  overflow: hidden;
 }
 .noPadding {
   padding-top: 20px;
+}
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0;
+    margin: 0;
+  }
+  .main-content:has(.login-container) {
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+  }
 }
 </style>
