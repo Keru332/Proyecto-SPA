@@ -11,7 +11,7 @@ function Paq() {
   op.value = 1
 }
 function Cat() {
-  alert('Todavia no se que poner aqui :D')
+  alert('Esperando por manuel:D')
   op.value = 3
 }
 </script>
