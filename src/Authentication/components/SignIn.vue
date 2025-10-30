@@ -7,6 +7,7 @@ const usuario = ref('')
 const pass = ref('')
 const correo = ref('')
 const nombre = ref('')
+const confirmPass = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
@@ -21,6 +22,11 @@ const registerUser = async (event) => {
   // Validaciones básicas
   if (!usuario.value || !pass.value || !correo.value || !nombre.value) {
     errorMessage.value = 'Todos los campos son obligatorios'
+    loading.value = false
+    return
+  }
+  if (!(pass.value == confirmPass.value)) {
+    errorMessage.value = 'Verifique bien la contraseña'
     loading.value = false
     return
   }
@@ -130,7 +136,13 @@ const registerUser = async (event) => {
 
       <div class="password-container">
         <label for="confirm-password">Confirmar Contraseña</label>
-        <input type="password" id="confirm-password" placeholder="Repita su contraseña" required />
+        <input
+          type="password"
+          id="confirm-password"
+          placeholder="Repita su contraseña"
+          required
+          v-model="confirmPass"
+        />
       </div>
 
       <input
