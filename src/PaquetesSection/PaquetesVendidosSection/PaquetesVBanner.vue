@@ -9,9 +9,9 @@
 
     <div class="paquetev-informacion">
       <div class="price-tag">
-        <h4>Fecha Compra:{{ paquetev.fechacompra }}</h4>
-        <h4>Fecha Inicio:{{ paquetev.fechainicio }}</h4>
-        <h4>Fecha Fin:{{ paquetev.fechafin }}</h4>
+        <h4>Fecha Compra:{{ paquetev.fechacompraf }}</h4>
+        <h4>Fecha Inicio:{{ paquetev.fechainiciof }}</h4>
+        <h4>Fecha Fin:{{ paquetev.fechafinf }}</h4>
       </div>
     </div>
 
@@ -68,9 +68,14 @@ const eliminarPaquetev = async () => {
   try {
     // Obtener el token
     const token = authService.getToken()
+    console.log('Valores para eliminar:', {
+      codpaquete: props.paquetev.paquete__codpaquete,
+      idcliente: props.paquetev.cliente__idcliente,
+      fechacompra: props.paquetev.fechacompra,
+    })
 
     const response = await fetch(
-      `http://localhost:3000/api/paquetevendido/${props.paquetev.codsolicitud}`,
+      `http://localhost:3000/api/paquetevendido/${props.paquetev.paquete__codpaquete}/${props.paquetev.cliente__idcliente}/${props.paquetev.fechacompra}`,
       {
         method: 'DELETE',
         headers: {

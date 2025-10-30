@@ -45,7 +45,7 @@ const PaqueteVendidoController = {
 
   delete: async (req, res) => {
     try {
-      const eliminado = await PaqueteVendido.delete(req.params.id);
+      const eliminado = await PaqueteVendido.delete(req.params.id, req.params.id2, req.params.id3);
       if (!eliminado) {
         return res.status(404).json({ error: 'PaqueteVendido no encontrado' });
       }
