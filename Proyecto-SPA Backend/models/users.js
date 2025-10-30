@@ -8,7 +8,7 @@ const User = {
   },
 
   getById: async (id) => {
-    const result = await db.query('SELECT id, username, role, created_at FROM users JOIN cliente ON codcliente = idcliente WHERE id = $1', [id]);
+    const result = await db.query('SELECT id, username, role, created_at, idcliente, nombrecliente, correo FROM users JOIN cliente ON codcliente = idcliente WHERE id = $1', [id]);
     return result.rows[0];
   },
 
