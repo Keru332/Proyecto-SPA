@@ -3,7 +3,7 @@ const db = require('../config/database');
 const PaqueteVendido = {
   getAll: async () => {
     const result = await db.query(`SELECT 
-paquetevendido.*,
+*,
  TO_CHAR(paquetevendido.fechacompra, 'DD/MM/YYYY') as fechacompraf,
  TO_CHAR(paquetevendido.fechainicio, 'DD/MM/YYYY') as fechainiciof,
  TO_CHAR(paquetevendido.fechafin, 'DD/MM/YYYY') as fechafinf

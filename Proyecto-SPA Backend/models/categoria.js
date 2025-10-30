@@ -12,10 +12,10 @@ const Categoria = {
   },
 
   create: async (data) => {
-    const fields = ["codcategoria","nombrecategoria"];
+    const fields = ["nombrecategoria"];
     const values = fields.map(field => data[field]);
     const result = await db.query(
-      'INSERT INTO categoria (' + fields.join(', ') + ') VALUES ($1, $2) RETURNING *',
+      'INSERT INTO categoria (' + fields.join(', ') + ') VALUES ($1) RETURNING *',
       values
     );
     return result.rows[0];
