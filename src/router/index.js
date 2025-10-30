@@ -15,6 +15,7 @@ import NotFound from '@/NotFound.vue'
 import PaquetesVSelection from '@/PaquetesSection/PaquetesVendidosSection/PaquetesVSelection.vue'
 import CategoriasSelection from '@/CategoriaSection/components/CategoriasSelection.vue'
 import EditarCategoria from '@/CategoriaSection/components/EditarCategoria.vue'
+import usuarioPanel from '@/usuario/usuarioPanel.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +108,12 @@ const router = createRouter({
       name: 'admin',
       component: adminPanel,
       meta: { requiresHeader: true, requiresAuth: true },
+    },
+    {
+     path: '/usuario',
+     name: 'usuarioPanel',
+     component: usuarioPanel,
+     meta: { requiresHeader: true, requiresAuth: true},
     },
     {
       path: '/:pathMatch(.*)*',

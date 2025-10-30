@@ -33,7 +33,7 @@ const logout = () => {
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/productos">Tratamientos</RouterLink>
           <RouterLink to="/paquetes">Paquetes</RouterLink>
-          <RouterLink to="/user">Usuario</RouterLink>
+          <RouterLink to="/usuario">Usuario</RouterLink>
           <button @click="logout" class="logout">Logout</button>
         </nav>
         <nav v-else-if="authService.isAuthenticated() && authService.isAdmin()">
