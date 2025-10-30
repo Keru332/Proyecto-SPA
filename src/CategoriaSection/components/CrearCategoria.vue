@@ -54,7 +54,7 @@ const submitForm = async () => {
     mensaje.value = 'Categoria creada correctamente!'
 
     alert('Categoria Creada correctamente')
-    router.push('Categoria')
+    router.push('/cat')
   } catch (error) {
     console.error('Error:', error)
     mensaje.value = 'Error al Crear la categoria'
