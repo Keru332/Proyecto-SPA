@@ -1,6 +1,7 @@
 <script setup>
 import formpaq from '@/PaquetesSection/components/CrearPaquete.vue'
 import formtrat from '@/TratamientoSection/components/CrearTratamiento.vue'
+import CrearCategoria from '@/CategoriaSection/components/CrearCategoria.vue'
 import { ref } from 'vue'
 const op = ref(0)
 
@@ -11,7 +12,6 @@ function Paq() {
   op.value = 1
 }
 function Cat() {
-  alert('Esperando por manuel:D')
   op.value = 3
 }
 </script>
@@ -29,7 +29,7 @@ function Cat() {
           <a href="#" @click="Paq()"><i>➕</i>Paquetes</a>
         </li>
         <li>
-          <a href="#" @click="Cat()"><i>➕</i>Proximamente...</a>
+          <a href="#" @click="Cat()"><i>➕</i>Categoria</a>
         </li>
       </ul>
     </div>
@@ -44,6 +44,9 @@ function Cat() {
         </div>
         <div class="Tratamientos" v-else-if="op == 2">
           <formtrat></formtrat>
+        </div>
+        <div class="Categorias" v-else-if="op == 3">
+          <CrearCategoria></CrearCategoria>
         </div>
       </div>
     </div>

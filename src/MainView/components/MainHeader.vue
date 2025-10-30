@@ -40,10 +40,10 @@ const logout = () => {
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/productos">Tratamientos</RouterLink>
           <RouterLink to="/paquetes">Paquetes</RouterLink>
-          <RouterLink to="/paquetesv">Paquetes Vendidos</RouterLink>
+          <RouterLink to="/paquetesv">Paq.Vend.</RouterLink>
           <RouterLink to="/citas">Citas</RouterLink>
           <RouterLink to="/cat">Categorías</RouterLink>
-          <RouterLink to="/admin">Admin Panel</RouterLink>
+          <RouterLink to="/admin">AdminPanel</RouterLink>
           <button @click="logout" class="logout">Logout</button>
         </nav>
         <nav v-else>

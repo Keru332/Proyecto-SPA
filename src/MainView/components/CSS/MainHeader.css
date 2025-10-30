@@ -39,6 +39,9 @@ header:hover {
   letter-spacing: -0.5px;
   position: relative;
   transition: all 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .logo span {

@@ -90,7 +90,7 @@ const tratamientoF = reactive({
   descripcion: '',
   duracion: '',
   precio: '',
-  codcategoria: '', // Cambiado para almacenar el ID
+  codcategoria: '',
 })
 
 const mensaje = ref('')

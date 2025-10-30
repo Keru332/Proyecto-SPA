@@ -13,6 +13,8 @@ import EditarPaquete from '@/PaquetesSection/components/EditarPaquete.vue'
 import CitasSeleccion from '@/CitasSection/CitasSeleccion.vue'
 import NotFound from '@/NotFound.vue'
 import PaquetesVSelection from '@/PaquetesSection/PaquetesVendidosSection/PaquetesVSelection.vue'
+import CategoriasSelection from '@/CategoriaSection/components/CategoriasSelection.vue'
+import EditarCategoria from '@/CategoriaSection/components/EditarCategoria.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -87,6 +89,19 @@ const router = createRouter({
       props: true,
       meta: { requiresHeader: true, requiresAuth: true },
     },
+    {
+      path: '/cat',
+      name: 'categoria',
+      component: CategoriasSelection,
+      meta: { requiresHeader: true, requiresAuth: true },
+    },
+    {
+      path: '/catEditar/:id',
+      name: 'EditarCategoria',
+      component: EditarCategoria,
+      meta: { requiresHeader: true, requiresAuth: true },
+    },
+
     {
       path: '/admin',
       name: 'admin',
