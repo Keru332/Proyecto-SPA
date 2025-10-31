@@ -11,7 +11,7 @@
 }
 
 h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -32,6 +32,11 @@ h2 {
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   text-align: left;
+  transition: all 0.3s ease;
+}
+
+.user-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .user-field {
@@ -80,25 +85,96 @@ h2 {
   font-style: italic;
 }
 
-/* Efectos de hover para toda la tarjeta */
-.user-card {
-  transition: all 0.3s ease;
+.edit-btn,
+.save-btn,
+.cancel-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.user-card:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+.edit-btn {
+  background-color: #007bff;
+  color: white;
 }
 
-/* Responsive */
+.save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.password-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.password-modal .modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.password-modal h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.modal-field {
+  margin-bottom: 15px;
+}
+
+.modal-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.modal-field input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
 @media (max-width: 768px) {
   .usuario-panel {
     margin: 20px;
     padding: 20px;
     border-radius: 30px;
-  }
-
-  h2 {
-    font-size: 2rem;
   }
 
   .user-card {
@@ -110,3 +186,4 @@ h2 {
     margin-bottom: 15px;
   }
 }
+

@@ -8,13 +8,14 @@ const User = {
   },
 
   getById: async (id) => {
-    const result = await db.query('SELECT id, username, role, created_at, idcliente, nombrecliente, correo FROM users JOIN cliente ON codcliente = idcliente WHERE id = $1', [id]);
+    const result = await db.query(
+  'SELECT id, username, role, created_at, password_hash, idcliente, nombrecliente, correo FROM users JOIN cliente ON codcliente = idcliente WHERE id = $1',[id]);
     return result.rows[0];
   },
 
   create: async (data) => {
     const { username, password, role = 'user', email, fullname} = data;
-    
+
     // Hashear la contraseña antes de guardarla
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -22,7 +23,7 @@ const User = {
       'INSERT INTO cliente (nombrecliente, correo) VALUES ($1, $2) RETURNING idcliente',
       [fullname, email]
     )
-    
+
     const result = await db.query(
       'INSERT INTO users (username, password_hash, role, codcliente) VALUES ($1, $2, $3, $4) RETURNING id, username, role, created_at',
       [username, passwordHash, role, clienteResult.rows[0].idcliente]
@@ -38,6 +39,32 @@ const User = {
     );
     return result.rows[0];
   },
+
+  updateProfile: async (id, data) => {
+  const { username, correo } = data;
+
+  await db.query('UPDATE users SET username = $1 WHERE id = $2', [username, id]);
+
+  await db.query(`
+    UPDATE cliente
+    SET correo = $1
+    WHERE idcliente = (
+      SELECT idcliente
+      FROM users
+      JOIN cliente ON codcliente = idcliente
+      WHERE id = $2
+    )
+  `, [correo, id]);
+
+  const result = await db.query(`
+    SELECT id, username, role, created_at, idcliente, nombrecliente, correo
+    FROM users
+    JOIN cliente ON codcliente = idcliente
+    WHERE id = $1
+  `, [id]);
+
+  return result.rows[0];
+},
 
   delete: async (id) => {
     const result = await db.query('DELETE FROM users WHERE id = $1 RETURNING id, username, role', [id]);

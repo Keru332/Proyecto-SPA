@@ -3,10 +3,10 @@ const jwt = require('jsonwebtoken');
 
 const generateToken = (user) => {
   return jwt.sign(
-    { 
-      id: user.id, 
-      username: user.username, 
-      role: user.role 
+    {
+      id: user.id,
+      username: user.username,
+      role: user.role
     },
     process.env.JWT_SECRET,
     { expiresIn: '24h' }
@@ -57,7 +57,7 @@ const userController = {
 
       // Crear usuario
       const nuevoUsuario = await User.create({ username, password, role, email, fullname });
-      
+
       // Generar token
       const token = generateToken(nuevoUsuario);
 
@@ -105,14 +105,14 @@ const userController = {
       }
 
       const user = await User.findByUsername(username);
-      
+
       if (!user) {
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
       // Verificar contraseña
       const isValidPassword = await User.verifyPassword(password, user.password_hash);
-      
+
       if (!isValidPassword) {
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
@@ -122,8 +122,8 @@ const userController = {
 
       // Eliminar password_hash de la respuesta
       const { password_hash, ...userWithoutPassword } = user;
-      
-      res.json({ 
+
+      res.json({
         message: 'Login exitoso',
         user: userWithoutPassword,
         token: token
@@ -134,22 +134,66 @@ const userController = {
   },
 
   updatePassword: async (req, res) => {
-    try {
-      const { newPassword } = req.body;
-      
-      if (!newPassword || newPassword.length < 6) {
-        return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' });
-      }
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.params.id;
 
-      const updatedUser = await User.updatePassword(req.params.id, newPassword);
-      if (!updatedUser) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
-      res.json({ message: 'Contraseña actualizada correctamente' });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    // Validar nueva contraseña
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' });
     }
+
+    // Obtener usuario con el método del modelo
+    const user = await User.getById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Verificar la contraseña antigua usando método del modelo
+    const valid = await User.verifyPassword(oldPassword, user.password_hash);
+    if (!valid) {
+      return res.status(400).json({ error: 'Contraseña actual incorrecta' });
+    }
+
+    // Actualizar la contraseña usando método del modelo
+    const updatedUser = await User.updatePassword(userId, newPassword);
+
+    res.json({
+      message: 'Contraseña actualizada correctamente',
+      user: {
+        id: updatedUser.id,
+        username: updatedUser.username,
+        role: updatedUser.role
+      }
+    });
+  } catch (error) {
+    console.error('Error al actualizar contraseña:', error);
+    res.status(500).json({ error: 'Error al actualizar la contraseña' });
   }
+},
+
+updateProfile: async (req, res) => {
+  try {
+    const { username, correo } = req.body;
+
+    if (!username || !correo) {
+      return res.status(400).json({ error: 'Faltan campos requeridos (username o correo)' });
+    }
+
+    const actualizado = await User.updateProfile(req.params.id, { username, correo });
+
+    if (!actualizado) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({
+      message: 'Perfil actualizado correctamente',
+      user: actualizado,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 };
 
 module.exports = userController;
