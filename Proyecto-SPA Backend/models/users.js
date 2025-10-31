@@ -9,7 +9,7 @@ const User = {
 
   getById: async (id) => {
     const result = await db.query(
-  'SELECT id, username, role, created_at, password_hash, idcliente, nombrecliente, correo FROM users JOIN cliente ON codcliente = idcliente WHERE id = $1',[id]);
+  'SELECT id, username, role, created_at, idcliente, nombrecliente, correo FROM users JOIN cliente ON codcliente = idcliente WHERE id = $1',[id]);
     return result.rows[0];
   },
 
@@ -88,7 +88,15 @@ const User = {
 
   verifyPassword: async (plainPassword, hashedPassword) => {
     return await bcrypt.compare(plainPassword, hashedPassword);
-  }
+  },
+
+  getHashed: async (id) => {
+    const result = await db.query(
+          'SELECT * FROM users WHERE id = $1',
+          [id]
+        );
+        return result.rows[0];
+},
 };
 
 module.exports = User;

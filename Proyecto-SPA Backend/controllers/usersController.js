@@ -145,12 +145,17 @@ const userController = {
 
     // Obtener usuario con el método del modelo
     const user = await User.getById(userId);
-    if (!user) {
+     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
     // Verificar la contraseña antigua usando método del modelo
-    const valid = await User.verifyPassword(oldPassword, user.password_hash);
+
+    const pass = await User.getHashed(userId)
+    if (!pass) {
+      return res.status(400).json({ error: 'Error al actualizar' });
+    }
+    const valid = await User.verifyPassword(oldPassword, pass.password_hash);
     if (!valid) {
       return res.status(400).json({ error: 'Contraseña actual incorrecta' });
     }
@@ -168,7 +173,7 @@ const userController = {
     });
   } catch (error) {
     console.error('Error al actualizar contraseña:', error);
-    res.status(500).json({ error: 'Error al actualizar la contraseña' });
+    res.status(500).json({ error: `Error al actualizar la contraseña ${error}` });
   }
 },
 

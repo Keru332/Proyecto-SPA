@@ -7,7 +7,7 @@
         <!-- Información del usuario -->
         <div v-if="!editando">
           <div class="user-field">
-            <strong>Nombre:</strong>
+            <strong>Usuario:</strong>
             <span class="user-value">{{ usuario.username }}</span>
           </div>
           <div class="user-field">
@@ -44,7 +44,6 @@
       <p>No hay información del usuario cargada.</p>
     </div>
 
-    <!-- Modal de cambio de contraseña -->
     <div v-if="modalPasswordVisible" class="password-modal">
       <div class="modal-content">
         <h3>Cambiar contraseña</h3>
@@ -110,7 +109,7 @@ const editar = () => {
   form.correo = usuario.correo
   editando.value = true
 }
-const cancelar = () => editando.value = false
+const cancelar = () => (editando.value = false)
 const guardar = async () => {
   const token = authService.getToken()
   try {
@@ -139,7 +138,7 @@ const abrirModalPassword = () => {
   passwordForm.oldPassword = ''
   passwordForm.newPassword = ''
 }
-const cerrarModalPassword = () => modalPasswordVisible.value = false
+const cerrarModalPassword = () => (modalPasswordVisible.value = false)
 
 // Guardar contraseña
 const guardarPassword = async () => {
@@ -158,9 +157,9 @@ const guardarPassword = async () => {
       },
       body: JSON.stringify({
         oldPassword: passwordForm.oldPassword,
-        newPassword: passwordForm.newPassword
+        newPassword: passwordForm.newPassword,
       }),
-    });
+    })
 
     const data = await response.json()
     if (!response.ok) throw new Error(data.error || 'Error al actualizar contraseña')
@@ -175,5 +174,3 @@ const guardarPassword = async () => {
 </script>
 
 <style scoped src="./CSS/usuarioPanel.css"></style>
-
-

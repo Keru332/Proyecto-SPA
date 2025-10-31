@@ -5,7 +5,7 @@ const { authenticateToken, requireRole } = require('../middleware/auth');
 
 router.get('/',authenticateToken, userController.getAll);
 router.get('/:id',authenticateToken, userController.getById);
-router.post('/register',userController.register);  // Nueva ruta de registro
+router.post('/register',userController.register); 
 router.post('/login', userController.login);
 router.put('/:id',authenticateToken, userController.update);
 router.put('/:id/password',authenticateToken, userController.updatePassword);
