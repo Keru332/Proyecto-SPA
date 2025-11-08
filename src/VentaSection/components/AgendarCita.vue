@@ -2,10 +2,13 @@
   <div class="Agendar-Panel">
     <h1>Agendar Cita</h1>
     <div class="container">
-      <TratamientoBanner
-        :tratamiento="tratData"
-        v-if="tratData && tratData.codtratamiento"
-      ></TratamientoBanner>
+      <div class="treatments-section">
+        <TratamientoBanner
+          :tratamiento="tratData"
+          v-if="tratData && tratData.codtratamiento"
+        ></TratamientoBanner>
+      </div>
+
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>

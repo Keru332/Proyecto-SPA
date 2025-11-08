@@ -1,9 +1,5 @@
 <template>
   <div class="paquete-container">
-    <div class="paquete-badge">
-      <span>Paquete</span>
-    </div>
-
     <div class="paquete-header">
       <h1>{{ paquete.nombrepaquete }}</h1>
     </div>

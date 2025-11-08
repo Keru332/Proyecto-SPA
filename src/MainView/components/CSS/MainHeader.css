@@ -15,6 +15,9 @@ header {
   left: 0;
   right: 0;
   z-index: 1000;
+  /* Hacer el header más delgado */
+  height: 60px;
+  transition: all 0.3s ease;
 }
 
 header:hover {
@@ -26,12 +29,14 @@ header:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem 0;
+  /* Reducir padding vertical */
+  padding: 0.5rem 0;
+  height: 100%;
 }
 
-/* Logo styles */
+/* Logo styles - más pequeño */
 .logo {
-  font-size: 2.2rem;
+  font-size: 1.5rem; /* Reducido de 2.2rem */
   font-weight: 700;
   color: #2c3e50;
   letter-spacing: -0.5px;
@@ -51,16 +56,16 @@ header:hover {
 }
 
 .iconLogo {
-  width: 40px;
-  height: 40px;
+  width: 30px; /* Reducido de 40px */
+  height: 30px; /* Reducido de 40px */
   display: inline-block;
   vertical-align: middle;
 }
 
-/* Navigation styles */
+/* Navigation styles - más compacto */
 nav {
   display: flex;
-  gap: 2.5rem;
+  gap: 1.5rem; /* Reducido de 2.5rem */
   align-items: center;
 }
 
@@ -68,8 +73,8 @@ nav a {
   text-decoration: none;
   color: #4a5568;
   font-weight: 500;
-  font-size: 1.1rem;
-  padding: 0.5rem 0;
+  font-size: 0.9rem; /* Reducido de 1.1rem */
+  padding: 0.3rem 0; /* Reducido de 0.5rem */
   position: relative;
   transition: all 0.3s ease;
   letter-spacing: 0.5px;
@@ -88,7 +93,7 @@ nav a::before {
 
 nav a:hover {
   color: #2d3748;
-  transform: translateY(-2px);
+  transform: translateY(-1px); /* Reducido efecto hover */
 }
 
 nav a:hover::before {
@@ -105,54 +110,22 @@ nav a.router-link-active::before {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .nav-container {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-
-  .logo {
-    font-size: 1.8rem;
-  }
-
-  nav {
-    gap: 1.5rem;
-  }
-
-  nav a {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  nav {
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .logo {
-    font-size: 1.6rem;
-  }
-}
-
+/* Botones más pequeños */
 .ButtonSigLog {
   all: unset;
   background-image: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: aliceblue;
-  border-radius: 20px;
-  padding: 20px;
-  width: 100px;
-  font-size: large;
+  border-radius: 15px; /* Reducido de 20px */
+  padding: 10px 20px; /* Reducido de 20px */
+  width: 80px; /* Reducido de 100px */
+  font-size: 0.9rem; /* Reducido de large */
   border: none;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
 
   position: static !important;
   transform: none !important;
@@ -163,8 +136,8 @@ nav a.router-link-active::before {
 }
 
 .ButtonSigLog:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px); /* Efecto hover más sutil */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: aliceblue !important;
 }
 
@@ -176,20 +149,99 @@ nav a.router-link-active::before {
   background-image: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: aliceblue;
-  border-radius: 20px;
-  padding: 20px;
-  width: 100px;
-  font-size: large;
+  border-radius: 15px;
+  padding: 10px 20px; /* Mantener padding horizontal para centrado */
+  /* ELIMINAR width fijo */
+  min-width: 80px; /* En lugar de width fijo */
+  font-size: 0.9rem;
   border: none;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Añadir estas propiedades para mejor centrado */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+}
+
+.ButtonSigLog {
+  all: unset;
+  background-image: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: aliceblue;
+  border-radius: 15px;
+  padding: 10px 20px;
+  /* ELIMINAR width fijo también aquí */
+  min-width: 80px;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Añadir las mismas propiedades */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+
+  position: static !important;
+  transform: none !important;
 }
 
 .logout:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px); /* Efecto hover más sutil */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: aliceblue;
+}
+
+/* Responsive design - ajustado para nuevo tamaño */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 0.8rem; /* Reducido gap */
+    padding: 0.8rem 0; /* Reducido padding */
+  }
+
+  .logo {
+    font-size: 1.3rem; /* Ajustado */
+  }
+
+  nav {
+    gap: 1rem; /* Reducido gap */
+  }
+
+  nav a {
+    font-size: 0.85rem; /* Ajustado */
+  }
+
+  .ButtonSigLog,
+  .logout {
+    padding: 8px 16px;
+    width: 70px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    gap: 0.8rem; /* Reducido gap */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .logo {
+    font-size: 1.2rem; /* Ajustado */
+  }
+
+  .ButtonSigLog,
+  .logout {
+    padding: 6px 12px;
+    width: 65px;
+    font-size: 0.8rem;
+  }
 }

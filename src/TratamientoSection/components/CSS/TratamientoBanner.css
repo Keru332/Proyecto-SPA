@@ -112,6 +112,7 @@
   font-weight: bold;
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .btn-reservar:hover {
@@ -171,5 +172,343 @@
 
   .price-tag h4 {
     font-size: 1.7rem;
+  }
+}
+
+/* TratamientoBanner.css actualizado */
+
+.trat-container {
+  justify-content: center;
+  padding: 40px 30px;
+  margin: 20px;
+  position: relative;
+  border-radius: 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #a8d8ea 0%, #aa96da 100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Estilo cuando está dentro de treatments-section - igual a PaqueteBanner */
+.treatments-section .trat-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  max-width: 300px;
+}
+
+.treatments-section .trat-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.trat-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.trat-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #a8d8ea, #aa96da);
+}
+
+/* Ocultar el ::before cuando está en treatments-section */
+.treatments-section .trat-container::before {
+  display: none;
+}
+
+.trat-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5d5d5d;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Badge estilo PaqueteBanner para treatments-section */
+.treatments-section .trat-badge {
+  position: static;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #5d5d5d;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.trat-header {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.5rem;
+  margin: 20px 0 25px;
+  position: relative;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.trat-header::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #a8d8ea, #aa96da);
+  margin: 15px auto;
+  border-radius: 2px;
+}
+
+/* Header estilo PaqueteBanner para treatments-section */
+.treatments-section .trat-header {
+  margin: 10px 0;
+}
+
+.treatments-section .trat-header::after {
+  display: none;
+}
+
+.treatments-section .trat-header h1 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 10px 0;
+}
+
+.trat-container p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 30px;
+  color: #4a5568;
+  padding: 0 10px;
+}
+.treatments-section .trat-container p {
+  min-height: 90px;
+  max-height: 90px;
+  margin-bottom: 15px;
+  overflow-y: auto;
+}
+
+.trat-informacion {
+  margin-bottom: 30px;
+}
+
+/* Información estilo PaqueteBanner para treatments-section */
+.treatments-section .trat-informacion {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.price-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Price-tag estilo PaqueteBanner para treatments-section */
+.treatments-section .price-tag {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.price-tag h4 {
+  font-size: 2rem;
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+/* Price-tag h4 estilo PaqueteBanner para treatments-section */
+.treatments-section .price-tag h4 {
+  color: #764ba2;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.price-tag span {
+  display: block;
+  font-size: 1rem;
+  color: #718096;
+  margin-top: 5px;
+}
+
+/* Price-tag span estilo PaqueteBanner para treatments-section */
+.treatments-section .price-tag span {
+  display: block;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.trat-footer {
+  margin-top: 20px;
+}
+
+/* Footer estilo PaqueteBanner para treatments-section */
+.treatments-section .trat-footer {
+  margin-top: 15px;
+}
+
+.btn-reservar {
+  background-image: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: aliceblue;
+  border-radius: 1000px;
+  padding: 20px;
+  width: 200px;
+  font-size: large;
+  border-color: black;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones estilo PaqueteBanner para treatments-section */
+.treatments-section .btn-reservar {
+  all: unset;
+  background: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: auto;
+  font-size: inherit;
+  border: none;
+  box-shadow: none;
+}
+
+.treatments-section .btn-reservar:hover {
+  transform: scale(1.05);
+}
+
+.btn-reservar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.btn-editar {
+  background-image: linear-gradient(135deg, #62a35c 0%, #72a24b 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: aliceblue;
+  border-radius: 1000px;
+  padding: 20px;
+  width: 200px;
+  font-size: large;
+  border-color: black;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.treatments-section .btn-editar {
+  all: unset;
+  background: linear-gradient(135deg, #62a35c 0%, #72a24b 100%);
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: auto;
+  font-size: inherit;
+  border: none;
+  box-shadow: none;
+}
+
+.treatments-section .btn-editar:hover {
+  transform: scale(1.05);
+}
+
+.btn-editar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.btn-eliminar {
+  background-image: linear-gradient(135deg, #ff5e00 0%, #d1271b 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: aliceblue;
+  border-radius: 1000px;
+  padding: 20px;
+  width: 200px;
+  font-size: large;
+  border-color: black;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.treatments-section .btn-eliminar {
+  all: unset;
+  background: linear-gradient(135deg, #ff5e00 0%, #d1271b 100%);
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: auto;
+  font-size: inherit;
+  border: none;
+  box-shadow: none;
+}
+
+.treatments-section .btn-eliminar:hover {
+  transform: scale(1.05);
+}
+
+.btn-eliminar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 600px) {
+  .trat-container {
+    padding: 30px 20px;
+    margin: 15px;
+  }
+
+  .trat-header {
+    font-size: 1.8rem;
+  }
+
+  .price-tag h4 {
+    font-size: 1.7rem;
+  }
+
+  /* Responsive para treatments-section */
+  .treatments-section .trat-container {
+    padding: 20px;
+    margin: 16px;
+    width: calc(100% - 32px);
+    max-width: none;
   }
 }

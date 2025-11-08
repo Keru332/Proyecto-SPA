@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <SpaBanner></SpaBanner>
-    <div class="treatments-section">
+    <div class="treatments-4">
       <div class="section-header">
         <h2>Algunos de nuestros tratamientos</h2>
         <p class="section-subtitle">
