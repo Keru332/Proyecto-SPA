@@ -140,11 +140,6 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
-  }
-  if (to.matched.some((record) => record.meta.requireAdmin)) {
-    if (authService.isAuthenticated() && !authService.isAdmin()) {
-      next('/home')
-    }
   } else {
     next()
   }

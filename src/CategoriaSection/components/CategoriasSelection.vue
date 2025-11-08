@@ -11,28 +11,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { useCategoriasSelection } from './JS/CategoriasSelection'
 import ListaCategorias from './ListaCategorias.vue'
-//import { authService } from '@/Authentication/services/auth'
 
-const categorias = ref([])
-const loading = ref(true)
-const error = ref('')
-
-const fetchcategorias = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/api/categoria/')
-    if (!response.ok) throw new Error(`Error ${response.status}`)
-    categorias.value = await response.json()
-  } catch (err) {
-    console.error('Error cargando categorias:', err)
-    error.value = 'No se pudieron cargar los categorias.'
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(fetchcategorias)
+const { categorias, loading, error } = useCategoriasSelection()
 </script>
 
 <style scoped src="./CSS/CategoriasSelection.css"></style>

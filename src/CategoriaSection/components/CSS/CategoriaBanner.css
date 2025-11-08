@@ -92,6 +92,7 @@
 .btn-editar {
   all: unset;
   background: linear-gradient(135deg, #62a35c 0%, #72a24b 100%);
+  width: 4rem;
   color: white;
   font-weight: bold;
   border-radius: 20px;
@@ -107,6 +108,7 @@
 .btn-eliminar {
   all: unset;
   background: linear-gradient(135deg, #ff5e00 0%, #d1271b 100%);
+  width: 4rem;
   color: white;
   font-weight: bold;
   border-radius: 20px;
