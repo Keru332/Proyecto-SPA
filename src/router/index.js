@@ -24,43 +24,43 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: MainPresentation,
-      meta: { requiresHeader: true },
+      meta: { requiresHeader: true, requiresAuth: false, requireAdmin: false },
     },
     {
       path: '/login',
       name: 'login',
       component: LogIn,
-      meta: { requiresHeader: false },
+      meta: { requiresHeader: false, requiresAuth: false, requireAdmin: false },
     },
     {
       path: '/register',
       name: 'sigin',
       component: SignIn,
-      meta: { requiresHeader: false },
+      meta: { requiresHeader: false, requiresAuth: false, requireAdmin: false },
     },
     {
       path: '/productos',
       name: 'tratamientos',
       component: TratamientosSeleccion,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: false },
     },
     {
       path: '/paquetes',
       name: 'paquetes',
       component: PaquetesSelection,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: false },
     },
     {
       path: '/paquetesv',
       name: 'paquetesv',
       component: PaquetesVSelection,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {
       path: '/citas',
       name: 'citas',
       component: CitasSeleccion,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {
       path: '/agendarCita/:id',
@@ -81,45 +81,45 @@ const router = createRouter({
       name: 'EditarTratamiento',
       component: EditarTratamiento,
       props: true,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {
       path: '/EditarPaquete/:id',
       name: 'EditarPaquete',
       component: EditarPaquete,
       props: true,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {
       path: '/cat',
       name: 'categoria',
       component: CategoriasSelection,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {
       path: '/catEditar/:id',
       name: 'EditarCategoria',
       component: EditarCategoria,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
 
     {
       path: '/admin',
       name: 'admin',
       component: adminPanel,
-      meta: { requiresHeader: true, requiresAuth: true },
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {
-     path: '/usuario',
-     name: 'usuarioPanel',
-     component: usuarioPanel,
-     meta: { requiresHeader: true, requiresAuth: true},
+      path: '/usuario',
+      name: 'usuarioPanel',
+      component: usuarioPanel,
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: false },
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: NotFound,
-      meta: { requiresHeader: false, requiresAuth: false },
+      meta: { requiresHeader: false, requiresAuth: false, requireAdmin: false },
     },
   ],
 })
@@ -130,7 +130,20 @@ router.beforeEach((to, from, next) => {
       // Redirige al login
       next('/login')
     } else {
-      next()
+      if (to.matched.some((record) => record.meta.requireAdmin)) {
+        if (authService.isAuthenticated() && !authService.isAdmin()) {
+          next('/')
+        } else {
+          next()
+        }
+      } else {
+        next()
+      }
+    }
+  }
+  if (to.matched.some((record) => record.meta.requireAdmin)) {
+    if (authService.isAuthenticated() && !authService.isAdmin()) {
+      next('/home')
     }
   } else {
     next()
