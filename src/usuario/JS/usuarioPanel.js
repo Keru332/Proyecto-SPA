@@ -1,5 +1,5 @@
-import { authService } from '@/Authentication/services/auth'
 import { onMounted, reactive, ref } from 'vue'
+import userService from '@/services/userService'
 
 export function useUsuarioPanel() {
   const usuario = reactive({ id: '', username: '', correo: '' })
@@ -19,17 +19,8 @@ export function useUsuarioPanel() {
   })
 
   const fetchUser = async () => {
-    const token = authService.getToken()
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${usuario.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Error al cargar usuario')
+      const data = await userService.getById(usuario.id)
       usuario.username = data.username
       usuario.correo = data.correo
     } catch (error) {
@@ -45,18 +36,10 @@ export function useUsuarioPanel() {
   }
   const cancelar = () => (editando.value = false)
   const guardar = async () => {
-    const token = authService.getToken()
+    const body = JSON.stringify({ username: form.username, correo: form.correo })
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${usuario.id}/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ username: form.username, correo: form.correo }),
-      })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Error al actualizar perfil')
+      const data = await userService.editProfile(usuario.id, body)
+
       usuario.username = data.user.username
       usuario.correo = data.user.correo
       editando.value = false
@@ -81,22 +64,12 @@ export function useUsuarioPanel() {
       return
     }
 
-    const token = authService.getToken()
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${usuario.id}/password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          oldPassword: passwordForm.oldPassword,
-          newPassword: passwordForm.newPassword,
-        }),
+      const body = JSON.stringify({
+        oldPassword: passwordForm.oldPassword,
+        newPassword: passwordForm.newPassword,
       })
-
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Error al actualizar contraseña')
+      await userService.editPassword(usuario.id, body)
 
       alert('Contraseña actualizada correctamente')
       cerrarModalPassword()

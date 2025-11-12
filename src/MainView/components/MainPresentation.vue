@@ -23,6 +23,7 @@
 <script setup>
 import ListaTratamientos from './ListaTratamientos.vue'
 import SpaBanner from './SpaBanner.vue'
+import tratamientoService from '@/services/tratamientoService'
 
 import { ref, onMounted } from 'vue'
 const tratamientos = ref([])
@@ -32,21 +33,9 @@ const error = ref('')
 
 const fetchTratamientos = async () => {
   try {
-    const responseTratamiento = await fetch(`http://localhost:3000/api/tratamiento/`, {
-      method: 'GET',
-    })
-    if (!responseTratamiento.ok) {
-      if (responseTratamiento.status === 401) {
-        throw new Error('Token inválido o expirado')
-      } else if (responseTratamiento.status === 403) {
-        throw new Error('No tienes permisos para ver los tratamientos')
-      } else {
-        throw new Error(`Error ${responseTratamiento.status}: ${responseTratamiento.statusText}`)
-      }
-    }
-    tratamientos.value = await responseTratamiento.json()
+    const responseTratamiento = await tratamientoService.getAll()
+    tratamientos.value = responseTratamiento
   } catch (err) {
-    tratamientos.value.error
     error.value = 'No se pudo cargar el tratamiento'
     console.error('Error:', err)
   } finally {

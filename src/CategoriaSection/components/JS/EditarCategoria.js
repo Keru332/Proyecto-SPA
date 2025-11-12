@@ -1,9 +1,9 @@
 import { ref, reactive } from 'vue'
-import { authService } from '@/Authentication/services/auth'
 import { useRoute, useRouter } from 'vue-router'
 import { categoriaStore } from '../../stores/CategoriaStore'
 import { storeToRefs } from 'pinia'
 import { onMounted, watch } from 'vue'
+import categoriaService from '@/services/categoriaService'
 
 export function useEditarCategoria() {
   const route = useRoute()
@@ -27,27 +27,11 @@ export function useEditarCategoria() {
 
   const submitForm = async () => {
     try {
-      const token = authService.getToken()
       const dato_actualizado = {
         nombrecategoria: categoria_actualizada.nombrecategoria,
       }
 
-      const response = await fetch(
-        `http://localhost:3000/api/categoria/${categoria_actualizada.codcategoria}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(dato_actualizado),
-        },
-      )
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al actualizar la categoria')
-      }
+      await categoriaService.update(categoria_actualizada.codcategoria, dato_actualizado)
 
       mensaje.value = 'categoria actualizada correctamente!'
 
@@ -55,8 +39,11 @@ export function useEditarCategoria() {
       alert('Categoria editada correctamente')
       router.push('/cat')
     } catch (error) {
-      console.error('Error:', error)
-      mensaje.value = 'Error al actualizar la categoria'
+      if (error.response) {
+        mensaje.value = `Error: ${error.response.data?.error || 'Error al actualizar la categoria'}`
+      } else {
+        mensaje.value = 'Error de conexión con el servidor'
+      }
     }
   }
 

@@ -1,7 +1,8 @@
-import { authService } from '@/Authentication/services/auth'
-import { computed } from 'vue'
+import citaService from '@/services/citaService'
+import { computed, ref } from 'vue'
 
 export function useCitaBanner(props) {
+  const errorMessage = ref('')
   const actual = new Date()
   const esFechaFutura = computed(() => {
     if (!props.cita.fecha) return false
@@ -20,19 +21,16 @@ export function useCitaBanner(props) {
 
   const eliminarCita = async () => {
     try {
-      // Obtener el token
-      const token = authService.getToken()
+      const response = await citaService.delete(props.cita.codsolicitud)
+      console.log(response)
 
-      const response = await fetch(`http://localhost:3000/api/cita/${props.cita.codsolicitud}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      alert('cita eliminada correctamente')
+      window.location.reload()
+    } catch (error) {
+      if (error.response) {
+        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar cita'}`
+        const errorText = JSON.stringify(error.response.data)
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        // Detectar violación de FK por el mensaje de error
         if (
           errorText.includes('foreign key') ||
           errorText.includes('FK_') ||
@@ -40,16 +38,13 @@ export function useCitaBanner(props) {
           errorText.includes('restrict') ||
           errorText.includes('REFERENCE')
         ) {
-          throw new Error('No se puede eliminar esta cita.')
+          errorMessage.value =
+            'No se puede eliminar este cita porque está siendo utilizado en algo.'
         }
-        throw new Error(`Error ${response.status}: ${errorText}`)
+      } else {
+        errorMessage.value = 'Error de conexión con el servidor'
       }
-
-      alert('Cita eliminada correctamente')
-      window.location.reload()
-    } catch (error) {
-      console.error('Error eliminando Cita:', error)
-      alert(`Error al eliminar: ${error.message}`)
+      alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
   return { actual, esFechaFutura, confirmarEliminacion }

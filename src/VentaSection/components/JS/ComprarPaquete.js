@@ -3,6 +3,7 @@ import { authService } from '@/Authentication/services/auth'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
+import paqueteVendidoService from '@/services/paqueteVendidoService'
 
 export function useComprarPaquete() {
   const route = useRoute()
@@ -35,31 +36,18 @@ export function useComprarPaquete() {
     errorMessage.value = ''
     try {
       const validationError = validateForm()
-      const token = authService.getToken()
       if (validationError) {
         throw new Error(validationError)
       }
-
-      const response = await fetch('http://localhost:3000/api/paquetevendido', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cliente__idcliente: cliente,
-          paquete__codpaquete: CodPaquete.value,
-          fechacompra: new Date(),
-          fechainicio: fechaI.value,
-          fechafin: fechaF.value,
-        }),
+      const body = JSON.stringify({
+        cliente__idcliente: cliente,
+        paquete__codpaquete: CodPaquete.value,
+        fechacompra: new Date(),
+        fechainicio: fechaI.value,
+        fechafin: fechaF.value,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al registrar usuario')
-      }
+      await paqueteVendidoService.create(body)
 
       alert('Paquete Comprado correctamente')
       router.push('/')

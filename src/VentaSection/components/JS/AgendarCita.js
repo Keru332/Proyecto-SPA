@@ -3,6 +3,7 @@ import { authService } from '@/Authentication/services/auth'
 import { tratamientoStore } from '@/TratamientoSection/stores/TratamientoReservar'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
+import citaService from '@/services/citaService'
 
 export function useAgendarCita() {
   const route = useRoute()
@@ -41,29 +42,18 @@ export function useAgendarCita() {
       if (validationError) {
         throw new Error(validationError)
       }
-
-      const response = await fetch('http://localhost:3000/api/cita', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          codsolicitud: 'z7ccd3cf-dd97-4e81-83af-fae01e33f261',
-          tratamiento__codtratamiento: CodTrat.value,
-          tratamiento__categoria_codcategoria: CodCategoria.value,
-          cliente__idcliente: cliente,
-          fecha: fechaC.value,
-          horacita: hora.value,
-          observaciones: '',
-        }),
+      const body = JSON.stringify({
+        codsolicitud: 'z7ccd3cf-dd97-4e81-83af-fae01e33f261',
+        tratamiento__codtratamiento: CodTrat.value,
+        tratamiento__categoria_codcategoria: CodCategoria.value,
+        cliente__idcliente: cliente,
+        fecha: fechaC.value,
+        horacita: hora.value,
+        observaciones: '',
       })
 
-      const data = await response.json()
+      await citaService.create(body)
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al registrar usuario')
-      }
       alert('Cita agendada correctamente')
       router.push('/')
     } catch (error) {

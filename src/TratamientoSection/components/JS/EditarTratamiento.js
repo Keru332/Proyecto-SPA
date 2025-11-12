@@ -2,7 +2,8 @@ import { reactive, ref, onMounted, watch } from 'vue'
 import { tratamientoStore } from '@/TratamientoSection/stores/TratamientoReservar'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { authService } from '@/Authentication/services/auth'
+import categoriaService from '@/services/categoriaService'
+import tratamientoService from '@/services/tratamientoService'
 
 export function useEditarTratamiento() {
   const route = useRoute()
@@ -28,11 +29,7 @@ export function useEditarTratamiento() {
   // Función para cargar las categorías desde la API
   const fetchCategorias = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/categoria')
-      if (!response.ok) {
-        throw new Error('Error al cargar categorías')
-      }
-      const data = await response.json()
+      const data = await categoriaService.getAll()
       categorias.value = data
     } catch (error) {
       console.error('Error:', error)
@@ -43,8 +40,6 @@ export function useEditarTratamiento() {
   // Función para actualizar el tratamiento
   const submitForm = async () => {
     try {
-      const token = authService.getToken()
-      // Preparar los datos para enviar
       const datosActualizados = {
         nombretratamiento: tratamientoF.nombre,
         descripcion: tratamientoF.descripcion,
@@ -53,22 +48,7 @@ export function useEditarTratamiento() {
         categoria_codcategoria: tratamientoF.codcategoria,
       }
 
-      const response = await fetch(
-        `http://localhost:3000/api/tratamiento/${tratamientoF.codtratamiento}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(datosActualizados),
-        },
-      )
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al actualizar el tratamiento')
-      }
+      await tratamientoService.update(tratamientoF.codtratamiento, datosActualizados)
 
       mensaje.value = 'Tratamiento actualizado correctamente!'
 

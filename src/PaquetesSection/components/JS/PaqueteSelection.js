@@ -1,6 +1,8 @@
 import { ref, onMounted } from 'vue'
 import { authService } from '@/Authentication/services/auth'
 import { computed } from 'vue'
+import paqueteService from '@/services/paqueteService'
+import paqTratService from '@/services/paqTratService'
 
 export function usePaqueteSelection() {
   const paquetes = ref([])
@@ -16,9 +18,8 @@ export function usePaqueteSelection() {
 
   const fetchPaquetes = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/paquete/')
-      if (!response.ok) throw new Error(`Error ${response.status}`)
-      paquetes.value = await response.json()
+      const response = await paqueteService.getAll()
+      paquetes.value = response
       await fetchPaquetesTratamiento()
     } catch (err) {
       console.error('Error cargando paquetes:', err)
@@ -33,10 +34,9 @@ export function usePaqueteSelection() {
   const fetchPaquetesTratamiento = async () => {
     const promises = paquetes.value.map(async (paquete, index) => {
       try {
-        const response = await fetch(`http://localhost:3000/api/paq_trat/${paquete.codpaquete}`)
-        if (!response.ok) throw new Error(`Error ${response.status}`)
+        const response = await paqTratService.getById(paquete.codpaquete)
         paquetes.value[index].tratamientos = []
-        paquetes.value[index].tratamientos = await response.json()
+        paquetes.value[index].tratamientos = response
       } catch (err) {
         console.error('Error cargando paquetes:', err)
       }

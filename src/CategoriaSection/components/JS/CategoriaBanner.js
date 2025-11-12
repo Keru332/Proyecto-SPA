@@ -1,36 +1,31 @@
-import { authService } from '@/Authentication/services/auth'
 import { useRouter } from 'vue-router'
+import categoriaService from '@/services/categoriaService'
+import { ref } from 'vue'
 export function useCategoriaBanner(props) {
   const router = useRouter()
-
+  const errorMessage = ref('')
   const confirmarEliminacion = () => {
     if (
       confirm(
         '¿Estás seguro de que deseas eliminar esta categoria? Esta acción no se puede deshacer.',
       )
     ) {
-      eliminarTratamiento()
+      eliminarCategoria()
     }
   }
 
-  const eliminarTratamiento = async () => {
+  const eliminarCategoria = async () => {
     try {
-      // Obtener el token
-      const token = authService.getToken()
+      const response = await categoriaService.delete(props.categoria.codcategoria)
+      console.log(response)
 
-      const response = await fetch(
-        `http://localhost:3000/api/categoria/${props.categoria.codcategoria}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      alert('categoria eliminado correctamente')
+      window.location.reload()
+    } catch (error) {
+      if (error.response) {
+        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar categoria'}`
+        const errorText = JSON.stringify(error.response.data)
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        // Detectar violación de FK por el mensaje de error
         if (
           errorText.includes('foreign key') ||
           errorText.includes('FK_') ||
@@ -38,20 +33,15 @@ export function useCategoriaBanner(props) {
           errorText.includes('restrict') ||
           errorText.includes('REFERENCE')
         ) {
-          throw new Error(
-            'No se puede eliminar este categoria porque está siendo utilizado en algun tratamiento. Primero elimine las compras asociadas.',
-          )
+          errorMessage.value =
+            'No se puede eliminar este categoria porque está siendo utilizado en algun tratamiento. Primero elimine las compras asociadas.'
         }
-        throw new Error(`Error ${response.status}: ${errorText}`)
+      } else {
+        errorMessage.value = 'Error de conexión con el servidor'
       }
-
-      alert('categoria eliminado correctamente')
-      window.location.reload()
-    } catch (error) {
-      console.error('Error eliminando categoria:', error)
-      alert(`Error al eliminar: ${error.message}`)
+      alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
 
-  return { router, confirmarEliminacion, eliminarTratamiento }
+  return { router, confirmarEliminacion, eliminarCategoria }
 }

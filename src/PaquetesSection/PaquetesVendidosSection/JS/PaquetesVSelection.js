@@ -1,13 +1,10 @@
 import { ref, onMounted, computed } from 'vue'
-import { authService } from '@/Authentication/services/auth'
-
+import paqueteVendidoService from '@/services/paqueteVendidoService'
 export function usePaquetesVSelection() {
   const paquetesv = ref([])
   const loading = ref(true)
   const error = ref('')
   const filtroActivo = ref('')
-
-  const headers = authService.getAuthHeaders()
 
   // Computed para el texto del filtro activo
   const textoFiltroActivo = computed(() => {
@@ -82,20 +79,8 @@ export function usePaquetesVSelection() {
 
   const fetchPaquetesV = async () => {
     try {
-      const responsePaqueteV = await fetch(`http://localhost:3000/api/paquetevendido/`, {
-        method: 'GET',
-        headers: headers,
-      })
-      if (!responsePaqueteV.ok) {
-        if (responsePaqueteV.status === 401) {
-          throw new Error('Token inválido o expirado')
-        } else if (responsePaqueteV.status === 403) {
-          throw new Error('No tienes permisos para ver los paquetes vendidos')
-        } else {
-          throw new Error(`Error ${responsePaqueteV.status}: ${responsePaqueteV.statusText}`)
-        }
-      }
-      paquetesv.value = await responsePaqueteV.json()
+      const responsePaqueteV = await paqueteVendidoService.getAll()
+      paquetesv.value = responsePaqueteV
     } catch (err) {
       error.value = 'No se pudo cargar los paquetes vendidos'
       console.error('Error:', err)

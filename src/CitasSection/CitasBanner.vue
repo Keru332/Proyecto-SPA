@@ -35,7 +35,7 @@ const props = defineProps({
     type: Object,
     required: true,
     default: () => ({
-      codcita: Object,
+      codsolicitud: Object,
       nombrecliente: '',
       nombretratamiento: '',
       horacita: '',

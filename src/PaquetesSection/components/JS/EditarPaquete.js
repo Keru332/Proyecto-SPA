@@ -1,8 +1,10 @@
 import { reactive, ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { authService } from '@/Authentication/services/auth'
-import { paqueteStore } from '../stores/PaqueteReservar'
+import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
+import tratamientoService from '@/services/tratamientoService'
+import paqTratService from '@/services/paqTratService'
+import paqueteService from '@/services/paqueteService'
 
 export function useEditarPaquete() {
   const route = useRoute()
@@ -59,11 +61,8 @@ export function useEditarPaquete() {
   // Función para cargar todos los tratamientos disponibles
   const fetchTratamientos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/tratamiento')
-      if (!response.ok) {
-        throw new Error('Error al cargar tratamientos')
-      }
-      const data = await response.json()
+      const response = await tratamientoService.getAll()
+      const data = response
 
       // Agregar propiedad selected a cada tratamiento
       const tratamientosConSelected = data.map((tratamiento) => ({
@@ -81,8 +80,6 @@ export function useEditarPaquete() {
   // Función para actualizar el paquete
   const submitForm = async () => {
     try {
-      const token = authService.getToken()
-
       // 1. Actualizar datos básicos del paquete
       const datosActualizados = {
         nombrepaquete: paqueteF.nombrepaquete,
@@ -90,20 +87,7 @@ export function useEditarPaquete() {
         duraciontotal: parseInt(paqueteF.duraciontotal),
       }
 
-      const response = await fetch(`http://localhost:3000/api/paquete/${paqueteF.codpaquete}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(datosActualizados),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al actualizar el paquete')
-      }
+      await paqueteService.update(paqueteF.codpaquete, datosActualizados)
 
       // 2. Actualizar relaciones con tratamientos
       await actualizarRelacionesTratamientos()
@@ -119,8 +103,6 @@ export function useEditarPaquete() {
   }
 
   const actualizarRelacionesTratamientos = async () => {
-    const token = authService.getToken()
-
     try {
       // Obtener IDs de tratamientos actuales y nuevos
       const tratamientosOriginalesIds = tratamientosOriginales.value.map((t) => t.codtratamiento)
@@ -138,19 +120,7 @@ export function useEditarPaquete() {
 
       // Eliminar relaciones que ya no existen
       const deletePromises = tratamientosAEliminar.map(async (tratamientoId) => {
-        const response = await fetch(
-          `http://localhost:3000/api/paq_trat/${paqueteF.codpaquete}/${tratamientoId}`,
-          {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
-
-        if (!response.ok) {
-          throw new Error(`Error al eliminar relación con tratamiento ${tratamientoId}`)
-        }
+        await paqTratService.delete(paqueteF.codpaquete, tratamientoId)
       })
 
       // Agregar nuevas relaciones
@@ -164,20 +134,9 @@ export function useEditarPaquete() {
           tratamiento__categoria_codcategoria: tratamiento.categoria_codcategoria,
         }
 
-        const response = await fetch(`http://localhost:3000/api/paq_trat`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(relacionData),
-        })
+        const response = await paqTratService.create(relacionData)
 
-        if (!response.ok) {
-          throw new Error(`Error al crear relación con tratamiento ${tratamientoId}`)
-        }
-
-        return await response.json()
+        return await response
       })
 
       // Esperar a que todas las operaciones se completen

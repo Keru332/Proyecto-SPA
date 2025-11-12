@@ -1,6 +1,8 @@
-import { authService } from '@/Authentication/services/auth'
+import paqueteService from '@/services/paqueteService'
+import { ref } from 'vue'
 
 export function usePaqueteBanner(props) {
+  const errorMessage = ref('')
   const confirmarEliminacion = () => {
     if (
       confirm(
@@ -13,22 +15,15 @@ export function usePaqueteBanner(props) {
 
   const eliminarTratamiento = async () => {
     try {
-      // Obtener el token
-      const token = authService.getToken()
+      await paqueteService.delete(props.paquete.codpaquete)
 
-      const response = await fetch(
-        `http://localhost:3000/api/paquete/${props.paquete.codpaquete}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      alert('Paquete eliminado correctamente')
+      window.location.reload()
+    } catch (error) {
+      if (error.response) {
+        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar paquete'}`
+        const errorText = JSON.stringify(error.response.data)
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        // Detectar violación de FK por el mensaje de error
         if (
           errorText.includes('foreign key') ||
           errorText.includes('FK_') ||
@@ -36,18 +31,13 @@ export function usePaqueteBanner(props) {
           errorText.includes('restrict') ||
           errorText.includes('REFERENCE')
         ) {
-          throw new Error(
-            'No se puede eliminar este paquete porque está siendo utilizado en paquetes comprados. Primero elimine las compras asociadas.',
-          )
+          errorMessage.value =
+            'No se puede eliminar este paquete porque está siendo utilizado en algun paquete vendido. Primero elimine las compras asociadas.'
         }
-        throw new Error(`Error ${response.status}: ${errorText}`)
+      } else {
+        errorMessage.value = 'Error de conexión con el servidor'
       }
-
-      alert('Paquete eliminado correctamente')
-      window.location.reload()
-    } catch (error) {
-      console.error('Error eliminando paquete:', error)
-      alert(`Error al eliminar: ${error.message}`)
+      alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
 

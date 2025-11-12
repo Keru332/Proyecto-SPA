@@ -1,4 +1,5 @@
 import { ref, onMounted } from 'vue'
+import categoriaService from '@/services/categoriaService'
 
 //import { authService } from '@/Authentication/services/auth'
 export function useCategoriasSelection() {
@@ -8,9 +9,8 @@ export function useCategoriasSelection() {
 
   const fetchcategorias = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/categoria/')
-      if (!response.ok) throw new Error(`Error ${response.status}`)
-      categorias.value = await response.json()
+      const response = await categoriaService.getAll()
+      categorias.value = response
     } catch (err) {
       console.error('Error cargando categorias:', err)
       error.value = 'No se pudieron cargar los categorias.'

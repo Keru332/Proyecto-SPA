@@ -1,6 +1,8 @@
 import { reactive, ref, computed, onMounted } from 'vue'
-import { authService } from '@/Authentication/services/auth'
 import { useRouter } from 'vue-router'
+import tratamientoService from '@/services/tratamientoService'
+import paqTratService from '@/services/paqTratService'
+import paqueteService from '@/services/paqueteService'
 
 export function useCrearPaquete() {
   const router = useRouter()
@@ -56,7 +58,6 @@ export function useCrearPaquete() {
 
   const submitForm = async () => {
     try {
-      const token = authService.getToken()
       // Preparar los datos para enviar
       const datosActualizados = {
         nombrepaquete: paquete.nombrepaquete,
@@ -64,19 +65,9 @@ export function useCrearPaquete() {
         duraciontotal: parseInt(paquete.duraciontotal),
       }
 
-      const response = await fetch(`http://localhost:3000/api/paquete/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(datosActualizados),
-      })
-      const data = await response.json()
+      const response = await paqueteService.create(datosActualizados)
+      const data = response
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al crear el paquete')
-      }
       const codpaquete = data.codpaquete
       if (tratamientosPaquete.value.length > 0) {
         await fetchCrearPaquetesConTratamientos(codpaquete)
@@ -103,11 +94,8 @@ export function useCrearPaquete() {
 
   const fetchTratamientos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/tratamiento')
-      if (!response.ok) {
-        throw new Error('Error al cargar tratamientos')
-      }
-      const data = await response.json()
+      const response = await tratamientoService.getAll()
+      const data = response
       tratamientosDisponibles.value = data
     } catch (error) {
       console.error('Error:', error)
@@ -116,7 +104,6 @@ export function useCrearPaquete() {
   }
 
   const fetchCrearPaquetesConTratamientos = async (codPaquete) => {
-    const token = authService.getToken()
     try {
       // Crear una relación por cada tratamiento en el paquete
       const promises = tratamientosPaquete.value.map(async (tratamiento) => {
@@ -126,22 +113,9 @@ export function useCrearPaquete() {
           tratamiento__categoria_codcategoria: tratamiento.categoria_codcategoria,
         }
 
-        const response = await fetch(`http://localhost:3000/api/paq_trat`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(relacionData),
-        })
+        const response = await paqTratService.create(relacionData)
 
-        if (!response.ok) {
-          throw new Error(
-            `Error al crear relación con tratamiento ${tratamiento.nombretratamiento}`,
-          )
-        }
-
-        return await response.json()
+        return response
       })
 
       // Esperar a que todas las relaciones se creen

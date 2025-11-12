@@ -7,6 +7,10 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+const validateSpaces = require('./middleware/validateSpace');
+
+app.use(validateSpaces);
+
 
 // Rutas automáticas
 app.use('/api/categoria', require('./routes/categoria'));

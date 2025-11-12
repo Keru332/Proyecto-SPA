@@ -1,6 +1,8 @@
-import { authService } from '@/Authentication/services/auth'
-
+import { ref } from 'vue'
+import tratamientoService from '@/services/tratamientoService'
 export function useTratamientoBanner(props) {
+  const errorMessage = ref('')
+
   const confirmarEliminacion = () => {
     if (
       confirm(
@@ -13,22 +15,16 @@ export function useTratamientoBanner(props) {
 
   const eliminarTratamiento = async () => {
     try {
-      // Obtener el token
-      const token = authService.getToken()
+      const response = await tratamientoService.delete(props.tratamiento.codtratamiento)
+      console.log(response)
 
-      const response = await fetch(
-        `http://localhost:3000/api/tratamiento/${props.tratamiento.codtratamiento}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      alert('tratamiento eliminado correctamente')
+      window.location.reload()
+    } catch (error) {
+      if (error.response) {
+        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar tratamiento'}`
+        const errorText = JSON.stringify(error.response.data)
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        // Detectar violación de FK por el mensaje de error
         if (
           errorText.includes('foreign key') ||
           errorText.includes('FK_') ||
@@ -36,18 +32,13 @@ export function useTratamientoBanner(props) {
           errorText.includes('restrict') ||
           errorText.includes('REFERENCE')
         ) {
-          throw new Error(
-            'No se puede eliminar este tratamiento porque está siendo utilizado en citas. Primero elimine las citas asociadas.',
-          )
+          errorMessage.value =
+            'No se puede eliminar este tratamiento porque está siendo utilizado en alguna cita. Primero elimine las compras asociadas.'
         }
-        throw new Error(`Error ${response.status}: ${errorText}`)
+      } else {
+        errorMessage.value = 'Error de conexión con el servidor'
       }
-
-      alert('Tratamiento eliminado correctamente')
-      window.location.reload()
-    } catch (error) {
-      console.error('Error eliminando tratamiento:', error)
-      alert(`Error al eliminar: ${error.message}`)
+      alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
 

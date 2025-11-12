@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import userService from '@/services/userService'
 
 export function useLogin() {
   const router = useRouter()
@@ -22,36 +23,25 @@ export function useLogin() {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: usuario.value,
-          password: pass.value,
-        }),
+      const body = JSON.stringify({
+        username: usuario.value,
+        password: pass.value,
       })
+      const response = await userService.login(body)
+      const data = response
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al iniciar sesión')
-      }
-
-      // Login exitoso
-      console.log('Login exitoso:', data)
-
-      // Guardar token en localStorage
       if (data.token) {
         localStorage.setItem('authToken', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
       }
 
-      // Redirigir al dashboard o página principal
       router.push('/')
     } catch (error) {
-      errorMessage.value = `❌ Error: ${error.message}`
+      if (error.response) {
+        errorMessage.value = `Error: ${error.response.data?.error || 'Error al iniciar sesión'}`
+      } else {
+        errorMessage.value = 'Error de conexión con el servidor'
+      }
     } finally {
       loading.value = false
     }

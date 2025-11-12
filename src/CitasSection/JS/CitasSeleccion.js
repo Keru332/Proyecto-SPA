@@ -1,13 +1,11 @@
 import { ref, onMounted, computed } from 'vue'
-import { authService } from '@/Authentication/services/auth'
+import citaService from '@/services/citaService'
 
 export function useCitasSeleccion() {
   const citas = ref([])
   const loading = ref(true)
   const error = ref('')
   const filtroActivo = ref('')
-
-  const headers = authService.getAuthHeaders()
 
   // Computed para el texto del filtro activo
   const textoFiltroActivo = computed(() => {
@@ -82,20 +80,8 @@ export function useCitasSeleccion() {
 
   const fetchCitas = async () => {
     try {
-      const responseCitas = await fetch(`http://localhost:3000/api/cita/`, {
-        method: 'GET',
-        headers: headers,
-      })
-      if (!responseCitas.ok) {
-        if (responseCitas.status === 401) {
-          throw new Error('Token inválido o expirado')
-        } else if (responseCitas.status === 403) {
-          throw new Error('No tienes permisos para ver las cias')
-        } else {
-          throw new Error(`Error ${responseCitas.status}: ${responseCitas.statusText}`)
-        }
-      }
-      citas.value = await responseCitas.json()
+      const responseCitas = await citaService.getAll()
+      citas.value = responseCitas
     } catch (err) {
       error.value = 'No se pudo cargar las citas'
       console.error('Error:', err)
