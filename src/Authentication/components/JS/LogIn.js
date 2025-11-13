@@ -10,8 +10,7 @@ export function useLogin() {
   const errorMessage = ref('')
 
   // Función para hacer login
-  const loginUser = async (event) => {
-    event.preventDefault()
+  const loginUser = async () => {
     loading.value = true
     errorMessage.value = ''
 

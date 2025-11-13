@@ -1,5 +1,8 @@
 <script setup>
+import { schema } from '../schemas/LogInValidate'
 import { useLogin } from './JS/LogIn'
+import { Form, ErrorMessage, Field } from 'vee-validate'
+
 const { usuario, pass, loading, errorMessage, loginUser } = useLogin()
 </script>
 
@@ -13,20 +16,29 @@ const { usuario, pass, loading, errorMessage, loginUser } = useLogin()
       {{ errorMessage }}
     </div>
 
-    <form @submit="loginUser" class="login-form">
+    <Form @submit="loginUser" class="login-form" :validation-schema="schema" v-slot="{ errors }">
       <div class="user-container">
         <label for="user">Usuario</label>
-        <input
+        <Field
           type="text"
           class="user"
+          name="user"
           placeholder="Escriba su Nombre"
           v-model="usuario"
-          required
+          :class="{ 'error-field': errors.user }"
         />
+        <ErrorMessage name="user" class="vee-error-message"></ErrorMessage>
       </div>
       <div class="password-container">
         <label for="password">Contraseña</label>
-        <input type="password" placeholder="Escriba su Contraseña" v-model="pass" required />
+        <Field
+          name="password"
+          type="password"
+          placeholder="Escriba su Contraseña"
+          v-model="pass"
+          :class="{ 'error-field': errors.password }"
+        />
+        <ErrorMessage name="password" class="vee-error-message"></ErrorMessage>
       </div>
       <input
         type="submit"
@@ -34,7 +46,7 @@ const { usuario, pass, loading, errorMessage, loginUser } = useLogin()
         class="submit"
         :disabled="loading"
       />
-    </form>
+    </Form>
     <div class="footer">
       <h3>
         ¿No está registrado? <span> <RouterLink to="/register">Registrar</RouterLink></span>

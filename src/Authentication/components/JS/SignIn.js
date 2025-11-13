@@ -14,8 +14,7 @@ export function useRegister() {
   const successMessage = ref('')
 
   // Función para registrar usuario
-  const registerUser = async (event) => {
-    event.preventDefault()
+  const registerUser = async () => {
     loading.value = true
     errorMessage.value = ''
     successMessage.value = ''

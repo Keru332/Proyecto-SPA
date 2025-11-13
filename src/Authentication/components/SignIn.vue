@@ -1,5 +1,7 @@
 <script setup>
 import { useRegister } from './JS/SignIn'
+import { Form, ErrorMessage, Field } from 'vee-validate'
+import { schema } from '../schemas/SignInValidate'
 
 const {
   usuario,
@@ -29,60 +31,71 @@ const {
       {{ successMessage }}
     </div>
 
-    <form @submit="registerUser" class="login-form">
+    <Form @submit="registerUser" class="login-form" :validation-schema="schema" v-slot="{ errors }">
       <div class="user-container">
         <label for="user">Usuario</label>
-        <input
+        <Field
           type="text"
           class="user"
+          name="user"
           placeholder="Escriba su nombre de usuario"
           v-model="usuario"
-          required
+          :class="{ 'error-field': errors.user }"
         />
+        <ErrorMessage name="user" class="vee-error-message"></ErrorMessage>
       </div>
 
       <div class="user-container">
         <label for="Fullname">Nombre y Apellidos</label>
-        <input
+        <Field
           type="text"
           class="Fullname"
+          name="Fullname"
           placeholder="Escriba su nombre completo"
           v-model="nombre"
-          required
+          :class="{ 'error-field': errors.Fullname }"
         />
+        <ErrorMessage name="Fullname" class="vee-error-message"></ErrorMessage>
       </div>
 
       <div class="user-container">
         <label for="correo">Correo Electrónico</label>
-        <input
+        <Field
           type="email"
           class="correo"
+          name="correo"
           placeholder="Escriba su correo electrónico"
           v-model="correo"
-          required
+          :class="{ 'error-field': errors.correo }"
         />
+        <ErrorMessage name="correo" class="vee-error-message"></ErrorMessage>
       </div>
 
       <div class="password-container">
         <label for="password">Contraseña</label>
-        <input
+        <Field
           type="password"
           id="password"
+          name="password"
           placeholder="Cree una contraseña segura"
           v-model="pass"
-          required
+          :class="{ 'error-field': errors.password }"
         />
+        <ErrorMessage name="password" class="vee-error-message"></ErrorMessage>
       </div>
 
       <div class="password-container">
         <label for="confirm-password">Confirmar Contraseña</label>
-        <input
+        <Field
           type="password"
           id="confirm-password"
+          name="confirmPassword"
           placeholder="Repita su contraseña"
           required
           v-model="confirmPass"
+          :class="{ 'error-field': errors.confirmPassword }"
         />
+        <ErrorMessage name="confirmPassword" class="vee-error-message"></ErrorMessage>
       </div>
 
       <input
@@ -91,7 +104,7 @@ const {
         class="submit"
         :disabled="loading"
       />
-    </form>
+    </Form>
 
     <div class="footer">
       <h3>
