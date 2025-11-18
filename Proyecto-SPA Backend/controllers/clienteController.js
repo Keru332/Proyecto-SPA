@@ -1,9 +1,9 @@
-const Cliente = require('../models/cliente');
+const ClienteService = require('../services/clienteService');
 
 const ClienteController = {
   getAll: async (req, res) => {
     try {
-      const data = await Cliente.getAll();
+      const data = await ClienteService.getAll();
       res.json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -12,7 +12,7 @@ const ClienteController = {
 
   getById: async (req, res) => {
     try {
-      const data = await Cliente.getById(req.params.id);
+      const data = await ClienteService.getById(req.params.id);
       if (!data) {
         return res.status(404).json({ error: 'Cliente no encontrado' });
       }
@@ -24,7 +24,7 @@ const ClienteController = {
 
   create: async (req, res) => {
     try {
-      const nuevo = await Cliente.create(req.body);
+      const nuevo = await ClienteService.create(req.body);
       res.status(201).json(nuevo);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -33,7 +33,7 @@ const ClienteController = {
 
   update: async (req, res) => {
     try {
-      const actualizado = await Cliente.update(req.params.id, req.body);
+      const actualizado = await ClienteService.update(req.params.id, req.body);
       if (!actualizado) {
         return res.status(404).json({ error: 'Cliente no encontrado' });
       }
@@ -45,7 +45,7 @@ const ClienteController = {
 
   delete: async (req, res) => {
     try {
-      const eliminado = await Cliente.delete(req.params.id);
+      const eliminado = await ClienteService.delete(req.params.id);
       if (!eliminado) {
         return res.status(404).json({ error: 'Cliente no encontrado' });
       }

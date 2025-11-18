@@ -1,22 +1,9 @@
-const User = require('../models/users');
-const jwt = require('jsonwebtoken');
-
-const generateToken = (user) => {
-  return jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-      role: user.role
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: '24h' }
-  );
-};
+const UserService = require('../services/userService');
 
 const userController = {
   getAll: async (req, res) => {
     try {
-      const data = await User.getAll();
+      const data = await UserService.getAll();
       res.json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -25,41 +12,29 @@ const userController = {
 
   getById: async (req, res) => {
     try {
-      const data = await User.getById(req.params.id);
-      if (!data) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
+      const data = await UserService.getById(req.params.id);
       res.json(data);
     } catch (error) {
+      if (error.message === 'Usuario no encontrado') {
+        return res.status(404).json({ error: error.message });
+      }
       res.status(500).json({ error: error.message });
     }
   },
 
-  // REGISTRO DE USUARIO
   register: async (req, res) => {
     try {
-      const { username, password, role = 'user' , email, fullname} = req.body;
+      const { username, password, role = 'user', email, fullname } = req.body;
 
-      // Validaciones básicas
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Username y password son requeridos' });
-      }
+      const nuevoUsuario = await UserService.register({
+        username,
+        password,
+        role,
+        email,
+        fullname
+      });
 
-      if (password.length < 6) {
-        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
-      }
-
-      // Verificar si el usuario ya existe
-      const existingUser = await User.findByUsername(username);
-      if (existingUser) {
-        return res.status(400).json({ error: 'El usuario ya existe' });
-      }
-
-      // Crear usuario
-      const nuevoUsuario = await User.create({ username, password, role, email, fullname });
-
-      // Generar token
-      const token = generateToken(nuevoUsuario);
+      const token = UserService.generateToken(nuevoUsuario);
 
       res.status(201).json({
         message: 'Usuario registrado exitosamente',
@@ -67,12 +42,20 @@ const userController = {
         token: token
       });
     } catch (error) {
+      if (error.message === 'Username y password son requeridos' || 
+          error.message === 'La contraseña debe tener al menos 6 caracteres' ||
+          error.message === 'El usuario ya existe') {
+        return res.status(400).json({ error: error.message });
+      }
       res.status(500).json({ error: error.message });
     }
   },
 
   update: async (req, res) => {
     try {
+      // Nota: Este método no existe en UserService, lo mantengo por compatibilidad
+      // Considera mover la lógica de update a UserService también
+      const User = require('../models/users');
       const actualizado = await User.update(req.params.id, req.body);
       if (!actualizado) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -85,6 +68,9 @@ const userController = {
 
   delete: async (req, res) => {
     try {
+      // Nota: Este método no existe en UserService, lo mantengo por compatibilidad
+      // Considera mover la lógica de delete a UserService también
+      const User = require('../models/users');
       const eliminado = await User.delete(req.params.id);
       if (!eliminado) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -95,110 +81,77 @@ const userController = {
     }
   },
 
-  // LOGIN
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
 
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Username y password son requeridos' });
-      }
-
-      const user = await User.findByUsername(username);
-
-      if (!user) {
-        return res.status(401).json({ error: 'Credenciales inválidas' });
-      }
-
-      // Verificar contraseña
-      const isValidPassword = await User.verifyPassword(password, user.password_hash);
-
-      if (!isValidPassword) {
-        return res.status(401).json({ error: 'Credenciales inválidas' });
-      }
-
-      // Generar token
-      const token = generateToken(user);
-
-      // Eliminar password_hash de la respuesta
-      const { password_hash, ...userWithoutPassword } = user;
+      const user = await UserService.login(username, password);
+      const token = UserService.generateToken(user);
 
       res.json({
         message: 'Login exitoso',
-        user: userWithoutPassword,
+        user: user,
         token: token
       });
     } catch (error) {
+      if (error.message === 'Username y password son requeridos') {
+        return res.status(400).json({ error: error.message });
+      }
+      if (error.message === 'Credenciales inválidas') {
+        return res.status(401).json({ error: error.message });
+      }
       res.status(500).json({ error: error.message });
     }
   },
 
   updatePassword: async (req, res) => {
-  try {
-    const { oldPassword, newPassword } = req.body;
-    const userId = req.params.id;
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const userId = req.params.id;
 
-    // Validar nueva contraseña
-    if (!newPassword || newPassword.length < 6) {
-      return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' });
-    }
+      const updatedUser = await UserService.updatePassword(userId, oldPassword, newPassword);
 
-    // Obtener usuario con el método del modelo
-    const user = await User.getById(userId);
-     if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
-
-    // Verificar la contraseña antigua usando método del modelo
-
-    const pass = await User.getHashed(userId)
-    if (!pass) {
-      return res.status(400).json({ error: 'Error al actualizar' });
-    }
-    const valid = await User.verifyPassword(oldPassword, pass.password_hash);
-    if (!valid) {
-      return res.status(400).json({ error: 'Contraseña actual incorrecta' });
-    }
-
-    // Actualizar la contraseña usando método del modelo
-    const updatedUser = await User.updatePassword(userId, newPassword);
-
-    res.json({
-      message: 'Contraseña actualizada correctamente',
-      user: {
-        id: updatedUser.id,
-        username: updatedUser.username,
-        role: updatedUser.role
+      res.json({
+        message: 'Contraseña actualizada correctamente',
+        user: {
+          id: updatedUser.id,
+          username: updatedUser.username,
+          role: updatedUser.role
+        }
+      });
+    } catch (error) {
+      if (error.message === 'La nueva contraseña debe tener al menos 6 caracteres' ||
+          error.message === 'Contraseña actual incorrecta') {
+        return res.status(400).json({ error: error.message });
       }
-    });
-  } catch (error) {
-    console.error('Error al actualizar contraseña:', error);
-    res.status(500).json({ error: `Error al actualizar la contraseña ${error}` });
-  }
-},
-
-updateProfile: async (req, res) => {
-  try {
-    const { username, correo } = req.body;
-
-    if (!username || !correo) {
-      return res.status(400).json({ error: 'Faltan campos requeridos (username o correo)' });
+      if (error.message === 'Usuario no encontrado') {
+        return res.status(404).json({ error: error.message });
+      }
+      res.status(500).json({ error: error.message });
     }
+  },
 
-    const actualizado = await User.updateProfile(req.params.id, { username, correo });
+  updateProfile: async (req, res) => {
+    try {
+      const { username, correo } = req.body;
+      const userId = req.params.id;
 
-    if (!actualizado) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
+      const actualizado = await UserService.updateProfile(userId, { username, correo });
+
+      res.json({
+        message: 'Perfil actualizado correctamente',
+        user: actualizado,
+      });
+    } catch (error) {
+      if (error.message === 'Faltan campos requeridos (username o correo)') {
+        return res.status(400).json({ error: error.message });
+      }
+      if (error.message === 'Usuario no encontrado') {
+        return res.status(404).json({ error: error.message });
+      }
+      res.status(500).json({ error: error.message });
     }
-
-    res.json({
-      message: 'Perfil actualizado correctamente',
-      user: actualizado,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
-}
 };
 
 module.exports = userController;

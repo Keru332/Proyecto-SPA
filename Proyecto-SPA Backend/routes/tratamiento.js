@@ -7,8 +7,8 @@ router.get('/mas-popular', TratamientoController.getMasPopular);
 
 router.get('/', TratamientoController.getAll);
 router.get('/:id', TratamientoController.getById);
-router.post('/',authenticateToken, TratamientoController.create);
-router.put('/:id',authenticateToken, TratamientoController.update);
-router.delete('/:id',authenticateToken, TratamientoController.delete);
+router.post('/',authenticateToken,requireRole('admin'), TratamientoController.create);
+router.put('/:id',authenticateToken,requireRole('admin'), TratamientoController.update);
+router.delete('/:id',authenticateToken,requireRole('admin'), TratamientoController.delete);
 
 module.exports = router;

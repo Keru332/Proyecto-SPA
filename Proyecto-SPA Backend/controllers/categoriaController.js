@@ -1,9 +1,9 @@
-const Categoria = require('../models/categoria');
+const CategoriaService = require('../services/categoriaService');
 
 const CategoriaController = {
   getAll: async (req, res) => {
     try {
-      const data = await Categoria.getAll();
+      const data = await CategoriaService.getAll();
       res.json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -12,7 +12,7 @@ const CategoriaController = {
 
   getById: async (req, res) => {
     try {
-      const data = await Categoria.getById(req.params.id);
+      const data = await CategoriaService.getById(req.params.id);
       if (!data) {
         return res.status(404).json({ error: 'Categoria no encontrado' });
       }
@@ -24,7 +24,7 @@ const CategoriaController = {
 
   create: async (req, res) => {
     try {
-      const nuevo = await Categoria.create(req.body);
+      const nuevo = await CategoriaService.create(req.body);
       res.status(201).json(nuevo);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -33,7 +33,7 @@ const CategoriaController = {
 
   update: async (req, res) => {
     try {
-      const actualizado = await Categoria.update(req.params.id, req.body);
+      const actualizado = await CategoriaService.update(req.params.id, req.body);
       if (!actualizado) {
         return res.status(404).json({ error: 'Categoria no encontrado' });
       }
@@ -45,7 +45,7 @@ const CategoriaController = {
 
   delete: async (req, res) => {
     try {
-      const eliminado = await Categoria.delete(req.params.id);
+      const eliminado = await CategoriaService.delete(req.params.id);
       if (!eliminado) {
         return res.status(404).json({ error: 'Categoria no encontrado' });
       }

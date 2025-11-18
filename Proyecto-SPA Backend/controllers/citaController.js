@@ -1,9 +1,9 @@
-const Cita = require('../models/cita');
+const CitaService = require('../services/citaService');
 
 const CitaController = {
   getAll: async (req, res) => {
     try {
-      const data = await Cita.getAll();
+      const data = await CitaService.getAll();
       res.json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -12,7 +12,7 @@ const CitaController = {
 
   getById: async (req, res) => {
     try {
-      const data = await Cita.getById(req.params.id);
+      const data = await CitaService.getById(req.params.id);
       if (!data) {
         return res.status(404).json({ error: 'Cita no encontrado' });
       }
@@ -24,7 +24,7 @@ const CitaController = {
 
   create: async (req, res) => {
     try {
-      const nuevo = await Cita.create(req.body);
+      const nuevo = await CitaService.create(req.body);
       res.status(201).json(nuevo);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -33,7 +33,7 @@ const CitaController = {
 
   update: async (req, res) => {
     try {
-      const actualizado = await Cita.update(req.params.id, req.body);
+      const actualizado = await CitaService.update(req.params.id, req.body);
       if (!actualizado) {
         return res.status(404).json({ error: 'Cita no encontrado' });
       }
@@ -45,7 +45,7 @@ const CitaController = {
 
   delete: async (req, res) => {
     try {
-      const eliminado = await Cita.delete(req.params.id);
+      const eliminado = await CitaService.delete(req.params.id);
       if (!eliminado) {
         return res.status(404).json({ error: 'Cita no encontrado' });
       }
