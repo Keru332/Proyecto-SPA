@@ -38,7 +38,7 @@ export function useAgendarCita() {
     errorMessage.value = ''
     try {
       const validationError = validateForm()
-      const token = authService.getToken()
+
       if (validationError) {
         throw new Error(validationError)
       }
@@ -49,7 +49,7 @@ export function useAgendarCita() {
         cliente__idcliente: cliente,
         fecha: fechaC.value,
         horacita: hora.value,
-        observaciones: '',
+        observaciones: 'No hay.',
       })
 
       await citaService.create(body)

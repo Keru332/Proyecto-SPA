@@ -125,6 +125,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // Verificar tokens expirados en cada navegación
+  const token = authService.getToken()
+  if (token && !authService.isTokenValid(token)) {
+    console.log('🛡️ Router: Token expirado, redirigiendo al login')
+    authService.logout(false)
+    next('/login?expired=true')
+    return
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!authService.isAuthenticated()) {
       // Redirige al login
