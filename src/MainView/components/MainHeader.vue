@@ -34,7 +34,7 @@ const logout = () => {
           <RouterLink to="/productos">Tratamientos</RouterLink>
           <RouterLink to="/paquetes">Paquetes</RouterLink>
           <RouterLink to="/usuario">Usuario</RouterLink>
-          <button @click="logout" class="logout">Logout</button>
+          <button @click="logout" class="logout">Cerrar sesión</button>
         </nav>
         <nav v-else-if="authService.isAuthenticated() && authService.isAdmin()">
           <RouterLink to="/productos">Tratamientos</RouterLink>
@@ -43,11 +43,11 @@ const logout = () => {
           <RouterLink to="/citas">Citas</RouterLink>
           <RouterLink to="/cat">Categorías</RouterLink>
           <RouterLink to="/admin">AdminPanel</RouterLink>
-          <button @click="logout" class="logout">Logout</button>
+          <button @click="logout" class="logout">Cerrar sesión</button>
         </nav>
         <nav v-else>
           <RouterLink to="/register" class="ButtonSigLog">Registrar</RouterLink>
-          <RouterLink to="/login" class="ButtonSigLog">Login</RouterLink>
+          <RouterLink to="/login" class="ButtonSigLog">Iniciar sesión</RouterLink>
         </nav>
       </div>
     </div>
