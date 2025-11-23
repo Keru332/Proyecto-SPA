@@ -4,12 +4,13 @@
 
     <div v-if="usuario" class="user-info-container">
       <div class="user-card">
-        <!-- Información del usuario -->
+
         <div v-if="!editando">
           <div class="user-field">
             <strong>Usuario:</strong>
             <span class="user-value">{{ usuario.username }}</span>
           </div>
+
           <div class="user-field">
             <strong>Correo:</strong>
             <span class="user-value">{{ usuario.correo }}</span>
@@ -21,21 +22,25 @@
           </div>
         </div>
 
-        <!-- Editar perfil -->
         <div v-else>
-          <div class="user-field">
-            <strong>Nombre:</strong>
-            <input v-model="form.username" type="text" />
-          </div>
-          <div class="user-field">
-            <strong>Correo:</strong>
-            <input v-model="form.correo" type="email" />
-          </div>
+          <Form :validation-schema="editSchema" @submit="guardar">
+            <div class="user-field">
+              <strong>Nombre:</strong>
+              <Field name="Fullname" v-model="form.username" />
+              <ErrorMessage name="Fullname" class="errorMessage" />
+            </div>
 
-          <div class="edit-actions action-buttons">
-            <button @click="guardar" class="save-btn">Guardar</button>
-            <button @click="cancelar" class="cancel-btn">Cancelar</button>
-          </div>
+            <div class="user-field">
+              <strong>Correo:</strong>
+              <Field name="correo" type="email" v-model="form.correo" />
+              <ErrorMessage name="correo" class="errorMessage" />
+            </div>
+
+            <div class="edit-actions action-buttons">
+              <button type="submit" class="save-btn">Guardar</button>
+              <button type="button" @click="cancelar" class="cancel-btn">Cancelar</button>
+            </div>
+          </Form>
         </div>
       </div>
     </div>
@@ -44,27 +49,48 @@
       <p>No hay información del usuario cargada.</p>
     </div>
 
+    <!-- MODAL CAMBIAR CONTRASEÑA -->
     <div v-if="modalPasswordVisible" class="password-modal">
       <div class="modal-content">
         <h3>Cambiar contraseña</h3>
-        <div class="modal-field">
-          <label>Contraseña actual</label>
-          <input type="password" v-model="passwordForm.oldPassword" />
-        </div>
-        <div class="modal-field">
-          <label>Nueva contraseña</label>
-          <input type="password" v-model="passwordForm.newPassword" />
-        </div>
-        <div class="modal-actions">
-          <button @click="guardarPassword" class="save-btn">Guardar</button>
-          <button @click="cerrarModalPassword" class="cancel-btn">Cancelar</button>
-        </div>
+
+        <!-- 🔥 Formulario con validación -->
+        <Form :validation-schema="changePasswordSchema" @submit="guardarPassword">
+
+          <div class="modal-field">
+            <label>Contraseña actual</label>
+            <Field name="oldPassword" type="password" v-model="passwordForm.oldPassword" />
+            <ErrorMessage name="oldPassword" class="errorMessage" />
+          </div>
+
+          <div class="modal-field">
+            <label>Nueva contraseña</label>
+            <Field name="newPassword" type="password" v-model="passwordForm.newPassword" />
+            <ErrorMessage name="newPassword" class="errorMessage" />
+          </div>
+
+          <div class="modal-field">
+            <label>Confirmar contraseña</label>
+            <Field name="confirmPassword" type="password" v-model="passwordForm.confirmPassword" />
+            <ErrorMessage name="confirmPassword" class="errorMessage" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="submit" class="save-btn">Guardar</button>
+            <button type="button" @click="cerrarModalPassword" class="cancel-btn">Cancelar</button>
+          </div>
+
+        </Form>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { Form, Field, ErrorMessage } from 'vee-validate'
+import { editSchema } from './schemas/validarEditarPerfil'
+import { changePasswordSchema } from './schemas/validarCambiarContraseña'
+
 import { useUsuarioPanel } from './JS/usuarioPanel'
 
 const {

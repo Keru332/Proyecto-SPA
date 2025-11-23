@@ -1,24 +1,24 @@
 import { yup } from '@/assets/custuomvalidate'
 
 export const schema = yup.object({
-  user: yup.string().required('El usuario es requerido').noEdgeSpaces().noRepeatedSpaces(),
+  user: yup.string().required('Introduzca su usuario.').noEdgeSpaces().noRepeatedSpaces(),
   password: yup
     .string()
-    .required('La contraseña es requerida')
-    .min(8, 'Debe tener minimo 8 caracteres')
+    .required('Introduzca una contraseña.')
+    .min(8, 'La contraseña debe tener mínimo 8 caracteres.')
     .noEdgeSpaces()
     .noRepeatedSpaces(),
-  Fullname: yup.string().required('El nombre es requerido').noEdgeSpaces().noRepeatedSpaces(),
+  Fullname: yup.string().required('Introduzca su usuario.').noEdgeSpaces().noRepeatedSpaces(),
   correo: yup
     .string()
-    .email('El email es invalido')
-    .required('El correo es requerido')
+    .email('El email es inválido.')
+    .required('Introduzca su correo.')
     .noEdgeSpaces()
     .noRepeatedSpaces(),
 
   confirmPassword: yup
     .string()
-    .required('la confirmacion es requerida')
+    .required('Repita la contraseña para confirmar.')
     .noEdgeSpaces()
     .noRepeatedSpaces()
     .test('passwords-match', 'Las contraseñas no coinciden', function (value) {
