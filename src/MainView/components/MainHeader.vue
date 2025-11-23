@@ -42,7 +42,6 @@ const logout = () => {
           <RouterLink to="/paquetesv">Paq.Vend.</RouterLink>
           <RouterLink to="/citas">Citas</RouterLink>
           <RouterLink to="/cat">Categorías</RouterLink>
-          <RouterLink to="/admin">AdminPanel</RouterLink>
           <button @click="logout" class="logout">Cerrar sesión</button>
         </nav>
         <nav v-else>
