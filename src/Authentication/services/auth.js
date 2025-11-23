@@ -58,7 +58,7 @@ export const authService = {
 
     if (redirectToLogin) {
       // Redirigir al login
-      window.location.href = '/home'
+      window.location.href = '/'
     }
   },
 

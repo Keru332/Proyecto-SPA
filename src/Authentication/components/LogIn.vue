@@ -8,7 +8,6 @@ const { usuario, pass, loading, errorMessage, loginUser } = useLogin()
 
 <template>
   <div class="login-container">
-    <h1>Login</h1>
     <img src="../../MainView/assets/RayMei Logo.webp" alt="logo" width="150px" />
 
     <!-- Mensaje de error -->

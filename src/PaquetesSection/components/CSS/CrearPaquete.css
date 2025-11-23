@@ -84,6 +84,7 @@ h1 {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
   display: grid;
+  grid-template-columns: 300px;
   justify-content: center;
   width: 100%;
   padding-top: 0px;

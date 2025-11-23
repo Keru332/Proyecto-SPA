@@ -15,13 +15,16 @@
 
       <div class="user-container">
         <label for="descripcion">Descripción</label>
-        <input
+        <textarea
           type="text"
           id="descripcion"
           v-model="tratamiento.descripcion"
           placeholder="Describe el tratamiento"
+          rows="4"
+          cols="40"
+          maxlength="250"
           required
-        />
+        ></textarea>
       </div>
 
       <div class="user-container">

@@ -16,6 +16,9 @@ import PaquetesVSelection from '@/PaquetesSection/PaquetesVendidosSection/Paquet
 import CategoriasSelection from '@/CategoriaSection/components/CategoriasSelection.vue'
 import EditarCategoria from '@/CategoriaSection/components/EditarCategoria.vue'
 import usuarioPanel from '@/usuario/usuarioPanel.vue'
+import CrearCategoria from '@/CategoriaSection/components/CrearCategoria.vue'
+import CrearTratamiento from '@/TratamientoSection/components/CrearTratamiento.vue'
+import CrearPaquete from '@/PaquetesSection/components/CrearPaquete.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +110,24 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: adminPanel,
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
+    },
+    {
+      path: '/crearCategoria',
+      name: 'crearCategoria',
+      component: CrearCategoria,
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
+    },
+    {
+      path: '/crearTrat',
+      name: 'crearTrat',
+      component: CrearTratamiento,
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
+    },
+    {
+      path: '/crearPaquete',
+      name: 'crearPaquete',
+      component: CrearPaquete,
       meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
     },
     {

@@ -8,7 +8,7 @@
   text-align: center;
   background-color: aliceblue;
 }
-/* En tu archivo CrearTratamiento.css */
+
 select {
   width: 100%;
   padding: 12px 15px;
@@ -76,6 +76,7 @@ h1 {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
   display: grid;
+  grid-template-columns: 300px;
   justify-content: center;
   width: 100%;
   padding-top: 0px;
@@ -91,6 +92,18 @@ h1 {
   font-size: 16px;
   box-sizing: border-box;
   border: 1px solid #ccc;
+}
+
+.user-container textarea {
+  padding: 12px;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  resize: none;
 }
 
 .user-container input:focus,
