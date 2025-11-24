@@ -29,7 +29,7 @@
 <script setup>
 import { useCategoriaBanner } from './JS/CategoriaBanner'
 import { authService } from '@/Authentication/services/auth'
-import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
+import AlertaConfirmacion from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 const props = defineProps({
   categoria: {
