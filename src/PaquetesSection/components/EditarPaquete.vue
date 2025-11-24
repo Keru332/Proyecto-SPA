@@ -94,6 +94,8 @@
 
       <button type="submit" class="submit">Actualizar Paquete</button>
 
+      <AlertaConfirmacion />
+
       <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
     </form>
   </div>
@@ -101,6 +103,8 @@
 
 <script setup>
 import { useEditarPaquete } from './JS/EditarPaquete'
+
+import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
 
 const {
   paqueteF,

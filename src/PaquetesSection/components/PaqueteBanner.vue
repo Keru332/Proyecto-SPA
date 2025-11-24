@@ -53,6 +53,8 @@
         Eliminar
       </button>
     </div>
+
+    <AlertaConfirmacion />
   </div>
 </template>
 
@@ -60,6 +62,7 @@
 import { authService } from '@/Authentication/services/auth'
 import { useRouter } from 'vue-router'
 import { usePaqueteBanner } from './JS/PaqueteBanner'
+import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
 
 const router = useRouter()
 const props = defineProps({
