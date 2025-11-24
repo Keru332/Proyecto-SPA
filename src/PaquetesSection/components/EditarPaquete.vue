@@ -104,7 +104,7 @@
 <script setup>
 import { useEditarPaquete } from './JS/EditarPaquete'
 
-import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
+import AlertaConfirmacion from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 const {
   paqueteF,
