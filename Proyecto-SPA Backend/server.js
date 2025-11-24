@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+
 require('dotenv').config();
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/paquetevendido', require('./routes/paquetevendido'));
 app.use('/api/paq_trat', require('./routes/paq_trat'));
 app.use('/api/mat_trat', require('./routes/mat_trat'));
 app.use('/api/users', require('./routes/users'));
+
 
 // Ruta de prueba
 app.get('/', (req, res) => {

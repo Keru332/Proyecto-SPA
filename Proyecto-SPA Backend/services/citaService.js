@@ -21,9 +21,6 @@ const CitaService = {
     if (!isValidUUID(data.tratamiento__codtratamiento)) {
       throw new Error('ID de tratamiento no válido');
     }
-    if (!isValidUUID(data.categoria_codcategoria)) {
-      throw new Error('ID de categoría no válido');
-    }
     if (!isValidUUID(data.cliente__idcliente)) {
       throw new Error('ID de cliente no válido');
     }
@@ -31,11 +28,6 @@ const CitaService = {
     // Validar que tratamiento y cliente existan
     const tratamiento = await TratamientoService.getById(data.tratamiento__codtratamiento);
     await ClienteService.getById(data.cliente__idcliente);
-
-    // Validar que la categoría coincida con el tratamiento
-    if (tratamiento.categoria_codcategoria !== data.categoria_codcategoria) {
-      throw new Error('La categoría no coincide con el tratamiento seleccionado');
-    }
 
     // Validaciones de fecha
     const fechaCita = new Date(data.fecha);
@@ -56,7 +48,7 @@ const CitaService = {
     }
 
     const hora = parseInt(data.horacita.split(':')[0]);
-    if (hora < 9 || hora > 18) {
+    if (hora < 9 || hora > 21) {
       throw new Error('Las citas solo están disponibles entre 9:00 y 18:00 horas');
     }
 
@@ -66,7 +58,7 @@ const CitaService = {
     }
 
     // Validar conflictos de horario (necesitarías implementar esta función)
-    await validarDisponibilidadCita(data.fecha, data.horacita, data.tratamiento__codtratamiento);
+    data.horacita = await validarDisponibilidadCita(data.fecha, data.horacita, data.tratamiento__codtratamiento);
 
     return await Cita.create(data);
   },
@@ -88,20 +80,33 @@ const CitaService = {
   }
 };
 
-// Función auxiliar para validar disponibilidad (debes implementarla según tus necesidades)
 async function validarDisponibilidadCita(fecha, hora, tratamientoId) {
-  // Implementar lógica para verificar que no hay citas en el mismo horario
-  // para el mismo tratamiento
-  const citasExistentes = await Cita.getAll();
-  const conflicto = citasExistentes.some(cita => 
-    cita.fecha === fecha && 
-    cita.horacita === hora && 
-    cita.tratamiento__codtratamiento === tratamientoId
-  );
+  const horarioApertura = 9;
+  let sumaTiempoCita = await Cita.getSumDuracionDiaria(fecha);
+  sumaTiempoCita.sum = Number(sumaTiempoCita.sum)
 
-  if (conflicto) {
-    throw new Error('Ya existe una cita programada para este tratamiento en la misma fecha y hora');
+  if(sumaTiempoCita.sum >= 720){
+    console.log('paso por aqui')
+    throw new Error('No hay disponibilidad para su cita en ese dia.');
   }
+
+  console.log(sumaTiempoCita.sum)
+  
+  let tratDuracion = await TratamientoService.getById(tratamientoId)
+  tratDuracion.duracion = Number(tratDuracion.duracion)
+  if((sumaTiempoCita.sum + tratDuracion.duracion) >= 720){
+    throw new Error('No hay disponibilidad para su cita en ese dia.');
+  }
+
+  
+  // Calcular la hora automáticamente basada en el tiempo acumulado
+  const minutosDesdeApertura = sumaTiempoCita.sum;
+  const horaDisponible = Math.floor(minutosDesdeApertura / 60) + horarioApertura;
+  const minutosDisponible = minutosDesdeApertura % 60;
+  
+  const horaAsignada = `${horaDisponible.toString().padStart(2, '0')}:${minutosDisponible.toString().padStart(2, '0')}`;
+
+  return horaAsignada
 }
 
 function isValidUUID(uuid) {

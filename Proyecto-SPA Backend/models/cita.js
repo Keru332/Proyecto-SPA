@@ -15,9 +15,17 @@ const Cita = {
         ORDER BY fecha
     `);
     return result.rows;
-},
+  },
   getById: async (id) => {
     const result = await db.query('SELECT * FROM cita WHERE codsolicitud = $1', [id]);
+    return result.rows[0];
+  },
+  getSumDuracionDiaria: async (dia)=>{
+    const result = await db.query(`
+      SELECT SUM(duracion) 
+      FROM cita 
+      JOIN tratamiento ON tratamiento__codtratamiento = codtratamiento 
+      WHERE fecha = $1`, [dia])
     return result.rows[0];
   },
 
