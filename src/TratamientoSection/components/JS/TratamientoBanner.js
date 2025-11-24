@@ -1,9 +1,10 @@
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 import tratamientoService from '@/services/tratamientoService'
 import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 export function useTratamientoBanner(props) {
   const errorMessage = ref('')
+<<<<<<< HEAD
   const { mostrarConfirmacion } = useAlertaConfirmacion()
 
   const confirmarEliminacion = () => {
@@ -15,6 +16,21 @@ export function useTratamientoBanner(props) {
       textoCancelar: 'Cancelar',
       onAceptar: eliminarTratamiento
     })
+=======
+  const { proxy } = getCurrentInstance()
+
+  const confirmarEliminacion = async () => {
+    try {
+      const result = await proxy.$confirm(
+        '¿Estás seguro de que deseas eliminar este tratamiento? Esta acción no se puede deshacer.',
+      )
+      if (result) {
+        eliminarTratamiento()
+      }
+    } catch {
+      console.log('cancelado')
+    }
+>>>>>>> 02bb1dc (Agregado Modal)
   }
 
   const eliminarTratamiento = async () => {
@@ -48,6 +64,7 @@ export function useTratamientoBanner(props) {
       } else {
         errorMessage.value = 'Error de conexión con el servidor'
       }
+<<<<<<< HEAD
      
       mostrarConfirmacion({
         titulo: 'Error',
@@ -55,6 +72,9 @@ export function useTratamientoBanner(props) {
         tipo: 'peligro',
         textoAceptar: 'Aceptar'
       })
+=======
+      await proxy.$alert(`Error al eliminar: ${errorMessage.value}`)
+>>>>>>> 02bb1dc (Agregado Modal)
     }
   }
 

@@ -1,6 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import MainHeader from './MainView/components/MainHeader.vue'
+import CustomModal from './MainView/assets/CustomModal.vue'
 </script>
 
 <script>
@@ -18,6 +19,7 @@ export default {
     <MainHeader v-if="$route.meta.requiresHeader !== false"></MainHeader>
     <div :class="{ 'main-content': true, noPadding: sinHeader }">
       <RouterView />
+      <CustomModal />
     </div>
   </div>
 </template>
