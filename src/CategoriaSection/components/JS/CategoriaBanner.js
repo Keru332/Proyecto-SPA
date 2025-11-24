@@ -1,17 +1,20 @@
-import { useRouter } from 'vue-router'
-import categoriaService from '@/services/categoriaService'
 import { ref } from 'vue'
+import categoriaService from '@/services/categoriaService'
+import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
+
 export function useCategoriaBanner(props) {
-  const router = useRouter()
   const errorMessage = ref('')
+  const { mostrarConfirmacion } = useAlertaConfirmacion()
+
   const confirmarEliminacion = () => {
-    if (
-      confirm(
-        '¿Estás seguro de que deseas eliminar esta categoria? Esta acción no se puede deshacer.',
-      )
-    ) {
-      eliminarCategoria()
-    }
+    mostrarConfirmacion({
+      titulo: 'Confirmar Eliminación',
+      mensaje: '¿Estás seguro de que deseas eliminar esta categoría? Esta acción no se puede deshacer.',
+      tipo: 'peligro',
+      textoAceptar: 'Sí, eliminar',
+      textoCancelar: 'Cancelar',
+      onAceptar: eliminarCategoria
+    })
   }
 
   const eliminarCategoria = async () => {
@@ -19,8 +22,14 @@ export function useCategoriaBanner(props) {
       const response = await categoriaService.delete(props.categoria.codcategoria)
       console.log(response)
 
-      alert('categoria eliminado correctamente')
-      window.location.reload()
+      mostrarConfirmacion({
+        titulo: '¡Éxito!',
+        mensaje: 'Categoría eliminada correctamente',
+        tipo: 'exito',
+        textoAceptar: 'Aceptar',
+        onAceptar: () => window.location.reload()
+      })
+     
     } catch (error) {
       if (error.response) {
         errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar categoria'}`
@@ -34,14 +43,20 @@ export function useCategoriaBanner(props) {
           errorText.includes('REFERENCE')
         ) {
           errorMessage.value =
-            'No se puede eliminar este categoria porque está siendo utilizado en algun tratamiento. Primero elimine las compras asociadas.'
+            'No se puede eliminar esta categoría porque está siendo utilizada en algún tratamiento.'
         }
       } else {
         errorMessage.value = 'Error de conexión con el servidor'
       }
-      alert(`Error al eliminar: ${errorMessage.value}`)
+     
+      mostrarConfirmacion({
+        titulo: 'Error',
+        mensaje: `Error al eliminar: ${errorMessage.value}`,
+        tipo: 'peligro',
+        textoAceptar: 'Aceptar'
+      })
     }
   }
 
-  return { router, confirmarEliminacion, eliminarCategoria }
+  return { confirmarEliminacion }
 }

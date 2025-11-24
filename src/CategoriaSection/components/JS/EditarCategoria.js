@@ -4,7 +4,7 @@ import { categoriaStore } from '../../stores/CategoriaStore'
 import { storeToRefs } from 'pinia'
 import { onMounted, watch } from 'vue'
 import categoriaService from '@/services/categoriaService'
-
+import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 export function useEditarCategoria() {
   const route = useRoute()
   const catStore = categoriaStore()
@@ -17,6 +17,7 @@ export function useEditarCategoria() {
   })
   const mensaje = ref('')
   const router = useRouter()
+  const { mostrarConfirmacion } = useAlertaConfirmacion()
 
   watch(catData, (newCatData) => {
     if (newCatData) {
@@ -25,7 +26,18 @@ export function useEditarCategoria() {
     }
   })
 
-  const submitForm = async () => {
+  const submitForm = () => {
+    mostrarConfirmacion({
+      titulo: 'Confirmar Edición',
+      mensaje: '¿Estás seguro de que deseas guardar los cambios en esta categoría?',
+      tipo: 'info',
+      textoAceptar: 'Sí, guardar',
+      textoCancelar: 'Cancelar',
+      onAceptar: confirmarEdicion
+    })
+  }
+
+  const confirmarEdicion = async () => {
     try {
       const dato_actualizado = {
         nombrecategoria: categoria_actualizada.nombrecategoria,
@@ -33,17 +45,31 @@ export function useEditarCategoria() {
 
       await categoriaService.update(categoria_actualizada.codcategoria, dato_actualizado)
 
-      mensaje.value = 'categoria actualizada correctamente!'
+      mensaje.value = 'Categoría actualizada correctamente!'
 
       categoria_actualizada.nombre = ''
-      alert('Categoria editada correctamente')
-      router.push('/cat')
+     
+      mostrarConfirmacion({
+        titulo: '¡Éxito!',
+        mensaje: 'Categoría editada correctamente',
+        tipo: 'exito',
+        textoAceptar: 'Aceptar',
+        onAceptar: () => router.push('/cat')
+      })
+     
     } catch (error) {
       if (error.response) {
         mensaje.value = `Error: ${error.response.data?.error || 'Error al actualizar la categoria'}`
       } else {
         mensaje.value = 'Error de conexión con el servidor'
       }
+     
+      mostrarConfirmacion({
+        titulo: 'Error',
+        mensaje: mensaje.value,
+        tipo: 'peligro',
+        textoAceptar: 'Aceptar'
+      })
     }
   }
 
@@ -52,5 +78,14 @@ export function useEditarCategoria() {
     await catStore.fetchcategoria(catID)
   })
 
-  return { route, catStore, catData, categoria, submitForm, categoria_actualizada, mensaje, router }
+  return {
+    route,
+    catStore,
+    catData,
+    categoria,
+    submitForm,
+    categoria_actualizada,
+    mensaje,
+    router
+  }
 }
