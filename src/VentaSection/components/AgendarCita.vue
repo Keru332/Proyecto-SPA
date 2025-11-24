@@ -17,10 +17,6 @@
           <label for="fecha">Fecha de Cita</label>
           <input type="date" v-model="fechaC" name="fecha" required />
         </div>
-        <div class="form-input">
-          <label for="hora">Hora de Cita</label>
-          <input type="time" v-model="hora" name="hora" required />
-        </div>
         <input type="submit" value="Agendar Cita" />
       </form>
     </div>
@@ -33,4 +29,5 @@
 import TratamientoBanner from '@/TratamientoSection/components/TratamientoBanner.vue'
 import { useAgendarCita } from './JS/AgendarCita'
 const { tratData, fechaC, hora, errorMessage, agendar } = useAgendarCita()
+hora.value = '9:00'
 </script>

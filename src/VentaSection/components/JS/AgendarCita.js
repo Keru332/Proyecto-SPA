@@ -57,7 +57,7 @@ export function useAgendarCita() {
       alert('Cita agendada correctamente')
       router.push('/')
     } catch (error) {
-      errorMessage.value = `❌ Error: ${error.message}`
+      errorMessage.value = `❌ Error: ${error.response.data?.error}`
     } finally {
       loading.value = false
     }
