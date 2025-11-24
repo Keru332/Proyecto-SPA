@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const Cliente = {
   getAll: async () => {
-    const result = await db.query('SELECT * FROM cliente ORDER BY 1');
+    const result = await db.query('SELECT * FROM cliente ORDER BY idcliente');
     return result.rows;
   },
 
@@ -12,24 +12,19 @@ const Cliente = {
   },
 
   create: async (data) => {
-    const fields = ["idcliente","nombrecliente"];
-    const values = fields.map(field => data[field]);
+    const { idcliente, nombrecliente } = data;
     const result = await db.query(
-      'INSERT INTO cliente (' + fields.join(', ') + ') VALUES ($1, $2) RETURNING *',
-      values
+      'INSERT INTO cliente (idcliente, nombrecliente) VALUES ($1, $2) RETURNING *',
+      [idcliente, nombrecliente]
     );
     return result.rows[0];
   },
 
   update: async (id, data) => {
-    const updateFields = ["nombrecliente"];
-    const setClause = updateFields.map((field, index) => field + ' = $' + (index + 1)).join(', ');
-    const values = updateFields.map(field => data[field]);
-    values.push(id);
-    
+    const { nombrecliente } = data;
     const result = await db.query(
-      'UPDATE cliente SET ' + setClause + ' WHERE idcliente = $' + (updateFields.length + 1) + ' RETURNING *',
-      values
+      'UPDATE cliente SET nombrecliente = $1 WHERE idcliente = $2 RETURNING *',
+      [nombrecliente, id]
     );
     return result.rows[0];
   },

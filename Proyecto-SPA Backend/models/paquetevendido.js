@@ -2,12 +2,17 @@ const db = require('../config/database');
 
 const PaqueteVendido = {
   getAll: async () => {
-    const result = await db.query(`SELECT 
-*,
- TO_CHAR(paquetevendido.fechacompra, 'DD/MM/YYYY') as fechacompraf,
- TO_CHAR(paquetevendido.fechainicio, 'DD/MM/YYYY') as fechainiciof,
- TO_CHAR(paquetevendido.fechafin, 'DD/MM/YYYY') as fechafinf
- FROM paquetevendido JOIN cliente ON cliente__idcliente = idcliente JOIN paquete ON paquete__codpaquete = codpaquete ORDER BY 1`);
+    const result = await db.query(`
+      SELECT 
+        *,
+        TO_CHAR(paquetevendido.fechacompra, 'DD/MM/YYYY') as fechacompraf,
+        TO_CHAR(paquetevendido.fechainicio, 'DD/MM/YYYY') as fechainiciof,
+        TO_CHAR(paquetevendido.fechafin, 'DD/MM/YYYY') as fechafinf
+      FROM paquetevendido 
+      JOIN cliente ON cliente__idcliente = idcliente 
+      JOIN paquete ON paquete__codpaquete = codpaquete 
+      ORDER BY paquetevendido.fechacompra
+    `);
     return result.rows;
   },
 
@@ -17,30 +22,28 @@ const PaqueteVendido = {
   },
 
   create: async (data) => {
-    const fields = ["cliente__idcliente","paquete__codpaquete","fechacompra","fechainicio","fechafin"];
-    const values = fields.map(field => data[field]);
+    const { cliente__idcliente, paquete__codpaquete, fechacompra, fechainicio, fechafin } = data;
     const result = await db.query(
-      'INSERT INTO paquetevendido (' + fields.join(', ') + ') VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      values
+      'INSERT INTO paquetevendido (cliente__idcliente, paquete__codpaquete, fechacompra, fechainicio, fechafin) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [cliente__idcliente, paquete__codpaquete, fechacompra, fechainicio, fechafin]
     );
     return result.rows[0];
   },
 
   update: async (id, data) => {
-    const updateFields = ["paquete__codpaquete","fechacompra","fechainicio","fechafin"];
-    const setClause = updateFields.map((field, index) => field + ' = $' + (index + 1)).join(', ');
-    const values = updateFields.map(field => data[field]);
-    values.push(id);
-    
+    const { paquete__codpaquete, fechacompra, fechainicio, fechafin } = data;
     const result = await db.query(
-      'UPDATE paquetevendido SET ' + setClause + ' WHERE cliente__idcliente = $' + (updateFields.length + 1) + ' RETURNING *',
-      values
+      'UPDATE paquetevendido SET paquete__codpaquete = $1, fechacompra = $2, fechainicio = $3, fechafin = $4 WHERE cliente__idcliente = $5 RETURNING *',
+      [paquete__codpaquete, fechacompra, fechainicio, fechafin, id]
     );
     return result.rows[0];
   },
 
   delete: async (id, id2, id3) => {
-    const result = await db.query('DELETE FROM paquetevendido WHERE paquete__codpaquete = $1 AND cliente__idcliente = $2 AND fechacompra = $3 RETURNING *', [id, id2, new Date(id3)]);
+    const result = await db.query(
+      'DELETE FROM paquetevendido WHERE paquete__codpaquete = $1 AND cliente__idcliente = $2 AND fechacompra = $3 RETURNING *', 
+      [id, id2, new Date(id3)]
+    );
     return result.rows[0];
   }
 };

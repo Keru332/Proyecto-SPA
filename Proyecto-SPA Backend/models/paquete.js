@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const Paquete = {
   getAll: async () => {
-    const result = await db.query('SELECT * FROM paquete ORDER BY 1');
+    const result = await db.query('SELECT * FROM paquete ORDER BY codpaquete');
     return result.rows;
   },
 
@@ -12,24 +12,19 @@ const Paquete = {
   },
 
   create: async (data) => {
-    const fields = ["nombrepaquete","preciopaquete","duraciontotal"];
-    const values = fields.map(field => data[field]);
+    const { nombrepaquete, preciopaquete, duraciontotal } = data;
     const result = await db.query(
-      'INSERT INTO paquete (' + fields.join(', ') + ') VALUES ($1, $2, $3) RETURNING *',
-      values
+      'INSERT INTO paquete (nombrepaquete, preciopaquete, duraciontotal) VALUES ($1, $2, $3) RETURNING *',
+      [nombrepaquete, preciopaquete, duraciontotal]
     );
     return result.rows[0];
   },
 
   update: async (id, data) => {
-    const updateFields = ["nombrepaquete","preciopaquete","duraciontotal"];
-    const setClause = updateFields.map((field, index) => field + ' = $' + (index + 1)).join(', ');
-    const values = updateFields.map(field => data[field]);
-    values.push(id);
-    
+    const { nombrepaquete, preciopaquete, duraciontotal } = data;
     const result = await db.query(
-      'UPDATE paquete SET ' + setClause + ' WHERE codpaquete = $' + (updateFields.length + 1) + ' RETURNING *',
-      values
+      'UPDATE paquete SET nombrepaquete = $1, preciopaquete = $2, duraciontotal = $3 WHERE codpaquete = $4 RETURNING *',
+      [nombrepaquete, preciopaquete, duraciontotal, id]
     );
     return result.rows[0];
   },

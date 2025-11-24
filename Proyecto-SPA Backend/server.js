@@ -18,11 +18,9 @@ app.use('/api/categoria', require('./routes/categoria'));
 app.use('/api/cliente', require('./routes/cliente'));
 app.use('/api/cita', require('./routes/cita'));
 app.use('/api/tratamiento', require('./routes/tratamiento'));
-app.use('/api/material', require('./routes/material'));
 app.use('/api/paquete', require('./routes/paquete'));
 app.use('/api/paquetevendido', require('./routes/paquetevendido'));
 app.use('/api/paq_trat', require('./routes/paq_trat'));
-app.use('/api/mat_trat', require('./routes/mat_trat'));
 app.use('/api/users', require('./routes/users'));
 
 
@@ -49,10 +47,8 @@ app.listen(PORT, () => {
   console.log('  http://localhost:' + PORT + '/api/cliente');
   console.log('  http://localhost:' + PORT + '/api/cita');
   console.log('  http://localhost:' + PORT + '/api/tratamiento');
-  console.log('  http://localhost:' + PORT + '/api/material');
   console.log('  http://localhost:' + PORT + '/api/paquete');
   console.log('  http://localhost:' + PORT + '/api/paquetevendido');
   console.log('  http://localhost:' + PORT + '/api/paq_trat');
-  console.log('  http://localhost:' + PORT + '/api/mat_trat');
   console.log('  http://localhost:' + PORT + '/api/users');
 });
