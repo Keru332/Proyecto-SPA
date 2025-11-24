@@ -15,13 +15,40 @@
       </div>
 
       <button type="submit" class="submit">Crear Categoria</button>
+
+      <PlantillaAlertaCrearCat
+        v-model:visible="mostrarAlerta"
+        :titulo="alertaTitulo"
+        :mensaje="alertaMensaje"
+        texto-aceptar="Aceptar"
+        @aceptar="manejarAceptar"
+      />
     </form>
     <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
   </div>
 </template>
+
 <script setup>
+import PlantillaAlertaCrearCat from '@/plantilla alerta/PlantillaAlerta.vue';
 import { useCrearCategoria } from './JS/CrearCategoria'
 
-const { categoria, mensaje, submitForm } = useCrearCategoria()
+const {
+  categoria,
+  mensaje,
+  submitForm,
+  mostrarAlerta,
+  alertaTitulo,
+  alertaMensaje,
+  router
+} = useCrearCategoria()
+
+
+const manejarAceptar = () => {
+
+  if (alertaTitulo === '¡Éxito!') {
+    router.push('/cat')
+  }
+}
 </script>
+
 <style scoped src="./CSS/CrearCategoria.css"></style>
