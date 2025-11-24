@@ -66,6 +66,8 @@
 
       <button type="submit" class="submit">Editar Tratamiento</button>
 
+      <AlertaConfirmacion />
+
       <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
     </form>
   </div>
@@ -73,6 +75,8 @@
 
 <script setup>
 import { useEditarTratamiento } from './JS/EditarTratamiento'
+import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
+
 
 const { tratamientoF, mensaje, categorias, submitForm } = useEditarTratamiento()
 </script>
