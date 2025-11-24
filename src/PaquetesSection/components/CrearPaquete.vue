@@ -94,12 +94,21 @@
 
       <button type="submit" class="submit">Crear Paquete</button>
 
+      <PlantillaAlertaCrearCat
+        v-model:visible="mostrarAlerta"
+        :titulo="alertaTitulo"
+        :mensaje="alertaMensaje"
+        texto-aceptar="Aceptar"
+        @aceptar="manejarAceptar"
+      />
+
       <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
     </form>
   </div>
 </template>
 
 <script setup>
+import PlantillaAlertaCrearCat from '@/plantilla alerta/PlantillaAlerta.vue'
 import { useCrearPaquete } from './JS/CrearPaquete'
 
 const {
@@ -107,6 +116,10 @@ const {
   tratamientosDisponibles,
   tratamientosPaquete,
   mensaje,
+  mostrarAlerta,
+  alertaTitulo,
+  alertaMensaje,
+  router,
   submitForm,
   moverADerecha,
   moverAIzquierda,
@@ -114,6 +127,14 @@ const {
   haySeleccionadosPaquete,
   toggleSelection,
 } = useCrearPaquete()
+
+
+const manejarAceptar = () => {
+
+  if (alertaTitulo === '¡Éxito!') {
+    router.push('/paquetes')
+  }
+}
 </script>
 
 <style scoped src="./CSS/CrearPaquete.css"></style>
