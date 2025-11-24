@@ -67,8 +67,7 @@ import { useRouter } from 'vue-router'
 import { tratamientoStore } from '../stores/TratamientoReservar'
 import { authService } from '@/Authentication/services/auth'
 import { useTratamientoBanner } from './JS/TratamientoBanner'
-import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
-
+import AlertaConfirmacion from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 const router = useRouter()
 const storeTrat = tratamientoStore()
 const props = defineProps({
