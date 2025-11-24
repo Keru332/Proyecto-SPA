@@ -15,7 +15,12 @@ export function useCrearTratamiento() {
   })
   const categorias = ref([])
 
-  // Función para cargar las categorías desde la API
+  const mostrarAlerta = ref(false)
+  const alertaTitulo = ref('')
+  const alertaMensaje = ref('')
+
+  const mensaje = ref('')
+
   const fetchCategorias = async () => {
     try {
       const data = await categoriaService.getAll()
@@ -23,14 +28,17 @@ export function useCrearTratamiento() {
     } catch (error) {
       console.error('Error:', error)
       mensaje.value = 'Error al cargar las categorías'
+     
+
+      alertaTitulo.value = 'Error'
+      alertaMensaje.value = 'Error al cargar las categorías'
+      mostrarAlerta.value = true
     }
   }
 
-  const mensaje = ref('')
-
   const submitForm = async () => {
     try {
-      // Preparar los datos para enviar
+     
       const datosActualizados = {
         nombretratamiento: tratamiento.nombre,
         descripcion: tratamiento.descripcion,
@@ -44,25 +52,44 @@ export function useCrearTratamiento() {
 
       mensaje.value = 'Tratamiento creado correctamente!'
 
-      // Limpiar formulario
+     
+      alertaTitulo.value = '¡Éxito!'
+      alertaMensaje.value = 'Tratamiento creado correctamente'
+      mostrarAlerta.value = true
+
+
       tratamiento.nombre = ''
       tratamiento.descripcion = ''
       tratamiento.duracion = ''
       tratamiento.precio = ''
       tratamiento.codcategoria = ''
 
-      alert('Tratamiento creado correctamente')
-      router.push('/productos')
+
+     
     } catch (error) {
       console.error('Error:', error)
       mensaje.value = 'Error al crear el tratamiento'
+     
+
+      alertaTitulo.value = 'Error'
+      alertaMensaje.value = 'Error al crear el tratamiento'
+      mostrarAlerta.value = true
     }
   }
 
   onMounted(async () => {
-    // Cargar categorías
+
     await fetchCategorias()
   })
 
-  return { router, tratamiento, categorias, submitForm, mensaje }
+  return {
+    router,
+    tratamiento,
+    categorias,
+    submitForm,
+    mensaje,
+    mostrarAlerta,
+    alertaTitulo,
+    alertaMensaje
+  }
 }
