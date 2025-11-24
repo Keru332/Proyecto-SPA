@@ -62,7 +62,7 @@
 import { authService } from '@/Authentication/services/auth'
 import { useRouter } from 'vue-router'
 import { usePaqueteBanner } from './JS/PaqueteBanner'
-import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
+import AlertaConfirmacion from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 const router = useRouter()
 const props = defineProps({
