@@ -69,15 +69,43 @@
 
       <button type="submit" class="submit">Crear Tratamiento</button>
 
+      <PlantillaAlertaCrearCat
+        v-model:visible="mostrarAlerta"
+        :titulo="alertaTitulo"
+        :mensaje="alertaMensaje"
+        texto-aceptar="Aceptar"
+        @aceptar="manejarAceptar"
+      />
+
       <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
     </form>
   </div>
 </template>
 
 <script setup>
+
+import PlantillaAlertaCrearCat from '@/plantilla alerta/PlantillaAlerta.vue'
 import { useCrearTratamiento } from './JS/CrearTratamiento'
 
-const { tratamiento, categorias, submitForm, mensaje } = useCrearTratamiento()
+const {
+  tratamiento,
+  categorias,
+  submitForm,
+  mensaje,
+ 
+  mostrarAlerta,
+  alertaTitulo,
+  alertaMensaje,
+  router
+} = useCrearTratamiento()
+
+
+const manejarAceptar = () => {
+
+  if (alertaTitulo === '¡Éxito!') {
+    router.push('/productos')
+  }
+}
 </script>
 
 <style scoped src="./CSS/CrearTratamiento.css"></style>
