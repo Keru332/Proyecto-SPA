@@ -8,7 +8,13 @@ export function useCrearCategoria() {
   const categoria = ref({
     nombre: '',
   })
+
+  const mostrarAlerta = ref(false)
+  const alertaTitulo = ref('')
+  const alertaMensaje = ref('')
+
   const mensaje = ref('')
+
   const submitForm = async () => {
     try {
       const dato_actualizado = {
@@ -17,17 +23,41 @@ export function useCrearCategoria() {
 
       await categoriaService.create(dato_actualizado)
 
-      mensaje.value = 'Categoria creada correctamente!'
+      alertaTitulo.value = '¡Éxito!'
+      alertaMensaje.value = 'Categoria creada correctamente!'
+      mostrarAlerta.value = true  
+     
+      mensaje.value = 'Categoria creada correctamente!' 
+     
 
-      alert('Categoria Creada correctamente')
-      router.push('/cat')
+     
     } catch (error) {
       if (error.response) {
+        
+        alertaTitulo.value = 'Error'
+        alertaMensaje.value = `Error: ${error.response.data?.error || 'Error al crear la categoria'}`
+        mostrarAlerta.value = true
+       
         mensaje.value = `Error: ${error.response.data?.error || 'Error al crear la categoria'}`
       } else {
+        alertaTitulo.value = 'Error'
+        alertaMensaje.value = 'Error de conexión con el servidor'
+        mostrarAlerta.value = true
+       
         mensaje.value = 'Error de conexión con el servidor'
       }
     }
   }
-  return { router, categoria, mensaje, submitForm }
+
+  return {
+    router,
+    categoria,
+    mensaje,
+    
+    mostrarAlerta,
+    alertaTitulo,
+    alertaMensaje,
+    submitForm
+  }
 }
+
