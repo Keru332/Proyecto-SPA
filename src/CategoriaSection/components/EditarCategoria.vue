@@ -26,7 +26,7 @@
 <script setup>
 import { useEditarCategoria } from './JS/EditarCategoria'
 
-import AlertaConfirmacion from '@/components/Alertas/AlertaConfirmacion.vue'
+import AlertaConfirmacion from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 
 const { submitForm, categoria_actualizada, mensaje } = useEditarCategoria()
