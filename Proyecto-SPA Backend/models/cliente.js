@@ -32,7 +32,14 @@ const Cliente = {
   delete: async (id) => {
     const result = await db.query('DELETE FROM cliente WHERE idcliente = $1 RETURNING *', [id]);
     return result.rows[0];
-  }
+  },
+  updateBalance: async (id, balance) => {
+    const result = await db.query(
+      'UPDATE cliente SET balance = $1 WHERE idcliente = $2 RETURNING *',
+      [balance, id]
+    );
+    return result.rows[0];
+  },
 };
 
 module.exports = Cliente;

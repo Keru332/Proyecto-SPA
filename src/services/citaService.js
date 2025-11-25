@@ -25,4 +25,19 @@ export default {
     const res = await api.delete(`/cita/${id}`)
     return res.data
   },
+
+  async getByPeriodo(periodo) {
+    const res = await api.get(`/cita/citasfiltro/${periodo}`)
+    return res.data
+  },
+
+  async getByClientePasadas(id) {
+    const res = await api.get(`/cita/citasUserP/${id}`)
+    return res.data
+  },
+
+  async getByClienteFuturas(id) {
+    const res = await api.get(`/cita/citasUserF/${id}`)
+    return res.data
+  },
 }

@@ -1,3 +1,4 @@
+import categoriaService from '@/services/categoriaService'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -11,13 +12,8 @@ export const categoriaStore = defineStore('catStore', () => {
   const fetchcategoria = async (catID) => {
     load.value = true
     try {
-      const response = await fetch(`http://localhost:3000/api/categoria/${catID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      const catData = await response.json()
+      const response = await categoriaService.getById(catID)
+      const catData = await response
       setcategoria(catData)
     } catch (error) {
       console.log('error: ', error)

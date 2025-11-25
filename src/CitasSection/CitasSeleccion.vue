@@ -29,13 +29,10 @@
           </button>
           <button
             class="filtro-btn"
-            :class="{ active: filtroActivo === 'año' }"
-            @click="aplicarFiltro('año')"
+            :class="{ active: filtroActivo === 'anno' }"
+            @click="aplicarFiltro('anno')"
           >
             Este Año
-          </button>
-          <button class="filtro-btn limpiar" @click="limpiarFiltro" v-if="filtroActivo">
-            Limpiar Filtro
           </button>
         </div>
 
@@ -70,16 +67,8 @@
 import { useCitasSeleccion } from './JS/CitasSeleccion'
 import ListaCitas from './ListaCitas.vue'
 
-const {
-  citas,
-  loading,
-  error,
-  filtroActivo,
-  textoFiltroActivo,
-  citasFiltradas,
-  aplicarFiltro,
-  limpiarFiltro,
-} = useCitasSeleccion()
+const { citas, loading, error, filtroActivo, textoFiltroActivo, citasFiltradas, aplicarFiltro } =
+  useCitasSeleccion()
 </script>
 
 <style scoped src="./CSS/CitasSeleccion.css"></style>

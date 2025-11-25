@@ -18,15 +18,9 @@ const PaqueteVendidoService = {
 
   create: async (data) => {
     // Validar que cliente y paquete existan
-    if (!isValidUUID(data.cliente__idcliente)) {
-      throw new Error('ID de cliente no válido');
-    }
-    if (!isValidUUID(data.paquete__codpaquete)) {
-      throw new Error('ID de paquete no válido');
-    }
 
-    await ClienteService.getById(data.cliente__idcliente);
-    await PaqueteService.getById(data.paquete__codpaquete);
+    cliente = await ClienteService.getById(data.cliente__idcliente);
+    paquete = await PaqueteService.getById(data.paquete__codpaquete);
 
     // Validar que el paquete tenga tratamientos
     const tratamientosPaquete = await PaqTratService.getById(data.paquete__codpaquete);
@@ -64,6 +58,15 @@ const PaqueteVendidoService = {
     if (paqueteActivo) {
       throw new Error('El cliente ya tiene este paquete activo');
     }
+
+    console.log(Number(cliente.balance))
+    console.log(Number(paquete.preciopaquete))
+    console.log(( Number(cliente.balance) - Number(paquete.preciopaquete) ))
+    if( ( Number(cliente.balance) - Number(paquete.preciopaquete) ) < 0){
+        throw new Error('No tiene suficiente dinero para comprar este paquete.');
+    } else {
+        await ClienteService.updateBalance(data.cliente__idcliente, Number(cliente.balance) - Number(paquete.precio))
+    }
     
     return await PaqueteVendido.create(data);
   },
@@ -87,7 +90,26 @@ const PaqueteVendidoService = {
     const eliminado = await PaqueteVendido.delete(codpaquete, idCliente, fechaCompra);
     if (!eliminado) throw new Error('Paquete vendido no encontrado');
     return eliminado;
-  }
+  },
+
+  getByPeriodo: async (periodo) => {
+    console.log(periodo)
+    const periodosValidos = ['hoy', 'semana', 'mes', 'anno'];
+    if (!periodosValidos.includes(periodo)) {
+      throw new Error('Período no válido. Use: hoy, semana, mes, anno');
+    }
+    return await PaqueteVendido.getByPeriodo(periodo);
+  },
+
+  getByClienteActivos: async (idCliente) => {
+    await ClienteService.getById(idCliente);
+    return await PaqueteVendido.getByClienteActivos(idCliente);
+  },
+
+  getByClienteExpirados: async (idCliente) => {
+    await ClienteService.getById(idCliente);
+    return await PaqueteVendido.getByClienteExpirados(idCliente);
+  },
 };
 
 function isValidUUID(uuid) {

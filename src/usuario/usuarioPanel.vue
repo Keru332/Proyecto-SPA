@@ -4,8 +4,12 @@
 
     <div v-if="usuario" class="user-info-container">
       <div class="user-card">
-
         <div v-if="!editando">
+          <div class="user-field">
+            <strong>Balance:</strong>
+            <span class="user-value">{{ usuario.balance }}</span>
+          </div>
+
           <div class="user-field">
             <strong>Usuario:</strong>
             <span class="user-value">{{ usuario.username }}</span>
@@ -56,7 +60,6 @@
 
         <!-- 🔥 Formulario con validación -->
         <Form :validation-schema="changePasswordSchema" @submit="guardarPassword">
-
           <div class="modal-field">
             <label>Contraseña actual</label>
             <Field name="oldPassword" type="password" v-model="passwordForm.oldPassword" />
@@ -79,7 +82,6 @@
             <button type="submit" class="save-btn">Guardar</button>
             <button type="button" @click="cerrarModalPassword" class="cancel-btn">Cancelar</button>
           </div>
-
         </Form>
       </div>
     </div>

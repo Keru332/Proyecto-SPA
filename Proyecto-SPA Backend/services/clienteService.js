@@ -63,7 +63,14 @@ const ClienteService = {
     }
     await ClienteService.getById(id);
     return await Cliente.delete(id);
-  }
+  },
+  updateBalance: async (id, data) => {
+    if (!isValidUUID(id)) {
+      throw new Error('ID de cliente no válido');
+    }
+    await ClienteService.getById(id);
+    return await Cliente.updateBalance(id, data);
+  },
 };
 
 function isValidUUID(uuid) {

@@ -58,6 +58,9 @@ export function useAgendarCita() {
       router.push('/')
     } catch (error) {
       errorMessage.value = `❌ Error: ${error.response.data?.error}`
+      if (errorMessage.value.includes('uk_cita_tratamiento_cliente')) {
+        errorMessage.value = 'No puedes agendar el mismo tratamiento para el mismo dia.'
+      }
     } finally {
       loading.value = false
     }

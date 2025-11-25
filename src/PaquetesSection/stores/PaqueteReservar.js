@@ -1,3 +1,5 @@
+import paqTratService from '@/services/paqTratService'
+import paqueteService from '@/services/paqueteService'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -11,20 +13,15 @@ export const paqueteStore = defineStore('paqStore', () => {
   const fetchPaquete = async (paqID) => {
     load.value = true
     try {
-      const response = await fetch(`http://localhost:3000/api/paquete/${paqID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      const paqData = await response.json()
+      const response = await paqueteService.getById(paqID)
+      console.log(response)
+      const paqData = await response
       paqData.tratamientos = []
 
-      const response2 = await fetch(`http://localhost:3000/api/paq_trat/${paqData.codpaquete}`)
-      if (!response2.ok) throw new Error(`Error ${response.status}`)
+      const response2 = await paqTratService.getById(paqData.codpaquete)
+      console.log(response2)
 
-      paqData.tratamientos = await response2.json()
+      paqData.tratamientos = await response2
       setPaquete(paqData)
     } catch (error) {
       console.log('error: ', error)

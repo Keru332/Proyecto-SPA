@@ -10,6 +10,33 @@ const PaqueteVendidoController = {
     }
   },
 
+  getByPeriodo: async (req, res) => {
+    try {
+      const data = await PaqueteVendidoService.getByPeriodo(req.params.periodo);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  getByClienteActivos: async (req, res) => {
+    try {
+      const data = await PaqueteVendidoService.getByClienteActivos(req.params.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  getByClienteExpirados: async (req, res) => {
+    try {
+      const data = await PaqueteVendidoService.getByClienteExpirados(req.params.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
   getById: async (req, res) => {
     try {
       const data = await PaqueteVendidoService.getById(req.params.id);

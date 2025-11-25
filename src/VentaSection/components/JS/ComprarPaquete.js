@@ -47,6 +47,7 @@ export function useComprarPaquete() {
         fechafin: fechaF.value,
       })
 
+      console.log(body)
       await paqueteVendidoService.create(body)
 
       alert('Paquete Comprado correctamente')

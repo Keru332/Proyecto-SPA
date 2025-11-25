@@ -29,13 +29,10 @@
           </button>
           <button
             class="filtro-btn"
-            :class="{ active: filtroActivo === 'año' }"
-            @click="aplicarFiltro('año')"
+            :class="{ active: filtroActivo === 'anno' }"
+            @click="aplicarFiltro('anno')"
           >
             Este Año
-          </button>
-          <button class="filtro-btn limpiar" @click="limpiarFiltro" v-if="filtroActivo">
-            Limpiar Filtro
           </button>
         </div>
 
@@ -77,7 +74,6 @@ const {
   textoFiltroActivo,
   paquetesvFiltrados,
   aplicarFiltro,
-  limpiarFiltro,
 } = usePaquetesVSelection()
 </script>
 

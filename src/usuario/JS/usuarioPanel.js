@@ -2,7 +2,7 @@ import { onMounted, reactive, ref } from 'vue'
 import userService from '@/services/userService'
 
 export function useUsuarioPanel() {
-  const usuario = reactive({ id: '', username: '', correo: '' })
+  const usuario = reactive({ id: '', username: '', correo: '', balance: 0 })
   const form = reactive({ username: '', correo: '' })
   const editando = ref(false)
 
@@ -23,6 +23,8 @@ export function useUsuarioPanel() {
       const data = await userService.getById(usuario.id)
       usuario.username = data.username
       usuario.correo = data.correo
+      usuario.balance = data.balance
+      console.log(data)
     } catch (error) {
       console.error(error)
     }

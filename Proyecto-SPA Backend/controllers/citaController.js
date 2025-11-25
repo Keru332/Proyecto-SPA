@@ -9,6 +9,30 @@ const CitaController = {
       res.status(500).json({ error: error.message });
     }
   },
+  getByPeriodo: async (req, res) => {
+    try {
+      const data = await CitaService.getByPeriodo(req.params.periodo);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+  getByClienteFuturas: async (req, res) => {
+    try {
+      const data = await CitaService.getByClienteFuturas(req.params.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+  getByClientePasadas: async (req, res) => {
+    try {
+      const data = await CitaService.getAll(req.params.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 
   getById: async (req, res) => {
     try {

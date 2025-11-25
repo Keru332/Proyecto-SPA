@@ -52,7 +52,80 @@ const Cita = {
   delete: async (id) => {
     const result = await db.query('DELETE FROM cita WHERE codsolicitud = $1 RETURNING *', [id]);
     return result.rows[0];
-  }
+  },
+
+  getByPeriodo: async (periodo) => {
+    let fechaFiltro = '';
+    
+    switch(periodo) {
+      case 'hoy':
+        fechaFiltro = 'fecha = CURRENT_DATE';
+        break;
+      case 'semana':
+        fechaFiltro = `fecha BETWEEN DATE_TRUNC('week', CURRENT_DATE) AND DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '6 days'`;
+        break;
+      case 'mes':
+        fechaFiltro = 'EXTRACT(MONTH FROM fecha) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE)';
+        break;
+      case 'anno':
+        fechaFiltro = 'EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE)';
+        break;
+      default:
+        fechaFiltro = 'fecha >= CURRENT_DATE';
+    }
+
+    const result = await db.query(`
+      SELECT 
+        cita.*,
+        tratamiento.nombretratamiento,
+        cliente.nombrecliente,
+        TO_CHAR(cita.fecha, 'DD/MM/YYYY') as fecha_formateada,
+        TO_CHAR(cita.horacita::time, 'HH24:MI') as hora_formateada
+      FROM cita 
+      JOIN tratamiento ON tratamiento__codtratamiento = codtratamiento 
+      JOIN cliente ON cliente__idcliente = idcliente 
+      WHERE ${fechaFiltro}
+      ORDER BY fecha, horacita
+    `);
+    return result.rows;
+  },
+
+  getByClienteFuturas: async (id) => {
+    const result = await db.query(`
+      SELECT 
+        cita.*,
+        tratamiento.nombretratamiento,
+        cliente.nombrecliente,
+        TO_CHAR(cita.fecha, 'DD/MM/YYYY') as fecha_formateada,
+        TO_CHAR(cita.horacita::time, 'HH24:MI') as hora_formateada
+      FROM cita 
+      JOIN tratamiento ON tratamiento__codtratamiento = codtratamiento 
+      JOIN cliente ON cliente__idcliente = idcliente 
+      WHERE cliente__idcliente = $1 
+        AND (fecha > CURRENT_DATE OR (fecha = CURRENT_DATE AND horacita >= CURRENT_TIME))
+      ORDER BY fecha, horacita
+    `, [id]);
+    return result.rows;
+  },
+
+
+  getByClientePasadas: async (id) => {
+    const result = await db.query(`
+      SELECT 
+        cita.*,
+        tratamiento.nombretratamiento,
+        cliente.nombrecliente,
+        TO_CHAR(cita.fecha, 'DD/MM/YYYY') as fecha_formateada,
+        TO_CHAR(cita.horacita::time, 'HH24:MI') as hora_formateada
+      FROM cita 
+      JOIN tratamiento ON tratamiento__codtratamiento = codtratamiento 
+      JOIN cliente ON cliente__idcliente = idcliente 
+      WHERE cliente__idcliente = $1 
+        AND (fecha < CURRENT_DATE OR (fecha = CURRENT_DATE AND horacita < CURRENT_TIME))
+      ORDER BY fecha DESC, horacita DESC
+    `, [id]);
+    return result.rows;
+  },
 };
 
 module.exports = Cita;

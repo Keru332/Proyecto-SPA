@@ -6,6 +6,21 @@ const CitaService = {
   getAll: async () => {
     return await Cita.getAll();
   },
+  getByPeriodo: async (periodo) => {
+    const periodosValidos = ['hoy', 'semana', 'mes', 'anno'];
+    if (!periodosValidos.includes(periodo)) {
+      throw new Error('Período no válido. Use: hoy, semana, mes, anno');
+    }
+    return await Cita.getByPeriodo(periodo);
+  },
+  getByClienteFuturas: async (id) => {
+    await ClienteService.getById(id);
+    return await Cita.getByClienteFuturas(id);
+  },
+  getByClientePasadas: async (id) => {
+    await ClienteService.getById(id);
+    return await Cita.getAll(id);
+  },
 
   getById: async (id) => {
     if (!isValidUUID(id)) {
@@ -27,7 +42,7 @@ const CitaService = {
 
     // Validar que tratamiento y cliente existan
     const tratamiento = await TratamientoService.getById(data.tratamiento__codtratamiento);
-    await ClienteService.getById(data.cliente__idcliente);
+    const cliente = await ClienteService.getById(data.cliente__idcliente);
 
     // Validaciones de fecha
     const fechaCita = new Date(data.fecha);
@@ -57,8 +72,14 @@ const CitaService = {
       throw new Error('Las observaciones no pueden exceder 500 caracteres');
     }
 
-    // Validar conflictos de horario (necesitarías implementar esta función)
+
     data.horacita = await validarDisponibilidadCita(data.fecha, data.horacita, data.tratamiento__codtratamiento);
+
+    if( ( Number(cliente.balance) - Number(tratamiento.precio) ) < 0){
+      throw new Error('No tiene suficiente dinero para comprar este tratamiento.');
+    } else {
+      await ClienteService.updateBalance(data.cliente__idcliente, Number(cliente.balance) - Number(tratamiento.precio))
+    }
 
     return await Cita.create(data);
   },

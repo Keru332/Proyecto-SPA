@@ -25,4 +25,19 @@ export default {
     const res = await api.delete(`/paquetevendido/${id}/${id2}/${id3}`)
     return res.data
   },
+
+  async getByPeriodo(periodo) {
+    const res = await api.get(`/paquetevendido/filtro/${periodo}`)
+    return res.data
+  },
+
+  async getByClientePasadas(id) {
+    const res = await api.get(`/paquetevendido/activos/${id}`)
+    return res.data
+  },
+
+  async getByClienteFuturas(id) {
+    const res = await api.get(`/paquetevendido/expirados/${id}`)
+    return res.data
+  },
 }
