@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import categoriaService from '@/services/categoriaService'
 import tratamientoService from '@/services/tratamientoService'
-import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
+
 export function useEditarTratamiento() {
   const route = useRoute()
   const router = useRouter()
@@ -25,11 +25,8 @@ export function useEditarTratamiento() {
   const categorias = ref([])
   const CodTrat = ref(null)
   const CodCategoria = ref(null)
- 
 
-  const { mostrarConfirmacion } = useAlertaConfirmacion()
-
-
+  // Función para cargar las categorías desde la API
   const fetchCategorias = async () => {
     try {
       const data = await categoriaService.getAll()
@@ -37,31 +34,11 @@ export function useEditarTratamiento() {
     } catch (error) {
       console.error('Error:', error)
       mensaje.value = 'Error al cargar las categorías'
-     
-
-      mostrarConfirmacion({
-        titulo: 'Error',
-        mensaje: 'Error al cargar las categorías',
-        tipo: 'peligro',
-        textoAceptar: 'Aceptar'
-      })
     }
   }
 
-  
-  const submitForm = () => {
-    mostrarConfirmacion({
-      titulo: 'Confirmar Edición',
-      mensaje: '¿Estás seguro de que deseas guardar los cambios en este tratamiento?',
-      tipo: 'info',
-      textoAceptar: 'Sí, guardar',
-      textoCancelar: 'Cancelar',
-      onAceptar: confirmarEdicion  
-    })
-  }
-
-
-  const confirmarEdicion = async () => {
+  // Función para actualizar el tratamiento
+  const submitForm = async () => {
     try {
       const datosActualizados = {
         nombretratamiento: tratamientoF.nombre,
@@ -82,26 +59,11 @@ export function useEditarTratamiento() {
       tratamientoF.precio = ''
       tratamientoF.codcategoria = ''
 
-
-      mostrarConfirmacion({
-        titulo: '¡Éxito!',
-        mensaje: 'Tratamiento editado correctamente',
-        tipo: 'exito',
-        textoAceptar: 'Aceptar',
-        onAceptar: () => router.push('/')  // 🔥 Redirigir después de aceptar
-      })
-     
+      alert('Tratamiento editado correctamente')
+      router.push('/')
     } catch (error) {
       console.error('Error:', error)
       mensaje.value = 'Error al actualizar el tratamiento'
-     
-
-      mostrarConfirmacion({
-        titulo: 'Error',
-        mensaje: 'Error al actualizar el tratamiento',
-        tipo: 'peligro',
-        textoAceptar: 'Aceptar'
-      })
     }
   }
 
@@ -129,11 +91,5 @@ export function useEditarTratamiento() {
     await tratStore.fetchTratamiento(tratID)
   })
 
-  return {
-    tratData,
-    tratamientoF,
-    mensaje,
-    categorias,
-    submitForm
-  }
+  return { tratData, tratamientoF, mensaje, categorias, submitForm }
 }

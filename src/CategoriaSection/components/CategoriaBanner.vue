@@ -21,15 +21,12 @@
         Eliminar
       </button>
     </div>
-
-    <AlertaConfirmacion />
   </div>
 </template>
 
 <script setup>
 import { useCategoriaBanner } from './JS/CategoriaBanner'
 import { authService } from '@/Authentication/services/auth'
-import AlertaConfirmacion from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 const props = defineProps({
   categoria: {
@@ -41,7 +38,6 @@ const props = defineProps({
     }),
   },
 })
-
 const { router, confirmarEliminacion } = useCategoriaBanner(props)
 </script>
 

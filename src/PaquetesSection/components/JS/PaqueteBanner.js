@@ -1,34 +1,24 @@
 import paqueteService from '@/services/paqueteService'
 import { ref } from 'vue'
-import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
 
 export function usePaqueteBanner(props) {
   const errorMessage = ref('')
-  const { mostrarConfirmacion } = useAlertaConfirmacion()
-
   const confirmarEliminacion = () => {
-    mostrarConfirmacion({
-      titulo: 'Confirmar Eliminación',
-      mensaje: '¿Estás seguro de que deseas eliminar este paquete? Esta acción no se puede deshacer.',
-      tipo: 'peligro',
-      textoAceptar: 'Sí, eliminar',
-      textoCancelar: 'Cancelar',
-      onAceptar: eliminarPaquete
-    })
+    if (
+      confirm(
+        '¿Estás seguro de que deseas eliminar este paquete? Esta acción no se puede deshacer.',
+      )
+    ) {
+      eliminarTratamiento()
+    }
   }
 
-  const eliminarPaquete = async () => {
+  const eliminarTratamiento = async () => {
     try {
       await paqueteService.delete(props.paquete.codpaquete)
 
-      mostrarConfirmacion({
-        titulo: '¡Éxito!',
-        mensaje: 'Paquete eliminado correctamente',
-        tipo: 'exito',
-        textoAceptar: 'Aceptar',
-        onAceptar: () => window.location.reload()
-      })
-     
+      alert('Paquete eliminado correctamente')
+      window.location.reload()
     } catch (error) {
       if (error.response) {
         errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar paquete'}`
@@ -42,18 +32,12 @@ export function usePaqueteBanner(props) {
           errorText.includes('REFERENCE')
         ) {
           errorMessage.value =
-            'No se puede eliminar este paquete porque está siendo utilizado en algún paquete vendido.'
+            'No se puede eliminar este paquete porque está siendo utilizado en algun paquete vendido. Primero elimine las compras asociadas.'
         }
       } else {
         errorMessage.value = 'Error de conexión con el servidor'
       }
-     
-      mostrarConfirmacion({
-        titulo: 'Error',
-        mensaje: `Error al eliminar: ${errorMessage.value}`,
-        tipo: 'peligro',
-        textoAceptar: 'Aceptar'
-      })
+      alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
 

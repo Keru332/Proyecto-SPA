@@ -5,7 +5,7 @@ import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
 import tratamientoService from '@/services/tratamientoService'
 import paqTratService from '@/services/paqTratService'
 import paqueteService from '@/services/paqueteService'
-import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
+
 export function useEditarPaquete() {
   const route = useRoute()
   const router = useRouter()
@@ -23,9 +23,6 @@ export function useEditarPaquete() {
   const tratamientosDisponibles = ref([])
   const tratamientosPaquete = ref([])
   const tratamientosOriginales = ref([])
- 
-  
-  const { mostrarConfirmacion } = useAlertaConfirmacion()
 
   const haySeleccionadosDisponibles = computed(() => {
     return tratamientosDisponibles.value.some((t) => t.selected)
@@ -77,31 +74,11 @@ export function useEditarPaquete() {
     } catch (error) {
       console.error('Error:', error)
       mensaje.value = 'Error al cargar los tratamientos'
-     
-
-      mostrarConfirmacion({
-        titulo: 'Error',
-        mensaje: 'Error al cargar los tratamientos',
-        tipo: 'peligro',
-        textoAceptar: 'Aceptar'
-      })
     }
   }
 
- 
-  const submitForm = () => {
-    mostrarConfirmacion({
-      titulo: 'Confirmar Edición',
-      mensaje: '¿Estás seguro de que deseas guardar los cambios en este paquete?',
-      tipo: 'info',
-      textoAceptar: 'Sí, guardar',
-      textoCancelar: 'Cancelar',
-      onAceptar: confirmarEdicion 
-    })
-  }
-
- 
-  const confirmarEdicion = async () => {
+  // Función para actualizar el paquete
+  const submitForm = async () => {
     try {
       // 1. Actualizar datos básicos del paquete
       const datosActualizados = {
@@ -117,26 +94,11 @@ export function useEditarPaquete() {
 
       mensaje.value = 'Paquete actualizado correctamente!'
 
-      
-      mostrarConfirmacion({
-        titulo: '¡Éxito!',
-        mensaje: 'Paquete actualizado correctamente',
-        tipo: 'exito',
-        textoAceptar: 'Aceptar',
-        onAceptar: () => router.push('/paquetes')  
-      })
-     
+      alert('Paquete actualizado correctamente')
+      router.push('/paquetes')
     } catch (error) {
       console.error('Error:', error)
       mensaje.value = 'Error al actualizar el paquete: ' + error.message
-     
-      
-      mostrarConfirmacion({
-        titulo: 'Error',
-        mensaje: 'Error al actualizar el paquete',
-        tipo: 'peligro',
-        textoAceptar: 'Aceptar'
-      })
     }
   }
 
@@ -240,6 +202,5 @@ export function useEditarPaquete() {
     toggleSelection,
     fetchTratamientos,
     actualizarRelacionesTratamientos,
-    
   }
 }

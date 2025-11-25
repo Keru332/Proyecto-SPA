@@ -1,22 +1,7 @@
 import { ref, getCurrentInstance } from 'vue'
 import tratamientoService from '@/services/tratamientoService'
-import { useAlertaConfirmacion } from '@/plantilla confirmacion/Plantilla confirmacion.vue'
-
 export function useTratamientoBanner(props) {
   const errorMessage = ref('')
-<<<<<<< HEAD
-  const { mostrarConfirmacion } = useAlertaConfirmacion()
-
-  const confirmarEliminacion = () => {
-    mostrarConfirmacion({
-      titulo: 'Confirmar Eliminación',
-      mensaje: '¿Estás seguro de que deseas eliminar este tratamiento? Esta acción no se puede deshacer.',
-      tipo: 'peligro',
-      textoAceptar: 'Sí, eliminar',
-      textoCancelar: 'Cancelar',
-      onAceptar: eliminarTratamiento
-    })
-=======
   const { proxy } = getCurrentInstance()
 
   const confirmarEliminacion = async () => {
@@ -30,7 +15,6 @@ export function useTratamientoBanner(props) {
     } catch {
       console.log('cancelado')
     }
->>>>>>> 02bb1dc (Agregado Modal)
   }
 
   const eliminarTratamiento = async () => {
@@ -38,14 +22,8 @@ export function useTratamientoBanner(props) {
       const response = await tratamientoService.delete(props.tratamiento.codtratamiento)
       console.log(response)
 
-      mostrarConfirmacion({
-        titulo: '¡Éxito!',
-        mensaje: 'Tratamiento eliminado correctamente',
-        tipo: 'exito',
-        textoAceptar: 'Aceptar',
-        onAceptar: () => window.location.reload()
-      })
-     
+      alert('tratamiento eliminado correctamente')
+      window.location.reload()
     } catch (error) {
       if (error.response) {
         errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar tratamiento'}`
@@ -59,22 +37,12 @@ export function useTratamientoBanner(props) {
           errorText.includes('REFERENCE')
         ) {
           errorMessage.value =
-            'No se puede eliminar este tratamiento porque está siendo utilizado en alguna cita.'
+            'No se puede eliminar este tratamiento porque está siendo utilizado en alguna cita. Primero elimine las compras asociadas.'
         }
       } else {
         errorMessage.value = 'Error de conexión con el servidor'
       }
-<<<<<<< HEAD
-     
-      mostrarConfirmacion({
-        titulo: 'Error',
-        mensaje: `Error al eliminar: ${errorMessage.value}`,
-        tipo: 'peligro',
-        textoAceptar: 'Aceptar'
-      })
-=======
       await proxy.$alert(`Error al eliminar: ${errorMessage.value}`)
->>>>>>> 02bb1dc (Agregado Modal)
     }
   }
 
