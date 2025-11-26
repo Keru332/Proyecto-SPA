@@ -33,6 +33,8 @@ const logout = () => {
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/productos">Tratamientos</RouterLink>
           <RouterLink to="/paquetes">Paquetes</RouterLink>
+          <RouterLink to="/paquetesvC">Tus Paquetes</RouterLink>
+          <RouterLink to="/citasC">Tus Citas</RouterLink>
           <RouterLink to="/usuario">Usuario</RouterLink>
           <button @click="logout" class="logout">Cerrar sesión</button>
         </nav>

@@ -5,7 +5,6 @@ import SignIn from '@/Authentication/components/SignIn.vue'
 import TratamientosSeleccion from '@/TratamientoSection/components/TratamientosSeleccion.vue'
 import { authService } from '@/Authentication/services/auth'
 import AgendarCita from '@/VentaSection/components/AgendarCita.vue'
-import PaquetesSelection from '@/PaquetesSection/components/PaquetesSelection.vue'
 import EditarTratamiento from '@/TratamientoSection/components/EditarTratamiento.vue'
 import ComprarPaquete from '@/VentaSection/components/ComprarPaquete.vue'
 import adminPanel from '@/admin/adminPanel.vue'
@@ -19,6 +18,9 @@ import usuarioPanel from '@/usuario/usuarioPanel.vue'
 import CrearCategoria from '@/CategoriaSection/components/CrearCategoria.vue'
 import CrearTratamiento from '@/TratamientoSection/components/CrearTratamiento.vue'
 import CrearPaquete from '@/PaquetesSection/components/CrearPaquete.vue'
+import CitasSeleccionC from '@/CitasSection/CitasSeleccionC.vue'
+import PaquetesSelection from '@/PaquetesSection/components/PaquetesSelection.vue'
+import PaquetesVSelectionC from '@/PaquetesSection/PaquetesVendidosSection/PaquetesVSelectionC.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +66,18 @@ const router = createRouter({
       name: 'citas',
       component: CitasSeleccion,
       meta: { requiresHeader: true, requiresAuth: true, requireAdmin: true },
+    },
+    {
+      path: '/paquetesvC',
+      name: 'paquetesvC',
+      component: PaquetesVSelectionC,
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: false },
+    },
+    {
+      path: '/citasC',
+      name: 'citasC',
+      component: CitasSeleccionC,
+      meta: { requiresHeader: true, requiresAuth: true, requireAdmin: false },
     },
     {
       path: '/agendarCita/:id',

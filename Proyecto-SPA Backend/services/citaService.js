@@ -19,7 +19,7 @@ const CitaService = {
   },
   getByClientePasadas: async (id) => {
     await ClienteService.getById(id);
-    return await Cita.getAll(id);
+    return await Cita.getByClientePasadas(id);
   },
 
   getById: async (id) => {
@@ -96,7 +96,19 @@ const CitaService = {
     if (!isValidUUID(id)) {
       throw new Error('ID de cita no válido');
     }
-    await CitaService.getById(id);
+    const cita = await CitaService.getById(id);
+    const fechaCita = new Date(cita.fecha);
+    const hoy = new Date();
+    if (fechaCita < hoy) {
+      throw new Error('No se puede eliminar una cita ya realizada');
+    }
+    const tratamiento = await TratamientoService.getById(cita.tratamiento__codtratamiento);
+    const cliente = await ClienteService.getById(cita.cliente__idcliente);
+
+    
+    await ClienteService.updateBalance(cita.cliente__idcliente, Number(cliente.balance) + Number(tratamiento.precio));
+
+    console.log(`Devolviendo $${tratamiento.precio} al cliente ${cliente.nombre} por eliminación de cita ${id}`);
     return await Cita.delete(id);
   }
 };
@@ -119,15 +131,15 @@ async function validarDisponibilidadCita(fecha, hora, tratamientoId) {
     throw new Error('No hay disponibilidad para su cita en ese dia.');
   }
 
-  
+  /*
   // Calcular la hora automáticamente basada en el tiempo acumulado
   const minutosDesdeApertura = sumaTiempoCita.sum;
   const horaDisponible = Math.floor(minutosDesdeApertura / 60) + horarioApertura;
   const minutosDisponible = minutosDesdeApertura % 60;
   
   const horaAsignada = `${horaDisponible.toString().padStart(2, '0')}:${minutosDisponible.toString().padStart(2, '0')}`;
-
-  return horaAsignada
+*/
+  return "21:00"
 }
 
 function isValidUUID(uuid) {

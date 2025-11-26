@@ -29,5 +29,5 @@
 import TratamientoBanner from '@/TratamientoSection/components/TratamientoBanner.vue'
 import { useAgendarCita } from './JS/AgendarCita'
 const { tratData, fechaC, hora, errorMessage, agendar } = useAgendarCita()
-hora.value = '9:00'
+hora.value = '21:00'
 </script>

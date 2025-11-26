@@ -18,7 +18,10 @@
     <div class="paquetev-footer">
       <button
         class="btn-eliminar"
-        v-if="authService.isAdmin() && esFechaFutura"
+        v-if="
+          (authService.isAdmin() && esFechaFutura) ||
+          (authService.isUser() && isDeleteable() && esFechaFutura)
+        "
         @click="confirmarEliminacion"
       >
         Cancelar
@@ -30,6 +33,11 @@
 <script setup>
 import { authService } from '@/Authentication/services/auth'
 import { usePaquetesVBanner } from './JS/PaquetesVBanner'
+
+function isDeleteable() {
+  const userData = JSON.parse(localStorage.getItem('user'))
+  return props.paquetev.cliente__idcliente == userData.codcliente
+}
 
 const props = defineProps({
   paquetev: {

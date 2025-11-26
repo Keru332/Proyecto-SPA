@@ -32,12 +32,12 @@ export default {
   },
 
   async getByClientePasadas(id) {
-    const res = await api.get(`/paquetevendido/activos/${id}`)
+    const res = await api.get(`/paquetevendido/expirados/${id}`)
     return res.data
   },
 
   async getByClienteFuturas(id) {
-    const res = await api.get(`/paquetevendido/expirados/${id}`)
+    const res = await api.get(`/paquetevendido/activos/${id}`)
     return res.data
   },
 }

@@ -27,7 +27,7 @@ const CitaController = {
   },
   getByClientePasadas: async (req, res) => {
     try {
-      const data = await CitaService.getAll(req.params.id);
+      const data = await CitaService.getByClientePasadas(req.params.id);
       res.json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });

@@ -52,14 +52,23 @@ export function useAgendarCita() {
         observaciones: 'No hay.',
       })
 
+      console.log(body)
       await citaService.create(body)
 
       alert('Cita agendada correctamente')
       router.push('/')
     } catch (error) {
-      errorMessage.value = `❌ Error: ${error.response.data?.error}`
-      if (errorMessage.value.includes('uk_cita_tratamiento_cliente')) {
-        errorMessage.value = 'No puedes agendar el mismo tratamiento para el mismo dia.'
+      console.error('Error completo en agendar:', error)
+
+      // Manejo seguro de errores
+      if (error.message) {
+        errorMessage.value = `❌ ${error.message}`
+      } else if (error.response && error.response.data) {
+        errorMessage.value = `❌ Error: ${error.response.data?.error || error.response.data?.message || 'Error del servidor'}`
+      } else if (error.request) {
+        errorMessage.value = '❌ Error de conexión. Verifica tu internet.'
+      } else {
+        errorMessage.value = '❌ Error inesperado al agendar la cita'
       }
     } finally {
       loading.value = false
@@ -92,9 +101,8 @@ export function useAgendarCita() {
       return 'Formato de hora inválido'
     }
 
-    // Validar horario laboral (ejemplo: 8:00 - 18:00)
     const [hours] = hora.value.split(':').map(Number)
-    if (hours < 8 || hours > 18) {
+    if (hours < 9 || hours > 21) {
       return 'El horario de atención es de 8:00 AM a 6:00 PM'
     }
 

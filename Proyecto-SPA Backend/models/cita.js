@@ -97,7 +97,8 @@ const Cita = {
         tratamiento.nombretratamiento,
         cliente.nombrecliente,
         TO_CHAR(cita.fecha, 'DD/MM/YYYY') as fecha_formateada,
-        TO_CHAR(cita.horacita::time, 'HH24:MI') as hora_formateada
+        TO_CHAR(cita.horacita::time, 'HH24:MI') as hora_formateada,
+        fecha
       FROM cita 
       JOIN tratamiento ON tratamiento__codtratamiento = codtratamiento 
       JOIN cliente ON cliente__idcliente = idcliente 

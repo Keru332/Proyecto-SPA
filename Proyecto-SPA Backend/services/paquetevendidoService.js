@@ -65,16 +65,13 @@ const PaqueteVendidoService = {
     if( ( Number(cliente.balance) - Number(paquete.preciopaquete) ) < 0){
         throw new Error('No tiene suficiente dinero para comprar este paquete.');
     } else {
-        await ClienteService.updateBalance(data.cliente__idcliente, Number(cliente.balance) - Number(paquete.precio))
+        await ClienteService.updateBalance(data.cliente__idcliente, Number(cliente.balance) - Number(paquete.preciopaquete))
     }
     
     return await PaqueteVendido.create(data);
   },
 
   update: async (id, data) => {
-    if (!isValidUUID(id)) {
-      throw new Error('ID de cliente no válido');
-    }
     await PaqueteVendidoService.getByClienteId(id);
     return await PaqueteVendido.update(id, data);
   },
@@ -87,6 +84,26 @@ const PaqueteVendidoService = {
       throw new Error('ID de cliente no válido');
     }
 
+    const paquete = await PaqueteService.getById(codpaquete);
+    
+    const cliente = await ClienteService.getById(idCliente);
+
+    const hoy = new Date();
+    const fechaInicio = new Date(paqueteVendido.fechainicio);
+    const fechaFin = new Date(paqueteVendido.fechafin);
+    
+    if (hoy >= fechaInicio) {
+      throw new Error('No se puede eliminar un paquete que ya ha comenzado su período de uso');
+    }
+    
+    if (hoy > fechaFin) {
+      throw new Error('No se puede eliminar un paquete que ya ha expirado');
+    }
+
+    await ClienteService.updateBalance(idCliente, Number(cliente.balance) + Number(paquete.preciopaquete));
+
+    console.log(`Devolviendo $${paquete.preciopaquete} al cliente ${cliente.nombre} por eliminación de paquete ${paquete.nombre}`);
+    
     const eliminado = await PaqueteVendido.delete(codpaquete, idCliente, fechaCompra);
     if (!eliminado) throw new Error('Paquete vendido no encontrado');
     return eliminado;

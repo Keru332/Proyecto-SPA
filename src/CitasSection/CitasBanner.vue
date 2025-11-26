@@ -10,14 +10,16 @@
     <div class="cita-informacion">
       <div class="price-tag">
         <h4>Fecha:{{ cita.fecha_formateada }}</h4>
-        <h4>Hora:{{ cita.hora_formateada }}</h4>
       </div>
     </div>
 
     <div class="cita-footer">
       <button
         class="btn-eliminar"
-        v-if="authService.isAdmin() && esFechaFutura"
+        v-if="
+          (authService.isAdmin() && esFechaFutura) ||
+          (authService.isUser() && isDeleteable() && esFechaFutura)
+        "
         @click="confirmarEliminacion"
       >
         Cancelar
@@ -29,6 +31,11 @@
 <script setup>
 import { authService } from '@/Authentication/services/auth'
 import { useCitaBanner } from './JS/CitasBanner'
+
+function isDeleteable() {
+  const userData = JSON.parse(localStorage.getItem('user'))
+  return props.cita.cliente__idcliente == userData.codcliente
+}
 
 const props = defineProps({
   cita: {

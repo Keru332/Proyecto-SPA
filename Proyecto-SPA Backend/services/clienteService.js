@@ -6,9 +6,6 @@ const ClienteService = {
   },
 
   getById: async (id) => {
-    if (!isValidUUID(id)) {
-      throw new Error('ID de cliente no válido');
-    }
     const cliente = await Cliente.getById(id);
     if (!cliente) throw new Error('Cliente no encontrado');
     return cliente;
