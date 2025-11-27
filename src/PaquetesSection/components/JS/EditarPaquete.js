@@ -1,4 +1,4 @@
-import { reactive, ref, computed, onMounted, watch } from 'vue'
+import { reactive, ref, computed, onMounted, watch, getCurrentInstance } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
@@ -11,6 +11,8 @@ export function useEditarPaquete() {
   const router = useRouter()
   const paqStore = paqueteStore()
   const { paquete } = storeToRefs(paqStore)
+
+  const { proxy } = getCurrentInstance()
 
   const paqueteF = reactive({
     codpaquete: null,
@@ -94,7 +96,7 @@ export function useEditarPaquete() {
 
       mensaje.value = 'Paquete actualizado correctamente!'
 
-      alert('Paquete actualizado correctamente')
+      await proxy.$alert('Paquete actualizado correctamente')
       router.push('/paquetes')
     } catch (error) {
       console.error('Error:', error)

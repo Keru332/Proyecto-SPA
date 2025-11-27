@@ -1,4 +1,4 @@
-import { reactive, ref, computed, onMounted } from 'vue'
+import { reactive, ref, computed, onMounted, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import tratamientoService from '@/services/tratamientoService'
 import paqTratService from '@/services/paqTratService'
@@ -6,6 +6,8 @@ import paqueteService from '@/services/paqueteService'
 
 export function useCrearPaquete() {
   const router = useRouter()
+
+  const { proxy } = getCurrentInstance()
 
   const paquete = reactive({
     nombrepaquete: '',
@@ -84,7 +86,7 @@ export function useCrearPaquete() {
       // Resetear listas
       tratamientosPaquete.value = []
 
-      alert('Paquete creado correctamente')
+      await proxy.$alert('Paquete creado correctamente')
       router.push('/paquetes')
     } catch (error) {
       console.error('Error:', error)
