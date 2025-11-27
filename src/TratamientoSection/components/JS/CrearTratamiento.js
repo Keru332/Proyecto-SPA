@@ -1,4 +1,4 @@
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, getCurrentInstance} from 'vue'
 import { useRouter } from 'vue-router'
 import categoriaService from '@/services/categoriaService'
 import tratamientoService from '@/services/tratamientoService'
@@ -14,6 +14,7 @@ export function useCrearTratamiento() {
     codcategoria: Object,
   })
   const categorias = ref([])
+  const { proxy } = getCurrentInstance()
 
   // Función para cargar las categorías desde la API
   const fetchCategorias = async () => {
@@ -51,7 +52,7 @@ export function useCrearTratamiento() {
       tratamiento.precio = ''
       tratamiento.codcategoria = ''
 
-      alert('Tratamiento creado correctamente')
+      await proxy.$alert('Tratamiento creado correctamente')
       router.push('/productos')
     } catch (error) {
       console.error('Error:', error)
