@@ -22,7 +22,7 @@ export function useTratamientoBanner(props) {
       const response = await tratamientoService.delete(props.tratamiento.codtratamiento)
       console.log(response)
 
-      alert('tratamiento eliminado correctamente')
+      await proxy.$alert('tratamiento eliminado correctamente')
       window.location.reload()
     } catch (error) {
       if (error.response) {

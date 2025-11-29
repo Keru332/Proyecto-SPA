@@ -1,16 +1,20 @@
 import { useRouter } from 'vue-router'
 import categoriaService from '@/services/categoriaService'
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 export function useCategoriaBanner(props) {
   const router = useRouter()
   const errorMessage = ref('')
-  const confirmarEliminacion = () => {
-    if (
-      confirm(
-        '¿Estás seguro de que deseas eliminar esta categoria? Esta acción no se puede deshacer.',
+  const { proxy } = getCurrentInstance()
+  const confirmarEliminacion = async () => {
+    try {
+      const result = await proxy.$confirm(
+        '¿Estás seguro de que deseas eliminar esta Categoria? Esta acción no se puede deshacer.',
       )
-    ) {
-      eliminarCategoria()
+      if (result) {
+        eliminarCategoria()
+      }
+    } catch {
+      console.log('cancelado')
     }
   }
 
@@ -19,7 +23,7 @@ export function useCategoriaBanner(props) {
       const response = await categoriaService.delete(props.categoria.codcategoria)
       console.log(response)
 
-      alert('categoria eliminado correctamente')
+      await proxy.$alert('categoria eliminado correctamente')
       window.location.reload()
     } catch (error) {
       if (error.response) {
@@ -39,7 +43,7 @@ export function useCategoriaBanner(props) {
       } else {
         errorMessage.value = 'Error de conexión con el servidor'
       }
-      alert(`Error al eliminar: ${errorMessage.value}`)
+      await proxy.$alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
 

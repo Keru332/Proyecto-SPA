@@ -1,4 +1,4 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { categoriaStore } from '../../stores/CategoriaStore'
 import { storeToRefs } from 'pinia'
@@ -10,6 +10,7 @@ export function useEditarCategoria() {
   const catStore = categoriaStore()
   const { categoria } = storeToRefs(catStore)
   const catData = categoria
+  const { proxy } = getCurrentInstance()
 
   const categoria_actualizada = reactive({
     codcategoria: Object,
@@ -36,7 +37,7 @@ export function useEditarCategoria() {
       mensaje.value = 'categoria actualizada correctamente!'
 
       categoria_actualizada.nombre = ''
-      alert('Categoria editada correctamente')
+      await proxy.$alert('Categoria editada correctamente')
       router.push('/cat')
     } catch (error) {
       if (error.response) {

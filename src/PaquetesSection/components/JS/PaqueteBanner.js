@@ -1,15 +1,19 @@
 import paqueteService from '@/services/paqueteService'
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 
 export function usePaqueteBanner(props) {
   const errorMessage = ref('')
-  const confirmarEliminacion = () => {
-    if (
-      confirm(
-        '¿Estás seguro de que deseas eliminar este paquete? Esta acción no se puede deshacer.',
+  const { proxy } = getCurrentInstance()
+  const confirmarEliminacion = async () => {
+    try {
+      const result = await proxy.$confirm(
+        '¿Estás seguro de que deseas eliminar este Paquete? Esta acción no se puede deshacer.',
       )
-    ) {
-      eliminarTratamiento()
+      if (result) {
+        eliminarTratamiento()
+      }
+    } catch {
+      console.log('cancelado')
     }
   }
 
@@ -17,7 +21,7 @@ export function usePaqueteBanner(props) {
     try {
       await paqueteService.delete(props.paquete.codpaquete)
 
-      alert('Paquete eliminado correctamente')
+      await proxy.$alert('Paquete eliminado correctamente')
       window.location.reload()
     } catch (error) {
       if (error.response) {
@@ -37,7 +41,7 @@ export function usePaqueteBanner(props) {
       } else {
         errorMessage.value = 'Error de conexión con el servidor'
       }
-      alert(`Error al eliminar: ${errorMessage.value}`)
+      await proxy.$alert(`Error al eliminar: ${errorMessage.value}`)
     }
   }
 

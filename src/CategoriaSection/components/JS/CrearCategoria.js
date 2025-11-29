@@ -1,9 +1,10 @@
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import categoriaService from '@/services/categoriaService'
 
 export function useCrearCategoria() {
   const router = useRouter()
+  const { proxy } = getCurrentInstance()
 
   const categoria = ref({
     nombre: '',
@@ -19,7 +20,7 @@ export function useCrearCategoria() {
 
       mensaje.value = 'Categoria creada correctamente!'
 
-      alert('Categoria Creada correctamente')
+      await proxy.$alert('Categoria Creada correctamente')
       router.push('/cat')
     } catch (error) {
       if (error.response) {

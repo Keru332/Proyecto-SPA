@@ -1,4 +1,4 @@
-import { reactive, ref, onMounted, watch } from 'vue'
+import { reactive, ref, onMounted, watch, getCurrentInstance } from 'vue'
 import { tratamientoStore } from '@/TratamientoSection/stores/TratamientoReservar'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
@@ -11,6 +11,8 @@ export function useEditarTratamiento() {
   const tratStore = tratamientoStore()
   const { tratamiento } = storeToRefs(tratStore)
   const tratData = tratamiento
+
+  const { proxy } = getCurrentInstance()
 
   const tratamientoF = reactive({
     codtratamiento: Object,
@@ -59,7 +61,7 @@ export function useEditarTratamiento() {
       tratamientoF.precio = ''
       tratamientoF.codcategoria = ''
 
-      alert('Tratamiento editado correctamente')
+      await proxy.$alert('Tratamiento editado correctamente')
       router.push('/')
     } catch (error) {
       console.error('Error:', error)
