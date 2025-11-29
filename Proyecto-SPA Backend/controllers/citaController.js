@@ -1,40 +1,40 @@
 const CitaService = require('../services/citaService');
 
 const CitaController = {
-  getAll: async (req, res) => {
+  getAll: async (req, res, next) => {
     try {
       const data = await CitaService.getAll();
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
-  getByPeriodo: async (req, res) => {
+  getByPeriodo: async (req, res, next) => {
     try {
       const data = await CitaService.getByPeriodo(req.params.periodo);
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
-  getByClienteFuturas: async (req, res) => {
+  getByClienteFuturas: async (req, res, next) => {
     try {
       const data = await CitaService.getByClienteFuturas(req.params.id);
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
-  getByClientePasadas: async (req, res) => {
+  getByClientePasadas: async (req, res, next) => {
     try {
       const data = await CitaService.getByClientePasadas(req.params.id);
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//.status(500).json({ error: error.message });
     }
   },
 
-  getById: async (req, res) => {
+  getById: async (req, res, next) => {
     try {
       const data = await CitaService.getById(req.params.id);
       if (!data) {
@@ -42,20 +42,20 @@ const CitaController = {
       }
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  create: async (req, res) => {
+  create: async (req, res, next) => {
     try {
       const nuevo = await CitaService.create(req.body);
       res.status(201).json(nuevo);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     try {
       const actualizado = await CitaService.update(req.params.id, req.body);
       if (!actualizado) {
@@ -63,11 +63,11 @@ const CitaController = {
       }
       res.json(actualizado);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  delete: async (req, res) => {
+  delete: async (req, res, next) => {
     try {
       const eliminado = await CitaService.delete(req.params.id);
       if (!eliminado) {
@@ -75,7 +75,7 @@ const CitaController = {
       }
       res.json({ message: 'Cita eliminado correctamente' });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   }
 };

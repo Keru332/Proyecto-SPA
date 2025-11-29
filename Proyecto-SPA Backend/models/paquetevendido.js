@@ -18,7 +18,24 @@ const PaqueteVendido = {
 
   getById: async (id) => {
     const result = await db.query('SELECT * FROM paquetevendido WHERE cliente__idcliente = $1', [id]);
-    return result.rows[0];
+    return result.rows;
+  },
+  getByID3: async (codpaquete, idCliente, fechaCompra) => {
+    const result = await db.query(
+      `SELECT 
+        *,
+        TO_CHAR(paquetevendido.fechacompra, 'DD/MM/YYYY') as fechacompraf,
+        TO_CHAR(paquetevendido.fechainicio, 'DD/MM/YYYY') as fechainiciof,
+        TO_CHAR(paquetevendido.fechafin, 'DD/MM/YYYY') as fechafinf
+       FROM paquetevendido 
+       JOIN cliente ON cliente__idcliente = idcliente 
+       JOIN paquete ON paquete__codpaquete = codpaquete 
+       WHERE paquete__codpaquete = $1 
+       AND cliente__idcliente = $2 
+       AND fechacompra = $3`,
+      [codpaquete, idCliente, new Date(fechaCompra)]
+    );
+    return result.rows[0]; // Devuelve un solo objeto
   },
 
   create: async (data) => {

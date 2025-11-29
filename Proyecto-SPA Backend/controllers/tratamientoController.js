@@ -1,16 +1,16 @@
 const TratamientoService = require('../services/tratamientoService');
 
 const TratamientoController = {
-  getAll: async (req, res) => {
+  getAll: async (req, res, next) => {
     try {
       const data = await TratamientoService.getAll();
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  getById: async (req, res) => {
+  getById: async (req, res, next) => {
     try {
       const data = await TratamientoService.getById(req.params.id);
       if (!data) {
@@ -18,20 +18,20 @@ const TratamientoController = {
       }
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  create: async (req, res) => {
+  create: async (req, res, next) => {
     try {
       const nuevo = await TratamientoService.create(req.body);
       res.status(201).json(nuevo);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     try {
       const actualizado = await TratamientoService.update(req.params.id, req.body);
       if (!actualizado) {
@@ -39,12 +39,11 @@ const TratamientoController = {
       }
       res.json(actualizado);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-    // Agrega este método al controlador
-    getMasPopular: async (req, res) => {
+    getMasPopular: async (req, res, next) => {
       try {
         const tratamientoPopular = await TratamientoService.getMasPopular();
         if (!tratamientoPopular) {
@@ -52,11 +51,11 @@ const TratamientoController = {
         }
         res.json(tratamientoPopular);
       } catch (error) {
-        res.status(500).json({ error: error.message });
+        next(error)//res.status(500).json({ error: error.message });
       }
     },
 
-  delete: async (req, res) => {
+  delete: async (req, res, next) => {
     try {
       const eliminado = await TratamientoService.delete(req.params.id);
       if (!eliminado) {
@@ -64,7 +63,7 @@ const TratamientoController = {
       }
       res.json({ message: 'Tratamiento eliminado correctamente' });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   }
 };

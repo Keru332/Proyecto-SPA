@@ -1,16 +1,16 @@
 const PaqueteService = require('../services/paqueteService');
 
 const PaqueteController = {
-  getAll: async (req, res) => {
+  getAll: async (req, res, next) => {
     try {
       const data = await PaqueteService.getAll();
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  getById: async (req, res) => {
+  getById: async (req, res, next) => {
     try {
       const data = await PaqueteService.getById(req.params.id);
       if (!data) {
@@ -18,20 +18,20 @@ const PaqueteController = {
       }
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  create: async (req, res) => {
+  create: async (req, res, next) => {
     try {
       const nuevo = await PaqueteService.create(req.body);
       res.status(201).json(nuevo);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     try {
       const actualizado = await PaqueteService.update(req.params.id, req.body);
       if (!actualizado) {
@@ -39,11 +39,11 @@ const PaqueteController = {
       }
       res.json(actualizado);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  delete: async (req, res) => {
+  delete: async (req, res, next) => {
     try {
       const eliminado = await PaqueteService.delete(req.params.id);
       if (!eliminado) {
@@ -51,7 +51,7 @@ const PaqueteController = {
       }
       res.json({ message: 'Paquete eliminado correctamente' });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   }
 };
