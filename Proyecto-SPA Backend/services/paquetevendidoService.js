@@ -2,33 +2,38 @@ const PaqueteVendido = require('../models/paquetevendido');
 const ClienteService = require('./clienteService');
 const PaqueteService = require('./paqueteService');
 const PaqTratService = require('./PaqTratService');
+const { ValidationError} = require('../middleware/appError');
+const {isValidEmail,isStrongPassword,isValidUUID,isValidTime} = require('../middleware/validators')
+
 
 const PaqueteVendidoService = {
   getAll: async () => {
     return await PaqueteVendido.getAll();
   },
 
-  getById: async (id) => {
-    if (!isValidUUID(id)) {
-      throw new Error('ID de cliente no válido');
+  getById: async (codpaquete, idCliente, fechaCompra) => {
+    if (!isValidUUID(codpaquete)) {
+      throw new ValidationError('ID de paquete no válido');
     }
-    await ClienteService.getById(id);
-    return await PaqueteVendido.getById(id);
+    if (!isValidUUID(idCliente)) {
+      throw new ValidationError('ID de cliente no válido');
+    }
+    
+    await ClienteService.getById(idCliente);
+    
+    return await PaqueteVendido.getByID3(codpaquete, idCliente, fechaCompra);
   },
 
   create: async (data) => {
-    // Validar que cliente y paquete existan
 
     cliente = await ClienteService.getById(data.cliente__idcliente);
     paquete = await PaqueteService.getById(data.paquete__codpaquete);
 
-    // Validar que el paquete tenga tratamientos
     const tratamientosPaquete = await PaqTratService.getById(data.paquete__codpaquete);
     if (!tratamientosPaquete || tratamientosPaquete.length === 0) {
-      throw new Error('El paquete no tiene tratamientos asociados');
+      throw new ValidationError('El paquete no tiene tratamientos asociados');
     }
 
-    // Validar lógica de fechas
     const fechaInicio = new Date(data.fechainicio);
     const fechaFin = new Date(data.fechafin);
     const fechaCompra = new Date(data.fechacompra);
@@ -36,18 +41,17 @@ const PaqueteVendidoService = {
     hoy.setHours(0, 0, 0, 0);
 
     if (fechaInicio < hoy) {
-      throw new Error('La fecha de inicio no puede ser anterior a la fecha actual');
+      throw new ValidationError('La fecha de inicio no puede ser anterior a la fecha actual');
     }
 
     if (fechaInicio.getFullYear() > 2100 || fechaFin.getFullYear() > 2100) {
-      throw new Error('El año de las fechas no puede ser mayor a 2100');
+      throw new ValidationError('El año de las fechas no puede ser mayor a 2100');
     }
 
     if (fechaInicio > fechaFin) {
-      throw new Error('La fecha de inicio no puede ser posterior a la fecha fin');
+      throw new ValidationError('La fecha de inicio no puede ser posterior a la fecha fin');
     }
 
-    // Verificar que el cliente no tiene el mismo paquete activo
     const paquetesCliente = await PaqueteVendido.getAll();
     const paqueteActivo = paquetesCliente.some(pv => 
       pv.cliente__idcliente === data.cliente__idcliente && 
@@ -56,14 +60,14 @@ const PaqueteVendidoService = {
     );
 
     if (paqueteActivo) {
-      throw new Error('El cliente ya tiene este paquete activo');
+      throw new ValidationError('El cliente ya tiene este paquete activo');
     }
 
     console.log(Number(cliente.balance))
     console.log(Number(paquete.preciopaquete))
     console.log(( Number(cliente.balance) - Number(paquete.preciopaquete) ))
     if( ( Number(cliente.balance) - Number(paquete.preciopaquete) ) < 0){
-        throw new Error('No tiene suficiente dinero para comprar este paquete.');
+        throw new ValidationError('No tiene suficiente dinero para comprar este paquete.');
     } else {
         await ClienteService.updateBalance(data.cliente__idcliente, Number(cliente.balance) - Number(paquete.preciopaquete))
     }
@@ -78,26 +82,26 @@ const PaqueteVendidoService = {
 
   delete: async (codpaquete, idCliente, fechaCompra) => {
     if (!isValidUUID(codpaquete)) {
-      throw new Error('ID de paquete no válido');
+      throw new ValidationError('ID de paquete no válido');
     }
     if (!isValidUUID(idCliente)) {
-      throw new Error('ID de cliente no válido');
+      throw new ValidationError('ID de cliente no válido');
     }
 
     const paquete = await PaqueteService.getById(codpaquete);
-    
     const cliente = await ClienteService.getById(idCliente);
+    const paqueteVendido = await PaqueteVendido.getByID3(codpaquete, idCliente, fechaCompra)
 
     const hoy = new Date();
     const fechaInicio = new Date(paqueteVendido.fechainicio);
     const fechaFin = new Date(paqueteVendido.fechafin);
     
     if (hoy >= fechaInicio) {
-      throw new Error('No se puede eliminar un paquete que ya ha comenzado su período de uso');
+      throw new ValidationError('No se puede eliminar un paquete que ya ha comenzado su período de uso');
     }
     
     if (hoy > fechaFin) {
-      throw new Error('No se puede eliminar un paquete que ya ha expirado');
+      throw new ValidationError('No se puede eliminar un paquete que ya ha expirado');
     }
 
     await ClienteService.updateBalance(idCliente, Number(cliente.balance) + Number(paquete.preciopaquete));
@@ -105,7 +109,7 @@ const PaqueteVendidoService = {
     console.log(`Devolviendo $${paquete.preciopaquete} al cliente ${cliente.nombre} por eliminación de paquete ${paquete.nombre}`);
     
     const eliminado = await PaqueteVendido.delete(codpaquete, idCliente, fechaCompra);
-    if (!eliminado) throw new Error('Paquete vendido no encontrado');
+    if (!eliminado) throw new ValidationError('Paquete vendido no encontrado');
     return eliminado;
   },
 
@@ -113,7 +117,7 @@ const PaqueteVendidoService = {
     console.log(periodo)
     const periodosValidos = ['hoy', 'semana', 'mes', 'anno'];
     if (!periodosValidos.includes(periodo)) {
-      throw new Error('Período no válido. Use: hoy, semana, mes, anno');
+      throw new ValidationError('Período no válido. Use: hoy, semana, mes, anno');
     }
     return await PaqueteVendido.getByPeriodo(periodo);
   },
@@ -129,9 +133,5 @@ const PaqueteVendidoService = {
   },
 };
 
-function isValidUUID(uuid) {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(uuid);
-}
 
 module.exports = PaqueteVendidoService;

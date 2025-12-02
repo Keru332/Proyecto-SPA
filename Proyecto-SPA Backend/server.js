@@ -4,16 +4,17 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
+const errorHandler = require('./middleware/errorHandler');
+const validateSpaces = require('./middleware/validateSpace');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-const validateSpaces = require('./middleware/validateSpace');
+
 
 app.use(validateSpaces);
 
 
-// Rutas automáticas
 app.use('/api/categoria', require('./routes/categoria'));
 app.use('/api/cliente', require('./routes/cliente'));
 app.use('/api/cita', require('./routes/cita'));
@@ -24,19 +25,14 @@ app.use('/api/paq_trat', require('./routes/paq_trat'));
 app.use('/api/users', require('./routes/users'));
 
 
-// Ruta de prueba
 app.get('/', (req, res) => {
   res.json({ 
     message: 'API del SPA funcionando correctamente',
-    endpoints: ["/api/categoria","/api/cliente","/api/cita","/api/tratamiento","/api/material","/api/paquete","/api/paquetevendido","/api/paq_trat","/api/mat_trat","/api/users"]
+    endpoints: ["/api/categoria","/api/cliente","/api/cita","/api/tratamiento","/api/paquete","/api/paquetevendido","/api/paq_trat","/api/users"]
   });
 });
 
-// Manejo de errores
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Algo salió mal en el servidor' });
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 

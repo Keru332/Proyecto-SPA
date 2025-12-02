@@ -1,16 +1,16 @@
 const UserService = require('../services/userService');
 
 const userController = {
-  getAll: async (req, res) => {
+  getAll: async (req, res, next) => {
     try {
       const data = await UserService.getAll();
       res.json(data);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  getById: async (req, res) => {
+  getById: async (req, res, next) => {
     try {
       const data = await UserService.getById(req.params.id);
       res.json(data);
@@ -18,11 +18,11 @@ const userController = {
       if (error.message === 'Usuario no encontrado') {
         return res.status(404).json({ error: error.message });
       }
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  register: async (req, res) => {
+  register: async (req, res, next) => {
     try {
       const { username, password, role = 'user', email, fullname } = req.body;
 
@@ -47,14 +47,12 @@ const userController = {
           error.message === 'El usuario ya existe') {
         return res.status(400).json({ error: error.message });
       }
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     try {
-      // Nota: Este método no existe en UserService, lo mantengo por compatibilidad
-      // Considera mover la lógica de update a UserService también
       const User = require('../models/users');
       const actualizado = await User.update(req.params.id, req.body);
       if (!actualizado) {
@@ -62,14 +60,12 @@ const userController = {
       }
       res.json(actualizado);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  delete: async (req, res) => {
+  delete: async (req, res, next) => {
     try {
-      // Nota: Este método no existe en UserService, lo mantengo por compatibilidad
-      // Considera mover la lógica de delete a UserService también
       const User = require('../models/users');
       const eliminado = await User.delete(req.params.id);
       if (!eliminado) {
@@ -77,11 +73,11 @@ const userController = {
       }
       res.json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  login: async (req, res) => {
+  login: async (req, res, next) => {
     try {
       const { username, password } = req.body;
 
@@ -100,11 +96,11 @@ const userController = {
       if (error.message === 'Credenciales inválidas') {
         return res.status(401).json({ error: error.message });
       }
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  updatePassword: async (req, res) => {
+  updatePassword: async (req, res, next) => {
     try {
       const { oldPassword, newPassword } = req.body;
       const userId = req.params.id;
@@ -127,11 +123,11 @@ const userController = {
       if (error.message === 'Usuario no encontrado') {
         return res.status(404).json({ error: error.message });
       }
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   },
 
-  updateProfile: async (req, res) => {
+  updateProfile: async (req, res, next) => {
     try {
       const { username, correo } = req.body;
       const userId = req.params.id;
@@ -149,7 +145,7 @@ const userController = {
       if (error.message === 'Usuario no encontrado') {
         return res.status(404).json({ error: error.message });
       }
-      res.status(500).json({ error: error.message });
+      next(error)//res.status(500).json({ error: error.message });
     }
   }
 };

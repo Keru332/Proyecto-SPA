@@ -41,7 +41,7 @@ export function useEditarCategoria() {
       router.push('/cat')
     } catch (error) {
       if (error.response) {
-        mensaje.value = `Error: ${error.response.data?.error || 'Error al actualizar la categoria'}`
+        mensaje.value = `${error.response.data?.error || 'Error al actualizar la categoria'}: ${error.response.data?.message}`
       } else {
         mensaje.value = 'Error de conexión con el servidor'
       }

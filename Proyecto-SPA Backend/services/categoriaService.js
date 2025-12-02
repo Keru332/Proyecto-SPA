@@ -1,4 +1,6 @@
 const Categoria = require('../models/categoria');
+const { ValidationError, NotFoundError, DuplicateError, InvalidIdError } = require('../middleware/appError');
+
 
 const CategoriaService = {
   getAll: async () => {
@@ -7,21 +9,21 @@ const CategoriaService = {
 
   getById: async (id) => {
     if (!isValidUUID(id)) {
-      throw new Error('ID de categoría no válido');
+      throw new ValidationError('ID de categoría no válido');
     }
     const categoria = await Categoria.getById(id);
-    if (!categoria) throw new Error('Categoria no encontrado');
+    if (!categoria) throw new NotFoundError('Categoria no encontrado');
     return categoria;
   },
 
   create: async (data) => {
     // Validaciones de negocio
     if (!data.nombrecategoria || data.nombrecategoria.trim() === '') {
-      throw new Error('El nombre de la categoría es requerido');
+      throw new ValidationError('El nombre de la categoría es requerido');
     }
     
     if (data.nombrecategoria.length > 20) {
-      throw new Error('El nombre de la categoría no puede exceder 20 caracteres');
+      throw new ValidationError('El nombre de la categoría no puede exceder 20 caracteres');
     }
 
     // Verificar unicidad (necesitarías agregar este método al modelo)
@@ -31,7 +33,7 @@ const CategoriaService = {
     );
     
     if (nombreExiste) {
-      throw new Error('Ya existe una categoría con este nombre');
+      throw new DuplicateError('Ya existe una categoría con este nombre');
     }
 
     return await Categoria.create(data);
@@ -39,11 +41,11 @@ const CategoriaService = {
 
   update: async (id, data) => {
     if (!isValidUUID(id)) {
-      throw new Error('ID de categoría no válido');
+      throw new ValidationError('ID de categoría no válido');
     }
     
     if (data.nombrecategoria && data.nombrecategoria.length > 20) {
-      throw new Error('El nombre de la categoría no puede exceder 20 caracteres');
+      throw new ValidationError('El nombre de la categoría no puede exceder 20 caracteres');
     }
 
     await CategoriaService.getById(id); // Verifica que existe
@@ -52,9 +54,9 @@ const CategoriaService = {
 
   delete: async (id) => {
     if (!isValidUUID(id)) {
-      throw new Error('ID de categoría no válido');
+      throw new ValidationError('ID de categoría no válido');
     }
-    await CategoriaService.getById(id); // Verifica que existe
+    await CategoriaService.getById(id);// Verifica que existe
     return await Categoria.delete(id);
   }
 };
