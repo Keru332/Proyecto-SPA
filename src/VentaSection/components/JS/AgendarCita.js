@@ -60,15 +60,10 @@ export function useAgendarCita() {
     } catch (error) {
       console.error('Error completo en agendar:', error)
 
-      // Manejo seguro de errores
-      if (error.message) {
-        errorMessage.value = `❌ ${error.message}`
-      } else if (error.response && error.response.data) {
-        errorMessage.value = `❌ Error: ${error.response.data?.error || error.response.data?.message || 'Error del servidor'}`
-      } else if (error.request) {
-        errorMessage.value = '❌ Error de conexión. Verifica tu internet.'
+      if (error.response) {
+        mensaje.value = `${error.response.data?.error || 'Error al agendar cita'}: ${error.response.data?.message}`
       } else {
-        errorMessage.value = '❌ Error inesperado al agendar la cita'
+        mensaje.value = 'Error de conexión con el servidor'
       }
     } finally {
       loading.value = false

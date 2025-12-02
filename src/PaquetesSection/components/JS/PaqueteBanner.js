@@ -25,7 +25,7 @@ export function usePaqueteBanner(props) {
       window.location.reload()
     } catch (error) {
       if (error.response) {
-        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar paquete'}`
+        errorMessage.value = `${error.response.data?.error || 'Error al eliminar paquete'}: ${error.response.data?.message}`
         const errorText = JSON.stringify(error.response.data)
 
         if (

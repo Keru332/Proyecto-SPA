@@ -53,7 +53,11 @@ export function useComprarPaquete() {
       alert('Paquete Comprado correctamente')
       router.push('/')
     } catch (error) {
-      errorMessage.value = `❌ Error: ${error.response.data?.error}`
+      if (error.response) {
+        errorMessage.value = `${error.response.data?.error || 'Error al comprar paquete'}: ${error.response.data?.message}`
+      } else {
+        errorMessage.value = 'Error de conexión con el servidor'
+      }
     } finally {
       loading.value = false
     }

@@ -1,5 +1,5 @@
 import citaService from '@/services/citaService'
-import { computed, ref, getCurrentInstance} from 'vue'
+import { computed, ref, getCurrentInstance } from 'vue'
 
 export function useCitaBanner(props) {
   const errorMessage = ref('')
@@ -34,7 +34,7 @@ export function useCitaBanner(props) {
       window.location.reload()
     } catch (error) {
       if (error.response) {
-        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar cita'}`
+        errorMessage.value = `${error.response.data?.error || 'Error al eliminar cita'}: ${error.response.data?.message}`
         const errorText = JSON.stringify(error.response.data)
 
         if (

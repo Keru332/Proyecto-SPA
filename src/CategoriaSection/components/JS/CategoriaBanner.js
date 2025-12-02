@@ -27,7 +27,7 @@ export function useCategoriaBanner(props) {
       window.location.reload()
     } catch (error) {
       if (error.response) {
-        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar categoria'}`
+        errorMessage.value = `${error.response.data?.error || 'Error al eliminar categoria'}: ${error.response.data?.message}`
         const errorText = JSON.stringify(error.response.data)
 
         if (
