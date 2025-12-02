@@ -1,61 +1,75 @@
 <template>
   <div class="login-container">
     <h1>Crear Tratamiento</h1>
-    <form class="login-form" @submit.prevent="submitForm">
+
+    <Form class="login-form" :validation-schema="crearTratamientoSchema" @submit="submitForm">
+      <!-- Nombre -->
       <div class="user-container">
         <label for="nombre">Nombre del Tratamiento</label>
-        <input
-          type="text"
+        <Field
           id="nombre"
+          name="nombre"
           v-model="tratamiento.nombre"
           placeholder="Ejemplo: Masaje relajante"
-          required
+          type="text"
+          class="input"
         />
+        <ErrorMessage name="nombre" class="error-message" />
       </div>
 
+      <!-- Descripción -->
       <div class="user-container">
         <label for="descripcion">Descripción</label>
-        <textarea
-          type="text"
+        <Field
+          as="textarea"
           id="descripcion"
-          v-model="tratamiento.descripcion"
-          placeholder="Describe el tratamiento"
+          name="descripcion"
           rows="4"
           cols="40"
           maxlength="250"
-          required
-        ></textarea>
+          v-model="tratamiento.descripcion"
+          placeholder="Describe el tratamiento"
+          class="input"
+        />
+        <ErrorMessage name="descripcion" class="error-message" />
       </div>
 
+      <!-- Duración -->
       <div class="user-container">
         <label for="duracion">Duración (minutos)</label>
-        <input
-          type="number"
+        <Field
           id="duracion"
+          name="duracion"
+          type="number"
           min="5"
           max="300"
           v-model="tratamiento.duracion"
           placeholder="0"
-          required
+          class="input"
         />
+        <ErrorMessage name="duracion" class="error-message" />
       </div>
 
+      <!-- Precio -->
       <div class="user-container">
         <label for="precio">Precio ($)</label>
-        <input
-          type="number"
+        <Field
           id="precio"
+          name="precio"
+          type="number"
           min="1"
           max="9999"
           v-model="tratamiento.precio"
           placeholder="0"
-          required
+          class="input"
         />
+        <ErrorMessage name="precio" class="error-message" />
       </div>
 
+      <!-- Categoría -->
       <div class="user-container">
         <label for="categoria">Categoría</label>
-        <select id="categoria" v-model="tratamiento.codcategoria" required>
+        <Field as="select" id="categoria" name="codcategoria" class="input">
           <option value="" disabled>Selecciona una categoría</option>
           <option
             v-for="categoria in categorias"
@@ -64,17 +78,20 @@
           >
             {{ categoria.nombrecategoria }}
           </option>
-        </select>
+        </Field>
+        <ErrorMessage name="codcategoria" class="error-message" />
       </div>
 
       <button type="submit" class="submit">Crear Tratamiento</button>
 
       <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script setup>
+import { Form, Field, ErrorMessage } from 'vee-validate'
+import { crearTratamientoSchema } from '../schemas/validarCrearTratamiento'
 import { useCrearTratamiento } from './JS/CrearTratamiento'
 
 const { tratamiento, categorias, submitForm, mensaje } = useCrearTratamiento()
