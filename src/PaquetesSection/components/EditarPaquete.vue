@@ -2,6 +2,7 @@
   <div class="login-container">
     <h1>Editar Paquete</h1>
     <form class="login-form" @submit.prevent="submitForm">
+
       <div class="user-container">
         <label for="nombre">Nombre del Paquete</label>
         <input
@@ -10,7 +11,12 @@
           v-model="paqueteF.nombrepaquete"
           placeholder="Ejemplo: Masaje relajante"
           required
+          @blur="validateField('nombrepaquete')"
+          :class="{ 'input-error': hasError('nombrepaquete') }"
         />
+        <p v-if="errors.nombrepaquete" class="error-message">
+          {{ errors.nombrepaquete }}
+        </p>
       </div>
 
       <div class="user-container">
@@ -23,7 +29,12 @@
           v-model="paqueteF.duraciontotal"
           placeholder="0"
           required
+          @blur="validateField('duraciontotal')"
+          :class="{ 'input-error': hasError('duraciontotal') }"
         />
+        <p v-if="errors.duraciontotal" class="error-message">
+          {{ errors.duraciontotal }}
+        </p>
       </div>
 
       <div class="user-container">
@@ -36,11 +47,17 @@
           v-model="paqueteF.preciopaquete"
           placeholder="0"
           required
+          @blur="validateField('preciopaquete')"
+          :class="{ 'input-error': hasError('preciopaquete') }"
         />
+        <p v-if="errors.preciopaquete" class="error-message">
+          {{ errors.preciopaquete }}
+        </p>
       </div>
 
       <div class="listas">
         <div class="container">
+
           <div class="list-container">
             <div class="list-title">Tratamientos del Paquete</div>
             <div class="list">
@@ -90,6 +107,10 @@
             </div>
           </div>
         </div>
+
+        <p v-if="errors.tratamientos" class="error-message">
+          {{ errors.tratamientos }}
+        </p>
       </div>
 
       <button type="submit" class="submit">Actualizar Paquete</button>
@@ -113,6 +134,9 @@ const {
   haySeleccionadosDisponibles,
   haySeleccionadosPaquete,
   toggleSelection,
+  errors,
+  validateField,
+  hasError,
 } = useEditarPaquete()
 </script>
 

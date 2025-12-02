@@ -10,7 +10,12 @@
           v-model="paquete.nombrepaquete"
           placeholder="Ejemplo: Masaje relajante"
           required
+          @blur="validateField('nombrepaquete')"
+          :class="{ 'input-error': hasError('nombrepaquete') }"
         />
+        <p v-if="errors.nombrepaquete" class="error-message">
+          {{ errors.nombrepaquete }}
+        </p>
       </div>
 
       <div class="user-container">
@@ -23,7 +28,12 @@
           v-model="paquete.duraciontotal"
           placeholder="0"
           required
+          @blur="validateField('duraciontotal')"
+          :class="{ 'input-error': hasError('duraciontotal') }"
         />
+        <p v-if="errors.duraciontotal" class="error-message">
+          {{ errors.duraciontotal }}
+        </p>
       </div>
 
       <div class="user-container">
@@ -36,7 +46,12 @@
           v-model="paquete.preciopaquete"
           placeholder="0"
           required
+          @blur="validateField('preciopaquete')"
+          :class="{ 'input-error': hasError('preciopaquete') }"
         />
+        <p v-if="errors.preciopaquete" class="error-message">
+          {{ errors.preciopaquete }}
+        </p>
       </div>
 
       <div class="listas">
@@ -90,6 +105,9 @@
             </div>
           </div>
         </div>
+        <p v-if="errors.tratamientos" class="error-message">
+          {{ errors.tratamientos }}
+        </p>
       </div>
 
       <button type="submit" class="submit">Crear Paquete</button>
@@ -113,6 +131,9 @@ const {
   haySeleccionadosDisponibles,
   haySeleccionadosPaquete,
   toggleSelection,
+  errors,
+  validateField,
+  hasError,
 } = useCrearPaquete()
 </script>
 

@@ -5,204 +5,252 @@ import { paqueteStore } from '@/PaquetesSection/stores/PaqueteReservar'
 import tratamientoService from '@/services/tratamientoService'
 import paqTratService from '@/services/paqTratService'
 import paqueteService from '@/services/paqueteService'
+import { editarPaqueteSchema } from '../../schemas/validarEditarPaquete'
 
 export function useEditarPaquete() {
-  const route = useRoute()
-  const router = useRouter()
-  const paqStore = paqueteStore()
-  const { paquete } = storeToRefs(paqStore)
+  const route = useRoute()
+  const router = useRouter()
+  const paqStore = paqueteStore()
+  const { paquete } = storeToRefs(paqStore)
 
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance()
 
-  const paqueteF = reactive({
-    codpaquete: null,
-    nombrepaquete: '',
-    duraciontotal: '',
-    preciopaquete: '',
-  })
+  const paqueteF = reactive({
+    codpaquete: null,
+    nombrepaquete: '',
+    duraciontotal: '',
+    preciopaquete: '',
+    tratamientos: [],
+  })
 
-  const mensaje = ref('')
-  const tratamientosDisponibles = ref([])
-  const tratamientosPaquete = ref([])
-  const tratamientosOriginales = ref([])
+  const errors = reactive({
+    nombrepaquete: '',
+    duraciontotal: '',
+    preciopaquete: '',
+    tratamientos: '',
+  })
 
-  const haySeleccionadosDisponibles = computed(() => {
-    return tratamientosDisponibles.value.some((t) => t.selected)
-  })
+  const mensaje = ref('')
+  const tratamientosDisponibles = ref([])
+  const tratamientosPaquete = ref([])
+  const tratamientosOriginales = ref([])
 
-  const haySeleccionadosPaquete = computed(() => {
-    return tratamientosPaquete.value.some((t) => t.selected)
-  })
+  const haySeleccionadosDisponibles = computed(() => {
+    return tratamientosDisponibles.value.some((t) => t.selected)
+  })
 
-  const toggleSelection = (tratamiento) => {
-    tratamiento.selected = !tratamiento.selected
-  }
+  const haySeleccionadosPaquete = computed(() => {
+    return tratamientosPaquete.value.some((t) => t.selected)
+  })
 
-  const moverADerecha = () => {
-    const seleccionados = tratamientosDisponibles.value.filter((t) => t.selected)
+  const toggleSelection = (tratamiento) => {
+    tratamiento.selected = !tratamiento.selected
+    paqueteF.tratamientos = tratamientosPaquete.value.map((t) => t.codtratamiento)
+    validateField('tratamientos')
+  }
 
-    tratamientosDisponibles.value = tratamientosDisponibles.value.filter((t) => !t.selected)
+  const moverADerecha = () => {
+    const seleccionados = tratamientosDisponibles.value.filter((t) => t.selected)
 
-    seleccionados.forEach((t) => {
-      t.selected = false
-      tratamientosPaquete.value.push(t)
-    })
-  }
+    tratamientosDisponibles.value = tratamientosDisponibles.value.filter((t) => !t.selected)
 
-  const moverAIzquierda = () => {
-    const seleccionados = tratamientosPaquete.value.filter((t) => t.selected)
+    seleccionados.forEach((t) => {
+      t.selected = false
+      tratamientosPaquete.value.push(t)
+    })
 
-    tratamientosPaquete.value = tratamientosPaquete.value.filter((t) => !t.selected)
+    paqueteF.tratamientos = tratamientosPaquete.value.map((t) => t.codtratamiento)
+    validateField('tratamientos')
+  }
 
-    seleccionados.forEach((t) => {
-      t.selected = false
-      tratamientosDisponibles.value.push(t)
-    })
-  }
+  const moverAIzquierda = () => {
+    const seleccionados = tratamientosPaquete.value.filter((t) => t.selected)
 
-  // Función para cargar todos los tratamientos disponibles
-  const fetchTratamientos = async () => {
-    try {
-      const response = await tratamientoService.getAll()
-      const data = response
+    tratamientosPaquete.value = tratamientosPaquete.value.filter((t) => !t.selected)
 
-      // Agregar propiedad selected a cada tratamiento
-      const tratamientosConSelected = data.map((tratamiento) => ({
-        ...tratamiento,
-        selected: false,
-      }))
+    seleccionados.forEach((t) => {
+      t.selected = false
+      tratamientosDisponibles.value.push(t)
+    })
 
-      tratamientosDisponibles.value = tratamientosConSelected
-    } catch (error) {
-      console.error('Error:', error)
-      mensaje.value = 'Error al cargar los tratamientos'
-    }
-  }
+    paqueteF.tratamientos = tratamientosPaquete.value.map((t) => t.codtratamiento)
+    validateField('tratamientos')
+  }
+ 
+  /**
+   * Valida un campo específico del formulario.
+   * @param {string} fieldName - El nombre del campo a validar.
+   */
+  const validateField = async (fieldName) => {
+    try {
+      await editarPaqueteSchema.validateAt(fieldName, paqueteF)
+      errors[fieldName] = '' // Limpiar error si es válido
+    } catch (err) {
+      errors[fieldName] = err.message
+    }
+  }
 
-  // Función para actualizar el paquete
-  const submitForm = async () => {
-    try {
-      // 1. Actualizar datos básicos del paquete
-      const datosActualizados = {
-        nombrepaquete: paqueteF.nombrepaquete,
-        preciopaquete: parseFloat(paqueteF.preciopaquete),
-        duraciontotal: parseInt(paqueteF.duraciontotal),
-      }
+  /**
+   * Valida todos los campos del formulario usando el schema de Yup.
+   * @returns {boolean} true si la validación es exitosa, false en caso contrario.
+   */
+  const validateForm = async () => {
+    for (const key in errors) {
+      errors[key] = ''
+    }
 
-      await paqueteService.update(paqueteF.codpaquete, datosActualizados)
+    try {
+      await editarPaqueteSchema.validate(paqueteF, { abortEarly: false })
+      return true
+    } catch (err) {
+      err.inner.forEach((error) => {
+        errors[error.path] = error.message
+      })
+      return false
+    }
+  }
 
-      // 2. Actualizar relaciones con tratamientos
-      await actualizarRelacionesTratamientos()
+  const hasError = (fieldName) => {
+    return !!errors[fieldName]
+  }
+ 
+  const fetchTratamientos = async () => {
+    try {
+      const response = await tratamientoService.getAll()
+      const data = response
 
-      mensaje.value = 'Paquete actualizado correctamente!'
+      const tratamientosConSelected = data.map((tratamiento) => ({
+        ...tratamiento,
+        selected: false,
+      }))
 
-      await proxy.$alert('Paquete actualizado correctamente')
-      router.push('/paquetes')
-    } catch (error) {
-      console.error('Error:', error)
-      mensaje.value = 'Error al actualizar el paquete: ' + error.message
-    }
-  }
+      tratamientosDisponibles.value = tratamientosConSelected
+    } catch (error) {
+      console.error('Error:', error)
+      mensaje.value = 'Error al cargar los tratamientos'
+    }
+  }
 
-  const actualizarRelacionesTratamientos = async () => {
-    try {
-      // Obtener IDs de tratamientos actuales y nuevos
-      const tratamientosOriginalesIds = tratamientosOriginales.value.map((t) => t.codtratamiento)
-      const tratamientosNuevosIds = tratamientosPaquete.value.map((t) => t.codtratamiento)
+  const submitForm = async () => {
+    mensaje.value = ''
 
-      // Identificar tratamientos a eliminar (estaban pero ya no están)
-      const tratamientosAEliminar = tratamientosOriginalesIds.filter(
-        (id) => !tratamientosNuevosIds.includes(id),
-      )
+    const isValid = await validateForm()
+    if (!isValid) {
+      mensaje.value = 'Por favor, corrija los errores del formulario.'
+      return
+    }
 
-      // Identificar tratamientos a agregar (no estaban pero ahora están)
-      const tratamientosAAgregar = tratamientosNuevosIds.filter(
-        (id) => !tratamientosOriginalesIds.includes(id),
-      )
+    try {
+      const datosActualizados = {
+        nombrepaquete: paqueteF.nombrepaquete,
+        preciopaquete: parseFloat(paqueteF.preciopaquete),
+        duraciontotal: parseInt(paqueteF.duraciontotal),
+      }
 
-      // Eliminar relaciones que ya no existen
-      const deletePromises = tratamientosAEliminar.map(async (tratamientoId) => {
-        await paqTratService.delete(paqueteF.codpaquete, tratamientoId)
-      })
+      await paqueteService.update(paqueteF.codpaquete, datosActualizados)
+      await actualizarRelacionesTratamientos()
 
-      // Agregar nuevas relaciones
-      const addPromises = tratamientosAAgregar.map(async (tratamientoId) => {
-        const tratamiento = tratamientosPaquete.value.find(
-          (t) => t.codtratamiento === tratamientoId,
-        )
-        const relacionData = {
-          paquete__codpaquete: paqueteF.codpaquete,
-          tratamiento__codtratamiento: tratamiento.codtratamiento,
-          tratamiento__categoria_codcategoria: tratamiento.categoria_codcategoria,
-        }
+      mensaje.value = 'Paquete actualizado correctamente!'
 
-        const response = await paqTratService.create(relacionData)
+      await proxy.$alert('Paquete actualizado correctamente')
+      router.push('/paquetes')
+    } catch (error) {
+      console.error('Error:', error)
+      mensaje.value = 'Error al actualizar el paquete: ' + error.message
+    }
+  }
 
-        return await response
-      })
+  const actualizarRelacionesTratamientos = async () => {
+    try {
+      const tratamientosOriginalesIds = tratamientosOriginales.value.map((t) => t.codtratamiento)
+      const tratamientosNuevosIds = tratamientosPaquete.value.map((t) => t.codtratamiento)
+      const tratamientosAEliminar = tratamientosOriginalesIds.filter(
+        (id) => !tratamientosNuevosIds.includes(id),
+      )
 
-      // Esperar a que todas las operaciones se completen
-      await Promise.all([...deletePromises, ...addPromises])
-      console.log('Relaciones actualizadas correctamente')
-    } catch (error) {
-      console.error('Error actualizando relaciones:', error)
-      throw new Error('Error al actualizar las relaciones con los tratamientos: ' + error.message)
-    }
-  }
+      const tratamientosAAgregar = tratamientosNuevosIds.filter(
+        (id) => !tratamientosOriginalesIds.includes(id),
+      )
 
-  // Watcher para cuando se cargan los datos del paquete
-  watch(paquete, (newPaqueteData) => {
-    if (newPaqueteData) {
-      // Actualizar el formulario con los datos del paquete
-      paqueteF.codpaquete = newPaqueteData.codpaquete
-      paqueteF.nombrepaquete = newPaqueteData.nombrepaquete
-      paqueteF.duraciontotal = newPaqueteData.duraciontotal
-      paqueteF.preciopaquete = newPaqueteData.preciopaquete
+      const deletePromises = tratamientosAEliminar.map(async (tratamientoId) => {
+        await paqTratService.delete(paqueteF.codpaquete, tratamientoId)
+      })
 
-      // Configurar tratamientos del paquete
-      if (newPaqueteData.tratamientos && newPaqueteData.tratamientos.length > 0) {
-        const tratamientosConSelected = newPaqueteData.tratamientos.map((tratamiento) => ({
-          ...tratamiento,
-          selected: false,
-        }))
+      const addPromises = tratamientosAAgregar.map(async (tratamientoId) => {
+        const tratamiento = tratamientosPaquete.value.find(
+          (t) => t.codtratamiento === tratamientoId,
+        )
+        const relacionData = {
+          paquete__codpaquete: paqueteF.codpaquete,
+          tratamiento__codtratamiento: tratamiento.codtratamiento,
+          tratamiento__categoria_codcategoria: tratamiento.categoria_codcategoria,
+        }
 
-        tratamientosPaquete.value = tratamientosConSelected
-        tratamientosOriginales.value = [...tratamientosConSelected]
+        const response = await paqTratService.create(relacionData)
 
-        // Actualizar tratamientos disponibles (excluyendo los que ya están en el paquete)
-        if (tratamientosDisponibles.value.length > 0) {
-          const tratamientosPaqueteIds = tratamientosConSelected.map((t) => t.codtratamiento)
-          tratamientosDisponibles.value = tratamientosDisponibles.value.filter(
-            (t) => !tratamientosPaqueteIds.includes(t.codtratamiento),
-          )
-        }
-      }
-    }
-  })
+        return await response
+      })
 
-  onMounted(async () => {
-    // Cargar todos los tratamientos disponibles
-    await fetchTratamientos()
+      await Promise.all([...deletePromises, ...addPromises])
+      console.log('Relaciones actualizadas correctamente')
+    } catch (error) {
+      console.error('Error actualizando relaciones:', error)
+      throw new Error('Error al actualizar las relaciones con los tratamientos: ' + error.message)
+    }
+  }
 
-    // Cargar datos del paquete
-    const paqID = route.params.id
-    await paqStore.fetchPaquete(paqID)
-  })
+  watch(paquete, (newPaqueteData) => {
+    if (newPaqueteData) {
+      paqueteF.codpaquete = newPaqueteData.codpaquete
+      paqueteF.nombrepaquete = newPaqueteData.nombrepaquete
+      paqueteF.duraciontotal = newPaqueteData.duraciontotal
+      paqueteF.preciopaquete = newPaqueteData.preciopaquete
 
-  return {
-    paqueteF,
-    paquete,
-    tratamientosDisponibles,
-    tratamientosPaquete,
-    tratamientosOriginales,
-    mensaje,
-    submitForm,
-    moverADerecha,
-    moverAIzquierda,
-    haySeleccionadosDisponibles,
-    haySeleccionadosPaquete,
-    toggleSelection,
-    fetchTratamientos,
-    actualizarRelacionesTratamientos,
-  }
+      if (newPaqueteData.tratamientos && newPaqueteData.tratamientos.length > 0) {
+        const tratamientosConSelected = newPaqueteData.tratamientos.map((tratamiento) => ({
+          ...tratamiento,
+          selected: false,
+        }))
+
+        tratamientosPaquete.value = tratamientosConSelected
+        tratamientosOriginales.value = [...tratamientosConSelected]
+
+        paqueteF.tratamientos = tratamientosConSelected.map((t) => t.codtratamiento)
+
+        if (tratamientosDisponibles.value.length > 0) {
+          const tratamientosPaqueteIds = tratamientosConSelected.map((t) => t.codtratamiento)
+          tratamientosDisponibles.value = tratamientosDisponibles.value.filter(
+            (t) => !tratamientosPaqueteIds.includes(t.codtratamiento),
+          )
+        }
+      }
+    }
+  })
+
+  onMounted(async () => {
+    await fetchTratamientos()
+
+    const paqID = route.params.id
+    await paqStore.fetchPaquete(paqID)
+  })
+
+  return {
+    paqueteF,
+    paquete,
+    tratamientosDisponibles,
+    tratamientosPaquete,
+    tratamientosOriginales,
+    mensaje,
+    submitForm,
+    moverADerecha,
+    moverAIzquierda,
+    haySeleccionadosDisponibles,
+    haySeleccionadosPaquete,
+    toggleSelection,
+    fetchTratamientos,
+    actualizarRelacionesTratamientos,
+    errors,
+    validateField,
+    hasError,
+  }
 }
