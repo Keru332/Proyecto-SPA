@@ -103,7 +103,7 @@ const CitaService = {
     const tratamiento = await TratamientoService.getById(cita.tratamiento__codtratamiento);
     const cliente = await ClienteService.getById(cita.cliente__idcliente);
 
-    
+
     await ClienteService.updateBalance(cita.cliente__idcliente, Number(cliente.balance) + Number(tratamiento.precio));
 
     console.log(`Devolviendo $${tratamiento.precio} al cliente ${cliente.nombre} por eliminación de cita ${id}`);
@@ -121,7 +121,7 @@ async function validarDisponibilidadCita(fecha, hora, tratamientoId) {
   }
 
   console.log(sumaTiempoCita.sum)
-  
+
   let tratDuracion = await TratamientoService.getById(tratamientoId)
   tratDuracion.duracion = Number(tratDuracion.duracion)
   if((sumaTiempoCita.sum + tratDuracion.duracion) >= 720){
@@ -133,7 +133,7 @@ async function validarDisponibilidadCita(fecha, hora, tratamientoId) {
   const minutosDesdeApertura = sumaTiempoCita.sum;
   const horaDisponible = Math.floor(minutosDesdeApertura / 60) + horarioApertura;
   const minutosDisponible = minutosDesdeApertura % 60;
-  
+
   const horaAsignada = `${horaDisponible.toString().padStart(2, '0')}:${minutosDisponible.toString().padStart(2, '0')}`;
 */
   return "21:00"

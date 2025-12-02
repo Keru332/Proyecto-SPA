@@ -9,7 +9,6 @@
           id="nombre"
           v-model="paquete.nombrepaquete"
           placeholder="Ejemplo: Masaje relajante"
-          required
           @blur="validateField('nombrepaquete')"
           :class="{ 'input-error': hasError('nombrepaquete') }"
         />
@@ -27,7 +26,6 @@
           max="1000"
           v-model="paquete.duraciontotal"
           placeholder="0"
-          required
           @blur="validateField('duraciontotal')"
           :class="{ 'input-error': hasError('duraciontotal') }"
         />
@@ -45,7 +43,6 @@
           max="9999"
           v-model="paquete.preciopaquete"
           placeholder="0"
-          required
           @blur="validateField('preciopaquete')"
           :class="{ 'input-error': hasError('preciopaquete') }"
         />

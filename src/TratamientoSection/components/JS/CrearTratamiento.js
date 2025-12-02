@@ -11,7 +11,7 @@ export function useCrearTratamiento() {
     descripcion: '',
     duracion: '',
     precio: '',
-    codcategoria: Object,
+    codcategoria: '',
   })
   const categorias = ref([])
   const { proxy } = getCurrentInstance()
@@ -43,19 +43,10 @@ export function useCrearTratamiento() {
 
       await tratamientoService.create(datosActualizados)
 
-      mensaje.value = 'Tratamiento creado correctamente!'
-
-      // Limpiar formulario
-      tratamiento.nombre = ''
-      tratamiento.descripcion = ''
-      tratamiento.duracion = ''
-      tratamiento.precio = ''
-      tratamiento.codcategoria = ''
-
       await proxy.$alert('Tratamiento creado correctamente')
       router.push('/productos')
     } catch (error) {
-      console.error('Error:', error)
+      console.log(error)
       mensaje.value = 'Error al crear el tratamiento'
     }
   }

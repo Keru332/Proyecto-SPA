@@ -51,6 +51,7 @@ const TratamientoService = {
       throw new ValidationError('ID de categoría no válido');
     }
     await CategoriaService.getById(data.categoria_codcategoria);
+    console.log("pasa por aqui")
 
     return await Tratamiento.create(data);
   },

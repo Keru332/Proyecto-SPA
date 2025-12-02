@@ -69,7 +69,7 @@
       <!-- Categoría -->
       <div class="user-container">
         <label for="categoria">Categoría</label>
-        <Field as="select" id="categoria" name="codcategoria" class="input">
+        <Field as="select" id="categoria" name="codcategoria" v-model="tratamiento.codcategoria" class="input">
           <option value="" disabled>Selecciona una categoría</option>
           <option
             v-for="categoria in categorias"
