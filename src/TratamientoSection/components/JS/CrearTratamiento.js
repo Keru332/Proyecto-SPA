@@ -46,17 +46,12 @@ export function useCrearTratamiento() {
       await proxy.$alert('Tratamiento creado correctamente')
       router.push('/productos')
     } catch (error) {
-<<<<<<< Updated upstream
-      console.log(error)
-      mensaje.value = 'Error al crear el tratamiento'
-=======
       console.error('Error:', error)
       if (error.response) {
         mensaje.value = `${error.response.data?.error || 'Error al crear el tratamiento'}: ${error.response.data?.message}`
       } else {
         mensaje.value = 'Error de conexión con el servidor'
       }
->>>>>>> Stashed changes
     }
   }
 

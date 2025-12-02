@@ -61,9 +61,9 @@ export function useAgendarCita() {
       console.error('Error completo en agendar:', error)
 
       if (error.response) {
-        mensaje.value = `${error.response.data?.error || 'Error al agendar cita'}: ${error.response.data?.message}`
+        errorMessage.value = `${error.response.data?.error || 'Error al agendar cita'}: ${error.response.data?.message}`
       } else {
-        mensaje.value = 'Error de conexión con el servidor'
+        errorMessage.value = 'Error de conexión con el servidor'
       }
     } finally {
       loading.value = false
