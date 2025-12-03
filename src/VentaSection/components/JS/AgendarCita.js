@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, getCurrentInstance} from 'vue'
 import { authService } from '@/Authentication/services/auth'
 import { tratamientoStore } from '@/TratamientoSection/stores/TratamientoReservar'
 import { storeToRefs } from 'pinia'
@@ -11,6 +11,7 @@ export function useAgendarCita() {
   const tratStore = tratamientoStore()
   const { tratamiento } = storeToRefs(tratStore)
   const tratData = tratamiento
+  const { proxy } = getCurrentInstance()
 
   const fechaC = ref('')
   const hora = ref('')
@@ -55,7 +56,7 @@ export function useAgendarCita() {
       console.log(body)
       await citaService.create(body)
 
-      alert('Cita agendada correctamente')
+      await proxy.$alert('Cita agendada correctamente')
       router.push('/')
     } catch (error) {
       console.error('Error completo en agendar:', error)

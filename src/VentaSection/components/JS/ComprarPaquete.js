@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, getCurrentInstance } from 'vue'
 import { authService } from '@/Authentication/services/auth'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
@@ -11,6 +11,7 @@ export function useComprarPaquete() {
   const paqStore = paqueteStore()
   const { paquete } = storeToRefs(paqStore)
   const paqData = paquete
+  const { proxy } = getCurrentInstance()
 
   const fechaI = ref('')
   const fechaF = ref('')
@@ -50,7 +51,7 @@ export function useComprarPaquete() {
       console.log(body)
       await paqueteVendidoService.create(body)
 
-      alert('Paquete Comprado correctamente')
+      await proxy.$alert('Paquete Comprado correctamente')
       router.push('/')
     } catch (error) {
       if (error.response) {
