@@ -223,21 +223,21 @@ export default {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #ff5e00 0%, #d1271b 100%);
   color: white;
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
+  transform: scale(1.05);
 }
 
 .prompt-input {
