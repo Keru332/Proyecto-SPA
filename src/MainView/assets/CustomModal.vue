@@ -21,11 +21,11 @@
         </template>
 
         <template v-else-if="type === 'confirm'">
-          <button @click="cancel" class="btn btn-secondary">
-            {{ cancelText }}
-          </button>
           <button @click="confirm" class="btn btn-primary">
             {{ confirmText }}
+          </button>
+          <button @click="cancel" class="btn btn-secondary">
+            {{ cancelText }}
           </button>
         </template>
 
@@ -37,11 +37,11 @@
             :placeholder="placeholder"
           />
           <div class="prompt-buttons">
-            <button @click="cancel" class="btn btn-secondary">
-              {{ cancelText }}
-            </button>
             <button @click="confirm" class="btn btn-primary">
               {{ confirmText }}
+            </button>
+            <button @click="cancel" class="btn btn-secondary">
+              {{ cancelText }}
             </button>
           </div>
         </template>
@@ -232,7 +232,7 @@ export default {
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, #ff5e00 0%, #d1271b 100%);
+  background: linear-gradient(135deg, #fa16dc 0%, #764ba2 100%);
   color: white;
 }
 
