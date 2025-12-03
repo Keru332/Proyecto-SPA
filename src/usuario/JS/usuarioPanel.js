@@ -1,10 +1,11 @@
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, getCurrentInstance } from 'vue'
 import userService from '@/services/userService'
 
 export function useUsuarioPanel() {
   const usuario = reactive({ id: '', username: '', correo: '', balance: 0 })
   const form = reactive({ username: '', correo: '' })
   const editando = ref(false)
+  const { proxy } = getCurrentInstance()
 
   // Modal de contraseña
   const modalPasswordVisible = ref(false)
@@ -47,7 +48,7 @@ export function useUsuarioPanel() {
       editando.value = false
     } catch (error) {
       console.error(error)
-      alert('No se pudo actualizar el perfil')
+      await proxy.$alert('No se pudo actualizar el perfil')
     }
   }
 
@@ -62,7 +63,7 @@ export function useUsuarioPanel() {
   // Guardar contraseña
   const guardarPassword = async () => {
     if (!passwordForm.oldPassword || !passwordForm.newPassword) {
-      alert('Debes llenar ambos campos')
+      await proxy.$alert('Debes llenar ambos campos')
       return
     }
 
@@ -73,7 +74,7 @@ export function useUsuarioPanel() {
       })
       await userService.editPassword(usuario.id, body)
 
-      alert('Contraseña actualizada correctamente')
+      await proxy.$alert('Contraseña actualizada correctamente')
       cerrarModalPassword()
     } catch (error) {
       console.error(error)
