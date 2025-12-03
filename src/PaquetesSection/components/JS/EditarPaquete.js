@@ -150,8 +150,6 @@ export function useEditarPaquete() {
       await paqueteService.update(paqueteF.codpaquete, datosActualizados)
       await actualizarRelacionesTratamientos()
 
-      mensaje.value = 'Paquete actualizado correctamente!'
-
       await proxy.$alert('Paquete actualizado correctamente')
       router.push('/paquetes')
     } catch (error) {
@@ -185,7 +183,6 @@ export function useEditarPaquete() {
           tratamiento__codtratamiento: tratamiento.codtratamiento,
           tratamiento__categoria_codcategoria: tratamiento.categoria_codcategoria,
         }
-
         const response = await paqTratService.create(relacionData)
 
         return await response

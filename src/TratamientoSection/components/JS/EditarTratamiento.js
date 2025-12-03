@@ -52,15 +52,6 @@ export function useEditarTratamiento() {
 
       await tratamientoService.update(tratamientoF.codtratamiento, datosActualizados)
 
-      mensaje.value = 'Tratamiento actualizado correctamente!'
-
-      // Limpiar formulario
-      tratamientoF.nombre = ''
-      tratamientoF.descripcion = ''
-      tratamientoF.duracion = ''
-      tratamientoF.precio = ''
-      tratamientoF.codcategoria = ''
-
       await proxy.$alert('Tratamiento editado correctamente')
       router.push('/')
     } catch (error) {

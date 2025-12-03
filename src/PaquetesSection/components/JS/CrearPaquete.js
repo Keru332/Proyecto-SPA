@@ -133,13 +133,6 @@ export function useCrearPaquete() {
         await fetchCrearPaquetesConTratamientos(codpaquete)
       }
 
-      mensaje.value = 'Paquete creado correctamente!'
-     
-      paquete.nombrepaquete = ''
-      paquete.duraciontotal = ''
-      paquete.preciopaquete = ''
-      paquete.tratamientos = []
-
       for (const key in errors) {
         errors[key] = ''
       }
