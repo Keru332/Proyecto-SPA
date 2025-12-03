@@ -1,0 +1,9 @@
+import * as yup from 'yup';
+
+export const categoriaSchema = yup.object().shape({
+  nombre: yup
+    .string()
+    .trim()
+    .required('El nombre es obligatorio')
+    .min(1, 'El nombre no puede estar vacío')
+});

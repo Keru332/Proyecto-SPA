@@ -1,6 +1,7 @@
 import { ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import categoriaService from '@/services/categoriaService'
+import {categoriaSchema} from '../../schemas/validarCategoria'
 
 export function useCrearCategoria() {
   const router = useRouter()
@@ -11,6 +12,17 @@ export function useCrearCategoria() {
   })
   const mensaje = ref('')
   const submitForm = async () => {
+
+    try {
+      await categoriaSchema.validate(
+        { nombre: categoria.value.nombre },
+        { abortEarly: false }
+      )
+    } catch (err) {
+      mensaje.value = err.errors[0]
+      return
+    }
+
     try {
       const dato_actualizado = {
         nombrecategoria: categoria.value.nombre,

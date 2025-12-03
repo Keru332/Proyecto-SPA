@@ -9,7 +9,6 @@
           id="nombre_categoria"
           v-model="categoria.nombre"
           placeholder="Ingrese un Nombre"
-          required
           name="catgoria"
         />
       </div>

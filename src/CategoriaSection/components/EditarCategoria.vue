@@ -9,7 +9,6 @@
           id="nombre_categoria"
           v-model="categoria_actualizada.nombrecategoria"
           placeholder="Ingrese un Nombre"
-          required
           name="catgoria"
         />
       </div>

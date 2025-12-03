@@ -4,6 +4,7 @@ import { categoriaStore } from '../../stores/CategoriaStore'
 import { storeToRefs } from 'pinia'
 import { onMounted, watch } from 'vue'
 import categoriaService from '@/services/categoriaService'
+import{categoriaSchema} from '../../schemas/validarCategoria'
 
 export function useEditarCategoria() {
   const route = useRoute()
@@ -27,6 +28,17 @@ export function useEditarCategoria() {
   })
 
   const submitForm = async () => {
+
+    try {
+    await categoriaSchema.validate(
+      { nombre: categoria_actualizada.nombrecategoria },
+      { abortEarly: false }
+    )
+  } catch (err) {
+    mensaje.value = err.errors[0]
+    return
+  }
+
     try {
       const dato_actualizado = {
         nombrecategoria: categoria_actualizada.nombrecategoria,
