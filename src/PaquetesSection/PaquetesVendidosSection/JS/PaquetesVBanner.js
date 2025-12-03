@@ -1,7 +1,8 @@
-import { computed } from 'vue'
+import { computed,getCurrentInstance  } from 'vue'
 import paqueteVendidoService from '@/services/paqueteVendidoService'
 export function usePaquetesVBanner(props) {
   const actual = new Date()
+  const { proxy } = getCurrentInstance()
   const esFechaFutura = computed(() => {
     if (!props.paquetev.fechafin) return false
 
@@ -9,13 +10,17 @@ export function usePaquetesVBanner(props) {
     return fechaCita > actual
   })
 
-  const confirmarEliminacion = () => {
-    if (
-      confirm(
+
+    const confirmarEliminacion = async () => {
+    try {
+      const result = await proxy.$confirm(
         '¿Estás seguro de que deseas cancelar este paquete vendido? Esta acción no se puede deshacer.',
       )
-    ) {
-      eliminarPaquetev()
+      if (result) {
+        eliminarPaquetev()
+      }
+    } catch {
+      console.log('eliminado')
     }
   }
 
@@ -33,11 +38,11 @@ export function usePaquetesVBanner(props) {
         props.paquetev.fechacompra,
       )
 
-      alert('Paquete vendidos eliminado correctamente')
+      await proxy.$alert('Paquete vendidos eliminado correctamente')
       window.location.reload()
     } catch (error) {
       console.error('Error eliminando paquete vendido:', error)
-      alert(`Error al eliminar: ${error.message}`)
+      await proxy.$alert(`Error al eliminar: ${error.message}`)
     }
   }
   return { actual, esFechaFutura, confirmarEliminacion }
