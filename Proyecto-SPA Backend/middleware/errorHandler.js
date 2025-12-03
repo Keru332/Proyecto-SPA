@@ -59,8 +59,8 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.code === '23503') {
     return res.status(409).json({
-      error: 'Violación de llave foránea',
-      message: 'No se puede realizar la operación debido a referencias existentes'
+      error: 'Recurso con dependencia',
+      message: 'No se puede realizar la operación debido a que otro recurso necesita de este.'
     });
   }
 

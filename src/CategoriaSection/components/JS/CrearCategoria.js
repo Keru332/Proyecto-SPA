@@ -18,13 +18,11 @@ export function useCrearCategoria() {
 
       await categoriaService.create(dato_actualizado)
 
-      mensaje.value = 'Categoria creada correctamente!'
-
       await proxy.$alert('Categoria Creada correctamente')
       router.push('/cat')
     } catch (error) {
       if (error.response) {
-        mensaje.value = `Error: ${error.response.data?.error || 'Error al crear la categoria'}`
+        mensaje.value = `${error.response.data?.error || 'Error al crear la categoria'}: ${error.response.data?.message}`
       } else {
         mensaje.value = 'Error de conexión con el servidor'
       }

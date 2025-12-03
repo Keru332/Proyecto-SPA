@@ -26,7 +26,7 @@ export function useTratamientoBanner(props) {
       window.location.reload()
     } catch (error) {
       if (error.response) {
-        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar tratamiento'}`
+        errorMessage.value = `Error: ${error.response.data?.error || 'Error al eliminar tratamiento'}: ${error.response.data?.message}`
         const errorText = JSON.stringify(error.response.data)
 
         if (

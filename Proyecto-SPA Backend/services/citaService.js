@@ -91,9 +91,13 @@ const CitaService = {
   },
 
   delete: async (id) => {
+    console.log(id)
     if (!isValidUUID(id)) {
       throw new ValidationError('ID de cita no válido');
     }
+    console.log('aqui')
+    console.log(`Cita: ${id}`)
+
     const cita = await CitaService.getById(id);
     const fechaCita = new Date(cita.fecha);
     const hoy = new Date();
@@ -101,12 +105,13 @@ const CitaService = {
       throw new ValidationError('No se puede eliminar una cita ya realizada');
     }
     const tratamiento = await TratamientoService.getById(cita.tratamiento__codtratamiento);
+    console.log(`Cliente: ${cita.cliente__idcliente}`)
     const cliente = await ClienteService.getById(cita.cliente__idcliente);
 
-
+    
     await ClienteService.updateBalance(cita.cliente__idcliente, Number(cliente.balance) + Number(tratamiento.precio));
 
-    console.log(`Devolviendo $${tratamiento.precio} al cliente ${cliente.nombre} por eliminación de cita ${id}`);
+    console.log(`Devolviendo $${tratamiento.precio} al cliente por eliminación de cita ${id}`);
     return await Cita.delete(id);
   }
 };
@@ -121,7 +126,7 @@ async function validarDisponibilidadCita(fecha, hora, tratamientoId) {
   }
 
   console.log(sumaTiempoCita.sum)
-
+  
   let tratDuracion = await TratamientoService.getById(tratamientoId)
   tratDuracion.duracion = Number(tratDuracion.duracion)
   if((sumaTiempoCita.sum + tratDuracion.duracion) >= 720){
@@ -133,7 +138,7 @@ async function validarDisponibilidadCita(fecha, hora, tratamientoId) {
   const minutosDesdeApertura = sumaTiempoCita.sum;
   const horaDisponible = Math.floor(minutosDesdeApertura / 60) + horarioApertura;
   const minutosDisponible = minutosDesdeApertura % 60;
-
+  
   const horaAsignada = `${horaDisponible.toString().padStart(2, '0')}:${minutosDisponible.toString().padStart(2, '0')}`;
 */
   return "21:00"

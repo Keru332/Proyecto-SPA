@@ -56,7 +56,11 @@ export function useEditarTratamiento() {
       router.push('/')
     } catch (error) {
       console.error('Error:', error)
-      mensaje.value = 'Error al actualizar el tratamiento'
+      if (error.response) {
+        mensaje.value = `${error.response.data?.error || 'Error al actualizar el tratamiento'}: ${error.response.data?.message}`
+      } else {
+        mensaje.value = 'Error de conexión con el servidor'
+      }
     }
   }
 
